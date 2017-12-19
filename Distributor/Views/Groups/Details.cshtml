@@ -1,0 +1,114 @@
+﻿@model Distributor.Models.Group
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Group</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VisibilityLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VisibilityLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.InviteLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InviteLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AcceptanceLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AcceptanceLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EntityStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EntityStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChange)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChange)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChangeOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChangeOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChangeBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChangeBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupOriginatorAppUserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupOriginatorAppUserId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupOriginatorOrganisationId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupOriginatorOrganisationId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupOriginatorDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupOriginatorDateTime)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.GroupId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

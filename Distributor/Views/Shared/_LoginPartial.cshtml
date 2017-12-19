@@ -1,0 +1,123 @@
+﻿@using Microsoft.AspNet.Identity
+@using Distributor.Extensions
+@using Distributor.Helpers
+@using Distributor.Enums
+
+@{
+    var userRole = User.Identity.GetCurrentUserRole();
+    var userStatus = AppUserHelpers.GetAppUserEntityStatus(User);
+    var orgId = AppUserHelpers.GetOrganisationIdFromUser(User);
+}
+
+@if (Request.IsAuthenticated)
+{
+    <ul class="nav navbar-nav"></ul>
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right" style="padding-right:30px">
+            @if (userStatus == EntityEnums.EntityStatusEnum.Active)
+            {
+                <li title="Dashboard"><a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i></a></li>
+                <li class="dropdown" title="General info">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-info fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href='#'><i class="fa fa-info fa-fw"></i> Requests</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-info fa-fw"></i> Available</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-info fa-fw"></i> Campaigns</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" title="Manage listings">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-th-list fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href='#'><i class="fa fa-th-list fa-fw"></i> Requests</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-th-list fa-fw"></i> Available</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-th-list fa-fw"></i> Campaigns</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-th-list fa-fw"></i> Offers</a>
+                        </li>
+                        <li>
+                            <a href='#'><i class="fa fa-th-list fa-fw"></i> Orders</a>
+                        </li>
+                    </ul>
+                </li>
+                <li title="Actions"><a href='#'><i class="fa fa-exclamation fa-fw"></i></a></li>
+                if (userRole == "Admin" || userRole == "SuperUser")
+                {
+                    <li class="dropdown" title="Admin">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-edit fa-fw"></i> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href='@Url.Action("Index", "UserTasks")'><i class="fa fa-tasks fa-fw"></i> Tasks</a>
+                            </li>
+                            <li>
+                                <a href='@Url.Action("Index", "Groups")'><i class="fa fa-group fa-fw"></i> Groups</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href='#'><i class="fa fa-user fa-fw"></i> User Admin</a>
+                            </li>
+                            <li>
+                                <a href='#'><i class="fa fa-institution fa-fw"></i> Company Admin</a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            }
+            <li class="dropdown" title="User info">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    @if (orgId != Guid.Empty)
+                    {
+                        <li>
+                            <a href='@Url.Action("UserProfile", "AppUsers")'><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Settings", "AppUsers")'><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href='@Url.Action("ChangePassword", "Manage")'><i class="fa fa-lock fa-fw"></i> Change Password</a>
+                        </li>
+                    }
+                    <li>
+                        <a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right" style="padding-right:30px">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

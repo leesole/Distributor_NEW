@@ -1,0 +1,143 @@
+﻿@model Distributor.ViewModels.AppUserProfileView
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-green" style="margin-top:50px">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Settings</h3>
+                </div>
+                @using (Html.BeginForm())
+                {
+                    <div class="panel-body">
+                        <form role="form">
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            @Html.HiddenFor(model => model.AppUserId)
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.LoginEmail, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    @Html.DisplayFor(model => model.LoginEmail, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+
+                            @if (ViewBag.OrganisationSelected == false)
+                            {
+                                <div class="form-group col-md-12">
+                                    @Html.LabelFor(model => model.SelectedOrganisationId, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => model.SelectedOrganisationId, (SelectList)ViewBag.OrganisationList, new { @class = "form-control", @id = "organisationdropdown", onchange = "javascipt:GetOrganisationDetails(this.value);" })
+                                        @Html.ValidationMessageFor(model => model.SelectedOrganisationId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.OrganisationName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="organisationname">@Html.DisplayFor(model => model.OrganisationName)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.BusinessType, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="businesstype">@Html.DisplayFor(model => model.BusinessType)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressLine1, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addressline1">@Html.DisplayFor(model => model.AddressLine1)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressLine2, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addressline2">@Html.DisplayFor(model => model.AddressLine2)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressLine3, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addressline3">@Html.DisplayFor(model => model.AddressLine3)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressTownCity, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addresstowncity">@Html.DisplayFor(model => model.AddressTownCity)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressCounty, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addresscounty">@Html.DisplayFor(model => model.AddressCounty)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                @Html.LabelFor(model => model.AddressPostcode, htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">
+                                    <p id="addresspostcode">@Html.DisplayFor(model => model.AddressPostcode)</p>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <input type="submit" value="Submit" name="submitbutton" class="btn btn-success" />
+                                <input type="reset" value="Reset" name="resetbutton" class="btn btn-danger" onclick="RefreshPage()" />
+                            </div>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        function GetOrganisationDetails(organisationId) {
+            $.ajax('@Url.Action("GetOrganisationDetailsForOrganisation", "Data")', {
+                type: 'POST',
+                dataType: 'json',
+                data: { 'organisationId': organisationId },
+                success: function (data, status, jqXHR) {
+                    if ("success" === status) {
+                        document.getElementById("organisationname").innerText = data.organisationDetails.OrganisationName;
+                        document.getElementById("businesstype").innerText = data.organisationDetails.BusinessType;
+                        document.getElementById("addressline1").innerText = data.organisationDetails.AddressLine1;
+                        document.getElementById("addressline2").innerText = data.organisationDetails.AddressLine2;
+                        document.getElementById("addressline3").innerText = data.organisationDetails.AddressLine3;
+                        document.getElementById("addresstowncity").innerText = data.organisationDetails.AddressTownCity;
+                        document.getElementById("addresscounty").innerText = data.organisationDetails.AddressCounty;
+                        document.getElementById("addresspostcode").innerText = data.organisationDetails.AddressPostcode;
+                    } else {
+                        alert('This organisation appears to be invalid, please re-select.');
+                    }
+                }
+            });
+        }
+
+        function RefreshPage() {
+            window.location.reload();
+        }
+</script>
+}

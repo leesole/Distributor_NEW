@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Distributor.Models.Group>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VisibilityLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InviteLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AcceptanceLevel)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordChange)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordChangeOn)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RecordChangeBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupOriginatorAppUserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupOriginatorOrganisationId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupOriginatorDateTime)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VisibilityLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.InviteLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AcceptanceLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EntityStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordChange)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordChangeOn)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RecordChangeBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupOriginatorAppUserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupOriginatorOrganisationId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupOriginatorDateTime)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.GroupId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.GroupId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.GroupId })
+        </td>
+    </tr>
+}
+
+</table>
