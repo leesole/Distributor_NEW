@@ -248,9 +248,16 @@ namespace Distributor.Helpers
 
         public static Guid GetOrganisationIdFromUser(IPrincipal user)
         {
+            ApplicationDbContext db = new ApplicationDbContext();
+            Guid organisationId = GetOrganisationIdFromUser(db, user);
+            db.Dispose();
+            return organisationId;
+        }
+        public static Guid GetOrganisationIdFromUser(ApplicationDbContext db, IPrincipal user)
+        {
             try
             {
-                return GetAppUser(user).OrganisationId;
+                return GetAppUser(db, user).OrganisationId;
             }
             catch
             {

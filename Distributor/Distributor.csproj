@@ -220,6 +220,7 @@
     <Compile Include="Helpers\ControlHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\GeneralHelpers.cs" />
+    <Compile Include="Helpers\GroupHelpers.cs" />
     <Compile Include="Helpers\HomeViewHelpers.cs" />
     <Compile Include="Helpers\OrganisationHelpers.cs" />
     <Compile Include="Helpers\UserTasksHelpers.cs" />
@@ -279,6 +280,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AppUserViewModels.cs" />
     <Compile Include="ViewModels\CallingFields.cs" />
+    <Compile Include="ViewModels\GroupViewModels.cs" />
     <Compile Include="ViewModels\HomeDashboardView.cs" />
     <Compile Include="ViewModels\HomeOrganisationDetailsView.cs" />
     <Compile Include="ViewModels\UserTasksViewModels.cs" />

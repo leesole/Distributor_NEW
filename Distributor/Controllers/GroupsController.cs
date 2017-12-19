@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Distributor.Models;
+using Distributor.ViewModels;
+using Distributor.Helpers;
 
 namespace Distributor.Controllers
 {
@@ -17,7 +19,8 @@ namespace Distributor.Controllers
         // GET: Groups
         public ActionResult Index()
         {
-            return View(db.Groups.ToList());
+            GroupViewIndexModel model = GroupViewHelpers.GetGroupViewIndexModel(db, User);
+            return View(model);
         }
 
         // GET: Groups/Details/5
