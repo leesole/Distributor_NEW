@@ -11,6 +11,10 @@ namespace Distributor.Controllers
     [Authorize]
     public class DataController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+        #region Organisation
+
         //GET organisation object for organisationid
         [HttpPost]
         public ActionResult GetOrganisationDetailsForOrganisation(Guid organisationId)
@@ -28,5 +32,19 @@ namespace Distributor.Controllers
             }
             return Json(new { success = false });
         }
+
+        #endregion
+
+        #region Groups
+
+        // This will (set the status to) remove (for) the 'Block' from a given blockId
+        [HttpPost]
+        public ActionResult RemoveGroup(Guid groupId)
+        {
+            GroupHelpers.RemoveGroup(db, groupId, User);
+            return Json(new { success = true });
+        }
+
+        #endregion
     }
 }

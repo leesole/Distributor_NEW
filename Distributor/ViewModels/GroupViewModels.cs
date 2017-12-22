@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using static Distributor.Enums.BranchEnums;
 using static Distributor.Enums.EntityEnums;
 using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.GroupEnums;
 
 namespace Distributor.ViewModels
 {
+    #region Views used to help build controller views
+
     public class GroupViewModel
     {
         public Guid GroupId { get; set; }
@@ -17,10 +20,6 @@ namespace Distributor.ViewModels
         [Required]
         [Display(Name = "Group name")]
         public string Name { get; set; }
-
-        [Required]
-        [Display(Name = "Type of group")]
-        public LevelEnum Type { get; set; }
 
         [Required]
         [Display(Name = "Group visibility")]
@@ -76,10 +75,61 @@ namespace Distributor.ViewModels
         public AppUser RecordChangeBy { get; set; }
     }
 
-    public class GroupViewIndexModel
+    #endregion
+
+    #region Group/Index
+
+    public class GroupIndexViewModel
     {
         public List<GroupViewModel> GroupsCreatedByOrg { get; set; }
 
         public List<GroupViewModel> GroupsContainingOrg { get; set; }
     }
+
+    #endregion
+
+    #region Group/Create
+    
+    public class GroupViewCreateModel
+    {
+        [Display(Name = "Group name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Group visibility")]
+        public GroupVisibilityEnum VisibilityLevel { get; set; }
+
+        [Required]
+        [Display(Name = "Group invite level")]
+        public GroupInviteLevelEnum InviteLevel { get; set; }
+
+        [Required]
+        [Display(Name = "Group invite acceptance level")]
+        public GroupInviteAcceptanceLevelEnum AcceptanceLevel { get; set; }
+
+
+        public List<GroupMemberViewCreateModel> GroupMembers { get; set; }
+    }
+
+    public class GroupMemberViewCreateModel
+    {
+        public Guid SelectedOrganisationId { get; set; }
+
+        [Display(Name = "Organisation name")]
+        public string OrganisationName { get; set; }
+
+        [Display(Name = "Business type")]
+        public BusinessTypeEnum BusinessType { get; set; }
+
+        [Display(Name = "Address line 1")]
+        public string AddressLine1 { get; set; }
+
+        [Display(Name = "Address town/city")]
+        public string AddressTownCity { get; set; }
+
+        [Display(Name = "Address postcode")]
+        public string AddressPostcode { get; set; }
+    }
+
+    #endregion
 }

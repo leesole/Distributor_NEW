@@ -28,7 +28,10 @@ namespace Distributor.Enums
             Rejected = 4,
             [Description("Closed")]
             [Display(Name = "Closed")]
-            Closed = 5
+            Closed = 5,
+            [Description("Removed")]
+            [Display(Name = "Removed")]
+            Removed = 6
         }
     }
 }

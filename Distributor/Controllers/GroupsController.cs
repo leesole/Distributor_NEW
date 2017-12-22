@@ -19,7 +19,7 @@ namespace Distributor.Controllers
         // GET: Groups
         public ActionResult Index()
         {
-            GroupViewIndexModel model = GroupViewHelpers.GetGroupViewIndexModel(db, User);
+            GroupIndexViewModel model = GroupViewHelpers.GetGroupIndexViewModel(db, User);
             return View(model);
         }
 
@@ -49,17 +49,28 @@ namespace Distributor.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GroupId,Name,Type,VisibilityLevel,InviteLevel,AcceptanceLevel,EntityStatus,RecordChange,RecordChangeOn,RecordChangeBy,GroupOriginatorAppUserId,GroupOriginatorOrganisationId,GroupOriginatorDateTime")] Group group)
+        public ActionResult Create([Bind(Include = "Name,VisibilityLevel,InviteLevel,AcceptanceLevel")] GroupViewCreateModel model)
         {
             if (ModelState.IsValid)
             {
-                group.GroupId = Guid.NewGuid();
-                db.Groups.Add(group);
-                db.SaveChanges();
+                if (Request.Form["resetbutton"] != null)
+                {
+                    return RedirectToAction("Create");
+                }
+
+                //Save the group before going to add members as to be here you have pressed either 'Save' or 'Add Members'
+                Group newGroup = GroupHelpers.CreateGroup(db, model, User);
+
+                if (Request.Form["addmembersbutton"] != null)
+                {
+                    return RedirectToAction("AddMembers", "Group", new { groupId = newGroup.GroupId });
+                }
+
+                //all done, go back to initial list
                 return RedirectToAction("Index");
             }
 
-            return View(group);
+            return View(model);
         }
 
         // GET: Groups/Edit/5

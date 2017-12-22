@@ -1,128 +1,83 @@
-﻿@model Distributor.Models.Group
-
-@{
-    ViewBag.Title = "Create";
-}
-
-<h2>Create</h2>
+﻿@model Distributor.ViewModels.GroupViewCreateModel
 
 
-@using (Html.BeginForm()) 
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Groups <small>Create</small></h1>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Groups", "Index", "Groups")
+            </li>
+            <li class="active">Create group</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Group</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Type, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">New Group</div>
+            <div class="panel-body">
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger", @id = "nameerror" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.VisibilityLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.VisibilityLevel, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.VisibilityLevel, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.VisibilityLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EnumDropDownListFor(model => model.VisibilityLevel, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.VisibilityLevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.InviteLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.InviteLevel, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.InviteLevel, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.InviteLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EnumDropDownListFor(model => model.InviteLevel, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.InviteLevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AcceptanceLevel, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.AcceptanceLevel, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.AcceptanceLevel, "", new { @class = "text-danger" })
+                <div class="form-group col-md-12">
+                    @Html.LabelFor(model => model.AcceptanceLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EnumDropDownListFor(model => model.AcceptanceLevel, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AcceptanceLevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EntityStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.EntityStatus, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.EntityStatus, "", new { @class = "text-danger" })
+            <div class="panel-footer">
+                <div class="col-md-4"><input type="submit" value="Save" name="savebutton" class="btn btn-primary btn-lg btn-block" onclick="ValidateFields()" /></div>
+                <div class="col-md-4"><input type="submit" value="Add Members" name="addmembersbutton" class="btn btn-success btn-lg btn-block" onclick="ValidateFields()" /></div>
+                <div class="col-md-4"><input type="submit" value="Reset" name="resetbutton" class="btn btn-danger btn-lg btn-block" /></div>
+                <div class="clearfix"></div>
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RecordChange, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.RecordChange, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RecordChange, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RecordChangeOn, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RecordChangeOn, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RecordChangeOn, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RecordChangeBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RecordChangeBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.RecordChangeBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GroupOriginatorAppUserId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.GroupOriginatorAppUserId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.GroupOriginatorAppUserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GroupOriginatorOrganisationId, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.GroupOriginatorOrganisationId, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.GroupOriginatorOrganisationId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.GroupOriginatorDateTime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.GroupOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.GroupOriginatorDateTime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+            
         </div>
     </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
 </div>
+}
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function ValidateFields() {
+            var error = false;
+            if ($("#Name").val() == "") {
+                error = true;
+                $("#nameerror").html("The name field is required");
+            }
+            if (error) {
+                event.preventDefault();
+            }
+        }
+    </script>
 }

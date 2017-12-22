@@ -19,10 +19,6 @@ namespace Distributor.Models
         public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Type of group")]
-        public LevelEnum Type { get; set; }
-
-        [Required]
         [Display(Name = "Group visibility")]
         public GroupVisibilityEnum VisibilityLevel { get; set; }
 
@@ -33,9 +29,9 @@ namespace Distributor.Models
         [Required]
         [Display(Name = "Group invite acceptance level")]
         public GroupInviteAcceptanceLevelEnum AcceptanceLevel { get; set; }
+
         [Required]
         [Display(Name = "Status")]
-
         public EntityStatusEnum EntityStatus { get; set; }
 
         public RecordChangeEnum RecordChange { get; set; }
