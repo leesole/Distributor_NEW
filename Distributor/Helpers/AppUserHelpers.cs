@@ -11,6 +11,9 @@ using Distributor.Extensions;
 using System.Data.Entity;
 using Distributor.ViewModels;
 using static Distributor.Enums.UserTaskEnums;
+using Microsoft.AspNet.Identity;
+using System.Security.Claims;
+using Microsoft.Owin.Security;
 
 namespace Distributor.Helpers
 {
@@ -86,7 +89,7 @@ namespace Distributor.Helpers
                 EntityStatus = EntityStatusEnum.AwaitingOrganisationDetails,
                 OrganisationId = Guid.Empty,
                 LoginEmail = model.Email,
-                PrivacyLevel = PrivacyLevelEnum.None,
+                PrivacyLevel = PrivacyLevelEnum.Public,
                 UserRole = role,
                 RecordChange = RecordChangeEnum.NewRecord,
                 RecordChangeOn = DateTime.Now
@@ -345,5 +348,35 @@ namespace Distributor.Helpers
         }
 
         #endregion
+    }
+
+    public static class UserHelpers
+    {
+        public static ApplicationUser UpdateUserRole(IPrincipal user, UserRoleEnum role)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            ApplicationUser applicationUser = UpdateUserRole(db, user, role);
+            db.Dispose();
+            return applicationUser;
+        }
+
+        public static ApplicationUser UpdateUserRole(ApplicationDbContext db, IPrincipal user, UserRoleEnum role)
+        {
+            string id = user.Identity.GetUserId();
+            ApplicationUser applicationUser = db.Users.FirstOrDefault(x => x.Id == id);
+            applicationUser.CurrentUserRole = role;
+
+            db.Entry(applicationUser).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //reset the claims to the updated value
+            var Identity = user.Identity as ClaimsIdentity;
+            Identity.RemoveClaim(Identity.FindFirst("CurrentUserRole"));
+            Identity.AddClaim(new Claim("CurrentUserRole", role.ToString()));
+            var authenticationManager = HttpContext.Current.GetOwinContext().Authentication;
+            authenticationManager.AuthenticationResponseGrant = new AuthenticationResponseGrant(new ClaimsPrincipal(Identity), new AuthenticationProperties() { IsPersistent = true });
+
+            return applicationUser;
+        }
     }
 }

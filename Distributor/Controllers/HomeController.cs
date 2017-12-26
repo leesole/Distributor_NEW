@@ -2,6 +2,8 @@
 using Distributor.Helpers;
 using Distributor.Models;
 using Distributor.ViewModels;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +56,7 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult OrganisationDetails([Bind(Include = "AppUserId,SelectedOrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,PrivacyLevel")] HomeOrganisationDetailsView model)
+        public ActionResult OrganisationDetails([Bind(Include = "AppUserId,SelectedOrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,PrivacyLevel,GroupPrivacyLevel")] HomeOrganisationDetailsView model)
         {
             if (Request.Form["resetbutton"] != null)
                 return RedirectToAction("OrganisationDetails", "Home");
@@ -70,6 +72,7 @@ namespace Distributor.Controllers
                         Organisation organisation = OrganisationHelpers.CreateOrganisation(model, User);
                         AppUserHelpers.UpdateAppUserOrganisationId(User, organisation.OrganisationId);
                         AppUserHelpers.UpdateAppUserRoleAndEntityStatus(User, UserRoleEnum.Admin ,EntityStatusEnum.Active, User);
+                        ApplicationUser user = UserHelpers.UpdateUserRole(User, UserRoleEnum.Admin);
                     }
                     else
                     {

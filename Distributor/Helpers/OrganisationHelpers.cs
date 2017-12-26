@@ -72,6 +72,7 @@ namespace Distributor.Helpers
                 CharityRegistrationDetails = model.CharityRegistrationDetails ?? "",
                 VATRegistrationDetails = model.VATRegistrationDetails ?? "",
                 PrivacyLevel = model.PrivacyLevel,
+                GroupPrivacyLevel = model.GroupPrivacyLevel,
                 EntityStatus = EntityStatusEnum.Active,
                 RecordChange = RecordChangeEnum.NewRecord,
                 RecordChangeBy = appUserId,

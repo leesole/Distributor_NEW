@@ -19,7 +19,7 @@ namespace Distributor.Helpers
         public static List<Group> GetGroupsCreatedByOrg(ApplicationDbContext db, Guid organisationId)
         {
             List<Group> groups = (from g in db.Groups
-                                  where g.GroupOriginatorOrganisationId == organisationId
+                                  where (g.GroupOriginatorOrganisationId == organisationId && g.EntityStatus == EntityStatusEnum.Active)
                                   select g).Distinct().ToList();
 
             return groups;
@@ -30,7 +30,7 @@ namespace Distributor.Helpers
         {
             List<Group> groups = (from g in db.Groups
                                   join gm in db.GroupMembers on g.GroupId equals gm.GroupId
-                                  where (gm.OrganisationId == organisationId && g.GroupOriginatorOrganisationId != organisationId)
+                                  where (gm.OrganisationId == organisationId && g.GroupOriginatorOrganisationId != organisationId && g.EntityStatus == EntityStatusEnum.Active)
                                   select g).Distinct().ToList();
 
             return groups;
@@ -99,6 +99,7 @@ namespace Distributor.Helpers
         public static Group RemoveGroup(ApplicationDbContext db, Guid groupId, IPrincipal user)
         {
             //To remove we just change status
+
             return UpdateEntityStatus(db, groupId, EntityStatusEnum.Removed, user);
         }
 

@@ -69,5 +69,9 @@ namespace Distributor.ViewModels
         [Required]
         [Display(Name = "Privacy level")]
         public PrivacyLevelEnum PrivacyLevel { get; set; }
+
+        [Required]
+        [Display(Name = "'Group' privacy level")]
+        public PrivacyLevelEnum GroupPrivacyLevel { get; set; }
     }
 }

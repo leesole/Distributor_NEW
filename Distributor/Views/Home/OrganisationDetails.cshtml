@@ -153,6 +153,14 @@
                                         @Html.ValidationMessageFor(model => model.PrivacyLevel, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
+
+                                <div class="form-group col-md-12">
+                                    @Html.LabelFor(model => model.GroupPrivacyLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EnumDropDownListFor(model => model.GroupPrivacyLevel, htmlAttributes: new { @class = "form-control", placeholder = "'Group' Privacy level" })
+                                        @Html.ValidationMessageFor(model => model.GroupPrivacyLevel, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="organisationDisplaySection" style="display:none">

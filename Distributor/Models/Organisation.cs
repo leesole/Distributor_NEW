@@ -69,6 +69,10 @@ namespace Distributor.Models
         public PrivacyLevelEnum PrivacyLevel { get; set; }
 
         [Required]
+        [Display(Name = "'Group' privacy level")]
+        public PrivacyLevelEnum GroupPrivacyLevel { get; set; }
+        
+        [Required]
         [Display(Name = "Status")]
         public EntityStatusEnum EntityStatus { get; set; }
         public RecordChangeEnum RecordChange { get; set; }

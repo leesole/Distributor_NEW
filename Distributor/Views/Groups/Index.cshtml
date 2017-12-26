@@ -1,6 +1,9 @@
 ﻿@using Distributor.Helpers
 @model Distributor.ViewModels.GroupIndexViewModel
 
+@{ 
+    //var groupId = Guid.Empty;
+}
 
 <div class="row">
     <div class="col-lg-12">
@@ -35,7 +38,7 @@
                                 <td onclick="location.href='@Url.Action("Details", "Groups", new { id = Model.GroupsCreatedByOrg[i].GroupId })'">@Model.GroupsCreatedByOrg[i].InviteLevel.DisplayName()</td>
                                 <td onclick="location.href='@Url.Action("Details", "Groups", new { id = Model.GroupsCreatedByOrg[i].GroupId })'">@Model.GroupsCreatedByOrg[i].AcceptanceLevel.DisplayName()</td>
                                 <td><button type="submit" class="btn btn-xs btn-success btn-block"><span class="glyphicon glyphicon-user"></span></button></td>
-                                <td><button type="submit" class="btn btn-xs btn-danger btn-block"><span class="glyphicon glyphicon-remove" onclick="removeGroup(@groupId)"></span></button></td>
+                                <td><button type="submit" class="btn btn-xs btn-danger btn-block" id=@groupId onclick="removeGroup(id)"><span class="glyphicon glyphicon-remove"></span></button></td>
                             </tr>
                         }
                     </tbody>
@@ -104,11 +107,11 @@
         function removeGroup(id) {
             alert(id);
             if (window.confirm("Proceed?")) {
-                var url = "/Data/RemoveBlock";
+                var url = "/Data/RemoveGroup";
 
                 $.ajax({
                     url: url,
-                    data: { blockId: id },
+                    data: { groupId: id },
                     cache: false,
                     type: "POST",
                     success: function (result) {

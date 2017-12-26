@@ -88,21 +88,17 @@ namespace Distributor.Enums
         }
 
         /// <summary>
-        /// The level of privacy for the Organisation or User
+        /// The level of privacy
         /// </summary>
         public enum PrivacyLevelEnum
         {
-            [Description("None")]
-            [Display(Name = "None")]
-            None = 0,
+            [Description("Public")]
+            [Display(Name = "Public")]
+            Public = 0,
 
-            [Description("User")]
-            [Display(Name = "User")]
-            User = 1,
-
-            [Description("Organisation")]
-            [Display(Name = "Organisation")]
-            Organisation = 2
+            [Description("Private")]
+            [Display(Name = "Private")]
+            Private = 1
         }
     }
 }
