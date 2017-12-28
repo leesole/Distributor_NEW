@@ -196,6 +196,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AppUsersController.cs" />
     <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Controllers\GroupMembersController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -533,6 +534,12 @@
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\Create.cshtml" />
     <Content Include="Views\Groups\Partials\GroupMemberViewCreateModel.cshtml" />
+    <Content Include="Views\GroupMembers\Create.cshtml" />
+    <Content Include="Views\GroupMembers\Delete.cshtml" />
+    <Content Include="Views\GroupMembers\Details.cshtml" />
+    <Content Include="Views\GroupMembers\Edit.cshtml" />
+    <Content Include="Views\GroupMembers\Index.cshtml" />
+    <Content Include="Views\Groups\AddMembers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

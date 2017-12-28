@@ -6,6 +6,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.groupId)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.SelectedOrganisationId)
         </th>
         <th>
@@ -25,6 +28,9 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.groupId)
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.SelectedOrganisationId)
         </td>

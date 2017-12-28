@@ -1,0 +1,88 @@
+﻿@model Distributor.Models.GroupMember
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>GroupMember</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrganisationId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrganisationId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddedDateTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddedDateTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChange)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChange)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChangeOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChangeOn)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RecordChangeBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RecordChangeBy)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -62,7 +62,7 @@ namespace Distributor.Helpers
             db.SaveChanges();
 
             if (model.GroupMembers != null)
-                GroupMembersHelpers.CreateGroupMembers(db, model.GroupMembers, group.GroupId, user);
+                GroupMembersHelpers.CreateGroupMembers(db, model.GroupMembers, user);
 
             return group;
         }
@@ -124,13 +124,13 @@ namespace Distributor.Helpers
         #region Create
 
         //Create a group member record from the GroupMemberViewCreateModel
-        public static GroupMember CreateGroupMember(ApplicationDbContext db, GroupMemberViewCreateModel memberModel, Guid groupId, IPrincipal user)
+        public static GroupMember CreateGroupMember(ApplicationDbContext db, Guid groupId, Guid organisationId, IPrincipal user)
         {
             GroupMember member = new GroupMember()
             {
                 GroupMemberId = Guid.NewGuid(),
                 GroupId = groupId,
-                OrganisationId = memberModel.SelectedOrganisationId,
+                OrganisationId = organisationId,
                 AddedBy = AppUserHelpers.GetAppUserIdFromUser(user),
                 AddedDateTime = DateTime.Now,
                 Status = GroupMemberStatusEnum.Accepted,
@@ -146,13 +146,13 @@ namespace Distributor.Helpers
         }
 
         //to create the members from the List<view> page through the List and call the single creation of the GroupMember
-        public static List<GroupMember> CreateGroupMembers(ApplicationDbContext db, List<GroupMemberViewCreateModel> membersModel, Guid groupId, IPrincipal user)
+        public static List<GroupMember> CreateGroupMembers(ApplicationDbContext db, List<GroupMemberViewCreateModel> membersModel, IPrincipal user)
         {
             List<GroupMember> list = new List<GroupMember>();
 
             foreach (GroupMemberViewCreateModel memberModel in membersModel)
             {
-                GroupMember item = CreateGroupMember(db, memberModel, groupId, user);
+                GroupMember item = CreateGroupMember(db, memberModel.GroupId, memberModel.SelectedOrganisationId, user);
                 list.Add(item);
             }
 
@@ -285,6 +285,14 @@ namespace Distributor.Helpers
             return list;
         }
 
+        public static List<GroupMemberViewCreateModel> GetGroupMembersViewCreateForGroup(ApplicationDbContext db, Guid groupId)
+        {
+            List<GroupMember> groupMembersForGroup = GroupMembersHelpers.GetGroupMembersForGroup(db, groupId);
+            List<GroupMemberViewCreateModel> list = BuildGroupMemberViewCreateListFromGroupMemberList(db, groupMembersForGroup);
+
+            return list;
+        }
+
         #endregion
 
         #region Create
@@ -310,6 +318,30 @@ namespace Distributor.Helpers
                     RecordChange = member.RecordChange,
                     RecordChangeOn = member.RecordChangeOn,
                     RecordChangeBy = recordChangedBy
+                };
+
+                list.Add(item);
+            }
+
+            return list;
+        }
+
+        public static List<GroupMemberViewCreateModel> BuildGroupMemberViewCreateListFromGroupMemberList(ApplicationDbContext db, List<GroupMember> groupMemberList)
+        {
+            List<GroupMemberViewCreateModel> list = new List<GroupMemberViewCreateModel>();
+
+            foreach (GroupMember member in groupMemberList)
+            {
+                Organisation organisaion = OrganisationHelpers.GetOrganisation(db, member.OrganisationId);
+
+                GroupMemberViewCreateModel item = new GroupMemberViewCreateModel()
+                {
+                    GroupId = member.GroupId,
+                    SelectedOrganisationId = member.OrganisationId,
+                    BusinessType = organisaion.BusinessType,
+                    AddressLine1 = organisaion.AddressLine1,
+                    AddressTownCity = organisaion.AddressTownCity,
+                    AddressPostcode = organisaion.AddressPostcode
                 };
 
                 list.Add(item);

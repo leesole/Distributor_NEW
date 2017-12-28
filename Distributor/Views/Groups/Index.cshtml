@@ -37,7 +37,7 @@
                                 <td onclick="location.href='@Url.Action("Details", "Groups", new { id = Model.GroupsCreatedByOrg[i].GroupId })'">@Model.GroupsCreatedByOrg[i].VisibilityLevel.DisplayName()</td>
                                 <td onclick="location.href='@Url.Action("Details", "Groups", new { id = Model.GroupsCreatedByOrg[i].GroupId })'">@Model.GroupsCreatedByOrg[i].InviteLevel.DisplayName()</td>
                                 <td onclick="location.href='@Url.Action("Details", "Groups", new { id = Model.GroupsCreatedByOrg[i].GroupId })'">@Model.GroupsCreatedByOrg[i].AcceptanceLevel.DisplayName()</td>
-                                <td><button type="submit" class="btn btn-xs btn-success btn-block"><span class="glyphicon glyphicon-user"></span></button></td>
+                                <td><button type="submit" class="btn btn-xs btn-success btn-block" onclick="location.href='@Url.Action("AddMembers", "Groups", new { groupId = Model.GroupsCreatedByOrg[i].GroupId })'"><span class="glyphicon glyphicon-user"></span></button></td>
                                 <td><button type="submit" class="btn btn-xs btn-danger btn-block" id=@groupId onclick="removeGroup(id)"><span class="glyphicon glyphicon-remove"></span></button></td>
                             </tr>
                         }

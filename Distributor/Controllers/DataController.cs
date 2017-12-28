@@ -45,6 +45,13 @@ namespace Distributor.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        public ActionResult AddOrganisationToGroup(Guid groupId, Guid organisationId)
+        {
+            GroupMembersHelpers.CreateGroupMember(db, groupId, organisationId, User);
+            return Json(new { success = true });
+        }
+
         #endregion
     }
 }

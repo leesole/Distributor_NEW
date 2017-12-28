@@ -36,7 +36,10 @@ namespace Distributor.Helpers
         }
         public static List<Organisation> GetAllOrganisations(ApplicationDbContext db)
         {
-            return db.Organisations.OrderBy(x => x.OrganisationName).ToList();
+            List<Organisation> list = (from o in db.Organisations
+                                       where o.EntityStatus == EntityStatusEnum.Active
+                                       select o).ToList();
+            return list;
         }
 
         #endregion

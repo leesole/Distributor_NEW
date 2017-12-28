@@ -1,0 +1,92 @@
+﻿@model IEnumerable<Distributor.ViewModels.GroupMemberViewCreateModel>
+
+@{ 
+    var groupId = ViewBag.GroupId;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Groups <small>Add Members</small></h1>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Groups", "Index", "Groups")
+            </li>
+            <li class="active">Add members</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">Group name: @ViewBag.GroupName</div>
+            <div class="panel-body">
+                <table width="100%" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr class="primary">
+                            <th>@Html.DisplayNameFor(model => model.GroupId)</th>
+                            <th>@Html.DisplayNameFor(model => model.SelectedOrganisationId)</th>
+                            <th>@Html.DisplayNameFor(model => model.OrganisationName)</th>
+                            <th>@Html.DisplayNameFor(model => model.AddressLine1)</th>
+                            <th>@Html.DisplayNameFor(model => model.AddressTownCity)</th>
+                            <th>@Html.DisplayNameFor(model => model.AddressPostcode)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.GroupId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.SelectedOrganisationId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.OrganisationName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.AddressLine1)</td>
+                                <td>@Html.DisplayFor(modelItem => item.AddressTownCity)</td>
+                                <td>@Html.DisplayFor(modelItem => item.AddressPostcode)</td>
+                                <td><button type="submit" class="btn btn-xs btn-danger btn-block"><span class="glyphicon glyphicon-remove"></span></button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer">
+                <div class="form-group">
+                    <div class="col-md-4">
+                        @Html.DropDownList("Organisation", (SelectList)ViewBag.OrganisationList, "Add organisation", new { @class = "form-control", @id = groupId, onchange = "javascipt:AddOrganisationDetails(this.value, this.id);" })
+                    </div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-xs btn-danger btn-block"><span class="glyphicon glyphicon-remove"></span></button></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-xs btn-danger btn-block"><span class="glyphicon glyphicon-remove"></span></button></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        function AddOrganisationDetails(organisationId, id) {
+            alert(id.toString());
+            $.ajax('@Url.Action("AddOrganisationToGroup", "Data")', {
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'groupId': id,
+                    'organisationId': organisationId
+                },
+                success: function (data, status, jqXHR) {
+                    if ("success" === status) {
+                        RefreshPage();
+                    }
+                }
+            });
+        }
+
+        function RefreshPage() {
+            window.location.reload();
+        }
+    </script>
+}

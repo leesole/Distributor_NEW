@@ -113,6 +113,8 @@ namespace Distributor.ViewModels
 
     public class GroupMemberViewCreateModel
     {
+        public Guid GroupId { get; set; }
+
         public Guid SelectedOrganisationId { get; set; }
 
         [Display(Name = "Organisation name")]

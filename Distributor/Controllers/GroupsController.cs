@@ -63,7 +63,7 @@ namespace Distributor.Controllers
 
                 if (Request.Form["addmembersbutton"] != null)
                 {
-                    return RedirectToAction("AddMembers", "Group", new { groupId = newGroup.GroupId });
+                    return RedirectToAction("AddMembers", "Groups", new { group = newGroup });
                 }
 
                 //all done, go back to initial list
@@ -128,6 +128,24 @@ namespace Distributor.Controllers
             db.Groups.Remove(group);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AddMembers(Guid? groupId)
+        {
+            if (groupId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Group group = db.Groups.Find(groupId);
+            ViewBag.GroupName = group.Name;
+            ViewBag.GroupId = group.GroupId;
+            //DropDown
+            ViewBag.OrganisationList = ControlHelpers.OrganisationsListForGroupDropDown(db, group.GroupId);
+
+            List<GroupMemberViewCreateModel> model = GroupMembersViewHelpers.GetGroupMembersViewCreateForGroup(db, groupId.Value);
+
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)
