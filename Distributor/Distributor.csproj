@@ -534,7 +534,6 @@
     <Content Include="Views\UserTasks\History.cshtml" />
     <Content Include="Views\Groups\Delete.cshtml" />
     <Content Include="Views\Groups\Details.cshtml" />
-    <Content Include="Views\Groups\Edit.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\Create.cshtml" />
     <Content Include="Views\Groups\Partials\GroupMemberViewCreateModel.cshtml" />
@@ -545,6 +544,7 @@
     <Content Include="Views\GroupMembers\Index.cshtml" />
     <Content Include="Views\Groups\AddMembers.cshtml" />
     <Content Include="Views\Groups\PastGroups.cshtml" />
+    <Content Include="Views\Groups\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

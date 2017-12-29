@@ -106,9 +106,6 @@ namespace Distributor.ViewModels
         [Required]
         [Display(Name = "Group invite acceptance level")]
         public GroupInviteAcceptanceLevelEnum AcceptanceLevel { get; set; }
-
-
-        //public List<GroupMemberViewCreateModel> GroupMembers { get; set; }
     }
 
     public class GroupMemberViewCreateModel
@@ -133,6 +130,30 @@ namespace Distributor.ViewModels
 
         [Display(Name = "Address postcode")]
         public string AddressPostcode { get; set; }
+    }
+
+    #endregion
+
+    #region Group/Edit
+
+    public class GroupViewEditModel
+    {
+        public Guid GroupId { get; set; }
+
+        [Display(Name = "Group name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Group visibility")]
+        public GroupVisibilityEnum VisibilityLevel { get; set; }
+
+        [Required]
+        [Display(Name = "Group invite level")]
+        public GroupInviteLevelEnum InviteLevel { get; set; }
+
+        [Required]
+        [Display(Name = "Group invite acceptance level")]
+        public GroupInviteAcceptanceLevelEnum AcceptanceLevel { get; set; }
     }
 
     #endregion

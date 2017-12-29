@@ -15,6 +15,11 @@ namespace Distributor.Helpers
     {
         #region Get
 
+        public static Group GetGroup(ApplicationDbContext db, Guid groupId)
+        {
+            return db.Groups.Find(groupId);
+        }
+
         //Get all groups that have been created by a specific Organisation
         public static List<Group> GetGroupsCreatedByOrg(ApplicationDbContext db, Guid organisationId)
         {
@@ -71,6 +76,24 @@ namespace Distributor.Helpers
 
         #region Update
 
+        public static Group UpdateGroup(ApplicationDbContext db, GroupViewEditModel model, IPrincipal user)
+        {
+            Group group = GetGroup(db, model.GroupId);
+
+            group.Name = model.Name;
+            group.VisibilityLevel = model.VisibilityLevel;
+            group.InviteLevel = model.InviteLevel;
+            group.AcceptanceLevel = model.AcceptanceLevel;
+            group.RecordChange = RecordChangeEnum.NewRecord;
+            group.RecordChangeOn = DateTime.Now;
+            group.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+
+            db.Entry(group).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return group;
+        }
+
         public static Group UpdateEntityStatus(ApplicationDbContext db, Guid groupId, EntityStatusEnum entityStatus, IPrincipal user)
         {
             try
@@ -81,6 +104,7 @@ namespace Distributor.Helpers
                 group.RecordChange = RecordChangeEnum.StatusChange;
                 group.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
                 group.RecordChangeOn = DateTime.Now;
+
                 db.Entry(group).State = EntityState.Modified;
                 db.SaveChanges();
 
@@ -228,6 +252,22 @@ namespace Distributor.Helpers
             {
                 GroupsCreatedByOrg = GroupsCreatedByOrg,
                 GroupsContainingOrg = GroupsContainingOrg
+            };
+
+            return model;
+        }
+
+        public static GroupViewEditModel GetGroupViewEditModel(ApplicationDbContext db, Guid groupId)
+        {
+            Group group = db.Groups.Find(groupId);
+
+            GroupViewEditModel model = new GroupViewEditModel()
+            {
+                GroupId = group.GroupId,
+                Name = group.Name,
+                VisibilityLevel = group.VisibilityLevel,
+                InviteLevel = group.InviteLevel,
+                AcceptanceLevel = group.AcceptanceLevel
             };
 
             return model;

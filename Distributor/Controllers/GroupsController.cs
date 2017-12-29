@@ -86,12 +86,12 @@ namespace Distributor.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Group group = db.Groups.Find(id);
-            if (group == null)
+            GroupViewEditModel model = GroupViewHelpers.GetGroupViewEditModel(db, id.Value);
+            if (model == null)
             {
                 return HttpNotFound();
             }
-            return View(group);
+            return View(model);
         }
 
         // POST: Groups/Edit/5
@@ -99,15 +99,19 @@ namespace Distributor.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GroupId,Name,Type,VisibilityLevel,InviteLevel,AcceptanceLevel,EntityStatus,RecordChange,RecordChangeOn,RecordChangeBy,GroupOriginatorAppUserId,GroupOriginatorOrganisationId,GroupOriginatorDateTime")] Group group)
+        public ActionResult Edit([Bind(Include = "GroupId,Name,VisibilityLevel,InviteLevel,AcceptanceLevel")] GroupViewEditModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(group).State = EntityState.Modified;
-                db.SaveChanges();
+                if (Request.Form["resetbutton"] != null)
+                {
+                    return RedirectToAction("Edit", "Groups", new { id = model.GroupId });
+                }
+
+                GroupHelpers.UpdateGroup(db, model, User);
                 return RedirectToAction("Index");
             }
-            return View(group);
+            return View(model);
         }
 
         // GET: Groups/Delete/5
