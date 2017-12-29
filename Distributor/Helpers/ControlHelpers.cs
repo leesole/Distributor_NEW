@@ -35,7 +35,14 @@ namespace Distributor.Helpers
                 allOrganisations.Remove(org);
             }
 
-            return new SelectList(allOrganisations, "OrganisationId", "OrganisationName");
+            //Build custom selectable data to hold org name and address
+            return new SelectList(
+                allOrganisations.Select(
+                    o => new
+                    {
+                        OrganisationId = o.OrganisationId,
+                        OrganisationDetails = o.OrganisationName + ": " + o.AddressLine1 + ", " + o.AddressTownCity
+                    }), "OrganisationId", "OrganisationDetails");
         }
 
         #endregion

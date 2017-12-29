@@ -108,14 +108,16 @@ namespace Distributor.ViewModels
         public GroupInviteAcceptanceLevelEnum AcceptanceLevel { get; set; }
 
 
-        public List<GroupMemberViewCreateModel> GroupMembers { get; set; }
+        //public List<GroupMemberViewCreateModel> GroupMembers { get; set; }
     }
 
     public class GroupMemberViewCreateModel
     {
+        public Guid GroupMemberId { get; set; }
+
         public Guid GroupId { get; set; }
 
-        public Guid SelectedOrganisationId { get; set; }
+        public Guid OrganisationId { get; set; }
 
         [Display(Name = "Organisation name")]
         public string OrganisationName { get; set; }

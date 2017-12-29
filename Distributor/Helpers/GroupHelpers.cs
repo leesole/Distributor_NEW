@@ -26,11 +26,11 @@ namespace Distributor.Helpers
         }
 
         //Get all groups that have members belonging to an organisation but have not themselves been set up by that organisation
-        public static List<Group> GetGroupsContainingOrg(ApplicationDbContext db, Guid organisationId)
+        public static List<Group> GetGroupsContainingOrg(ApplicationDbContext db, Guid organisationId, EntityStatusEnum memberStatus)
         {
             List<Group> groups = (from g in db.Groups
                                   join gm in db.GroupMembers on g.GroupId equals gm.GroupId
-                                  where (gm.OrganisationId == organisationId && g.GroupOriginatorOrganisationId != organisationId && g.EntityStatus == EntityStatusEnum.Active)
+                                  where (gm.OrganisationId == organisationId && g.GroupOriginatorOrganisationId != organisationId && g.EntityStatus == EntityStatusEnum.Active && gm.EntityStatus == memberStatus)
                                   select g).Distinct().ToList();
 
             return groups;
@@ -61,8 +61,8 @@ namespace Distributor.Helpers
             db.Groups.Add(group);
             db.SaveChanges();
 
-            if (model.GroupMembers != null)
-                GroupMembersHelpers.CreateGroupMembers(db, model.GroupMembers, user);
+            //Add user Organisation as the initial group member
+            GroupMembersHelpers.CreateGroupMember(db, group.GroupId, group.GroupOriginatorOrganisationId, user);
 
             return group;
         }
@@ -99,7 +99,6 @@ namespace Distributor.Helpers
         public static Group RemoveGroup(ApplicationDbContext db, Guid groupId, IPrincipal user)
         {
             //To remove we just change status
-
             return UpdateEntityStatus(db, groupId, EntityStatusEnum.Removed, user);
         }
 
@@ -110,10 +109,28 @@ namespace Distributor.Helpers
     {
         #region Get
 
+        public static GroupMember GetGroupMember(ApplicationDbContext db, Guid groupMemberId)
+        {
+            GroupMember member = (from gm in db.GroupMembers
+                                  where gm.GroupMemberId == groupMemberId
+                                  select gm).FirstOrDefault();
+
+            return member;
+        }
+
+        public static GroupMember GetGroupMemberFromGroup(ApplicationDbContext db, Guid groupId, Guid organisationId)
+        {
+            GroupMember member = (from gm in db.GroupMembers
+                                  where (gm.GroupId == groupId && gm.OrganisationId == organisationId)
+                                  select gm).FirstOrDefault();
+
+            return member;
+        }
+
         public static List<GroupMember> GetGroupMembersForGroup(ApplicationDbContext db, Guid groupId)
         {
             List<GroupMember> list = (from gm in db.GroupMembers
-                                      where gm.GroupId == groupId
+                                      where (gm.GroupId == groupId && gm.EntityStatus == EntityStatusEnum.Active)
                                       select gm).Distinct().ToList();
 
             return list;
@@ -133,6 +150,7 @@ namespace Distributor.Helpers
                 OrganisationId = organisationId,
                 AddedBy = AppUserHelpers.GetAppUserIdFromUser(user),
                 AddedDateTime = DateTime.Now,
+                EntityStatus = EntityStatusEnum.Active,
                 Status = GroupMemberStatusEnum.Accepted,
                 RecordChange = RecordChangeEnum.NewRecord,
                 RecordChangeOn = DateTime.Now,
@@ -152,11 +170,46 @@ namespace Distributor.Helpers
 
             foreach (GroupMemberViewCreateModel memberModel in membersModel)
             {
-                GroupMember item = CreateGroupMember(db, memberModel.GroupId, memberModel.SelectedOrganisationId, user);
+                GroupMember item = CreateGroupMember(db, memberModel.GroupId, memberModel.OrganisationId, user);
                 list.Add(item);
             }
 
             return list;
+        }
+
+        #endregion
+
+        #region Remove
+
+        public static void RemoveMember(ApplicationDbContext db, Guid groupMemberId)
+        {
+            GroupMember member = GetGroupMember(db, groupMemberId);
+            db.GroupMembers.Remove(member);
+            db.SaveChanges();
+        }
+
+        public static void LeaveGroup(ApplicationDbContext db, Guid groupId, Guid groupMemberId, IPrincipal user)
+        {
+            GroupMember member = GetGroupMemberFromGroup(db, groupId, groupMemberId);
+            member.EntityStatus = EntityStatusEnum.Inactive;
+            member.RecordChange = RecordChangeEnum.StatusChange;
+            member.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+            member.RecordChangeOn = DateTime.Now;
+
+            db.Entry(member).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public static void RejoinGroup(ApplicationDbContext db, Guid groupId, Guid groupMemberId, IPrincipal user)
+        {
+            GroupMember member = GetGroupMemberFromGroup(db, groupId, groupMemberId);
+            member.EntityStatus = EntityStatusEnum.Active;
+            member.RecordChange = RecordChangeEnum.StatusChange;
+            member.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+            member.RecordChangeOn = DateTime.Now;
+
+            db.Entry(member).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         #endregion
@@ -169,13 +222,20 @@ namespace Distributor.Helpers
         public static GroupIndexViewModel GetGroupIndexViewModel(ApplicationDbContext db, IPrincipal user)
         {
             List<GroupViewModel> GroupsCreatedByOrg = GetGroupsViewCreatedByOrg(db, user);
-            List<GroupViewModel> GroupsContainingOrg = GetGroupsViewContainingOrg(db, user);
+            List<GroupViewModel> GroupsContainingOrg = GetGroupsViewContainingOrg(db, EntityStatusEnum.Active, user); //only for Active members
 
             GroupIndexViewModel model = new GroupIndexViewModel()
             {
                 GroupsCreatedByOrg = GroupsCreatedByOrg,
                 GroupsContainingOrg = GroupsContainingOrg
             };
+
+            return model;
+        }
+
+        public static List<GroupViewModel> GetPastGroupsViewModel(ApplicationDbContext db, IPrincipal user)
+        {
+            List<GroupViewModel> model = GetGroupsViewContainingOrg(db, EntityStatusEnum.Inactive, user); //Only for Inactive members
 
             return model;
         }
@@ -225,7 +285,7 @@ namespace Distributor.Helpers
             return groupsViewCreatedByOrg;
         }
 
-        public static List<GroupViewModel> GetGroupsViewContainingOrg(ApplicationDbContext db, IPrincipal user)
+        public static List<GroupViewModel> GetGroupsViewContainingOrg(ApplicationDbContext db, EntityStatusEnum memberStatus, IPrincipal user)
         {
             List<GroupViewModel> groupsViewContainingOrg = new List<GroupViewModel>();
 
@@ -233,7 +293,7 @@ namespace Distributor.Helpers
             Organisation organisation = OrganisationHelpers.GetOrganisation(db, AppUserHelpers.GetOrganisationIdFromUser(db, user));
 
             //get list of groups containing this organisation
-            List<Group> groupsContainingOrg = GroupHelpers.GetGroupsContainingOrg(db, organisation.OrganisationId);
+            List<Group> groupsContainingOrg = GroupHelpers.GetGroupsContainingOrg(db, organisation.OrganisationId, memberStatus);
             
             //build view
             foreach (Group group in groupsContainingOrg)
@@ -336,8 +396,10 @@ namespace Distributor.Helpers
 
                 GroupMemberViewCreateModel item = new GroupMemberViewCreateModel()
                 {
+                    GroupMemberId = member.GroupMemberId,
                     GroupId = member.GroupId,
-                    SelectedOrganisationId = member.OrganisationId,
+                    OrganisationId = member.OrganisationId,
+                    OrganisationName = organisaion.OrganisationName,
                     BusinessType = organisaion.BusinessType,
                     AddressLine1 = organisaion.AddressLine1,
                     AddressTownCity = organisaion.AddressTownCity,

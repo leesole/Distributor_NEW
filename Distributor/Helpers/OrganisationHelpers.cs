@@ -38,6 +38,7 @@ namespace Distributor.Helpers
         {
             List<Organisation> list = (from o in db.Organisations
                                        where o.EntityStatus == EntityStatusEnum.Active
+                                       orderby o.OrganisationName
                                        select o).ToList();
             return list;
         }

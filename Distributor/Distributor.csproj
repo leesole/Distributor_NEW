@@ -277,6 +277,10 @@
     <Compile Include="Migrations\201712262051345_12th.Designer.cs">
       <DependentUpon>201712262051345_12th.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712291700429_14th.cs" />
+    <Compile Include="Migrations\201712291700429_14th.Designer.cs">
+      <DependentUpon>201712291700429_14th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -540,6 +544,7 @@
     <Content Include="Views\GroupMembers\Edit.cshtml" />
     <Content Include="Views\GroupMembers\Index.cshtml" />
     <Content Include="Views\Groups\AddMembers.cshtml" />
+    <Content Include="Views\Groups\PastGroups.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -587,6 +592,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712262051345_12th.resx">
       <DependentUpon>201712262051345_12th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712291700429_14th.resx">
+      <DependentUpon>201712291700429_14th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

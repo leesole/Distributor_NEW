@@ -52,6 +52,28 @@ namespace Distributor.Controllers
             return Json(new { success = true });
         }
 
+        // This will (set the status to) remove (for) the 'Block' from a given blockId
+        [HttpPost]
+        public ActionResult RemoveMember(Guid organisationId)
+        {
+            GroupMembersHelpers.RemoveMember(db, organisationId);
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult LeaveGroup(Guid groupId)
+        {
+            GroupMembersHelpers.LeaveGroup(db, groupId, AppUserHelpers.GetOrganisationIdFromUser(db, User), User);
+            return Json(new { success = true });
+        }
+
+        [HttpPost]
+        public ActionResult RejoinGroup(Guid groupId)
+        {
+            GroupMembersHelpers.RejoinGroup(db, groupId, AppUserHelpers.GetOrganisationIdFromUser(db, User), User);
+            return Json(new { success = true });
+        }
+
         #endregion
     }
 }

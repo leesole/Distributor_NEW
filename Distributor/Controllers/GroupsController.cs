@@ -23,6 +23,12 @@ namespace Distributor.Controllers
             return View(model);
         }
 
+        public ActionResult PastGroups()
+        {
+            List<GroupViewModel> model = GroupViewHelpers.GetPastGroupsViewModel(db, User);
+            return View(model);
+        }
+
         // GET: Groups/Details/5
         public ActionResult Details(Guid? id)
         {
@@ -63,7 +69,7 @@ namespace Distributor.Controllers
 
                 if (Request.Form["addmembersbutton"] != null)
                 {
-                    return RedirectToAction("AddMembers", "Groups", new { group = newGroup });
+                    return RedirectToAction("AddMembers", "Groups", new { groupId = newGroup.GroupId });
                 }
 
                 //all done, go back to initial list

@@ -63,6 +63,10 @@ namespace Distributor.Models
         [Display(Name = "Record added on")]
         public DateTime AddedDateTime { get; set; }
 
+        [Required]
+        [Display(Name = "Status")]
+        public EntityStatusEnum EntityStatus { get; set; }
+
         [Display(Name = "Group member status")]
         public GroupMemberStatusEnum Status { get; set; }
 
