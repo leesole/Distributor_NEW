@@ -10,6 +10,7 @@ using Distributor.Models;
 
 namespace Distributor.Controllers
 {
+    [Authorize]
     public class GroupMembersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

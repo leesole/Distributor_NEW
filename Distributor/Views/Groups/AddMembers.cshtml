@@ -51,7 +51,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="panel-footer">
+            <div class="panel-footer clearfix">
                 <div class="form-group">
                     <div class="col-md-4 col-sm-6">Select organisation to add to group:</div>
                     <div class="col-md-8 col-sm-6">@Html.DropDownList("Organisation", (SelectList)ViewBag.OrganisationList, "Add organisation", new { @class = "form-control", @id = groupId, onchange = "javascipt:AddOrganisationDetails(this.value, this.id);" })</div>

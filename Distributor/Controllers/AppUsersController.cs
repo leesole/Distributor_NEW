@@ -152,11 +152,21 @@ namespace Distributor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UserProfile([Bind(Include = "AppUserId,FirstName,LastName,EntityStatus,LoginEmail,PrivacyLevel,UserRole,SelectedOrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode")] AppUserProfileView view)
         {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("UserProfile");
+            }
+
             if (ModelState.IsValid)
             {
-                AppUserHelpers.UpdateAppUser(db, view, User);
+                //if selectedorganisationid is null then the organisation already exists so set that flag as a limited number of fields needs updating
 
-                return RedirectToAction("Index", "Home");
+                if (view.SelectedOrganisationId == null)
+                    AppUserHelpers.UpdateAppUser(db, view, User, true);
+                else
+                    AppUserHelpers.UpdateAppUser(db, view, User, false);
+
+                return RedirectToAction("Dashboard", "Home");
             }
             return View(view);
         }
@@ -181,6 +191,11 @@ namespace Distributor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Settings([Bind(Include = "AppUserId,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,DisplayMyOrganisationListingsFilter")] AppUserSettingsView view)
         {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Settings");
+            }
+
             if (ModelState.IsValid)
             {
                 AppUserHelpers.UpdateAppUser(db, view, User);

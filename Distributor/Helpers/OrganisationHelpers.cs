@@ -8,6 +8,7 @@ using static Distributor.Enums.EntityEnums;
 using System.Security.Principal;
 using Distributor.Extensions;
 using static Distributor.Enums.GeneralEnums;
+using System.Data.Entity;
 
 namespace Distributor.Helpers
 {
@@ -92,9 +93,76 @@ namespace Distributor.Helpers
         #endregion
 
         #region Update
+
+        public static Organisation UpdateOrganisation(ApplicationDbContext db, OrganisationAdminView view, IPrincipal user)
+        {
+            Organisation organisation = GetOrganisation(db, view.OrganisationId);
+            organisation.OrganisationName = view.OrganisationName;
+            organisation.BusinessType = view.BusinessType;
+            organisation.AddressLine1 = view.AddressLine1;
+            organisation.AddressLine2 = view.AddressLine2;
+            organisation.AddressLine3 = view.AddressLine3;
+            organisation.AddressTownCity = view.AddressTownCity;
+            organisation.AddressCounty = view.AddressCounty;
+            organisation.AddressPostcode = view.AddressPostcode;
+            organisation.TelephoneNumber = view.TelephoneNumber;
+            organisation.Email = view.Email;
+            organisation.Website = view.Website;
+            organisation.ContactName = view.ContactName;
+            organisation.CompanyRegistrationDetails = view.CompanyRegistrationDetails;
+            organisation.CharityRegistrationDetails = view.CharityRegistrationDetails;
+            organisation.VATRegistrationDetails = view.VATRegistrationDetails;
+            organisation.PrivacyLevel = view.PrivacyLevel;
+            organisation.GroupPrivacyLevel = view.GroupPrivacyLevel;
+            organisation.RecordChange = RecordChangeEnum.RecordUpdated;
+            organisation.RecordChangeOn = DateTime.Now;
+            organisation.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+
+            db.Entry(organisation).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return organisation;
+        }
+
         #endregion
 
         #region Delete
+        #endregion
+    }
+
+    public static class OrganisationViewHelpers
+    {
+        #region Get
+
+        public static OrganisationAdminView GetOrganisationAdminView(ApplicationDbContext db, Guid organisationId)
+        {
+            Organisation org = OrganisationHelpers.GetOrganisation(db, organisationId);
+
+            OrganisationAdminView view = new OrganisationAdminView()
+            {
+                OrganisationId = org.OrganisationId,
+                OrganisationName = org.OrganisationName,
+                BusinessType = org.BusinessType,
+                AddressLine1 = org.AddressLine1,
+                AddressLine2 = org.AddressLine2,
+                AddressLine3 = org.AddressLine3,
+                AddressTownCity = org.AddressTownCity,
+                AddressCounty = org.AddressCounty,
+                AddressPostcode = org.AddressPostcode,
+                TelephoneNumber = org.TelephoneNumber,
+                Email = org.Email,
+                Website = org.Website,
+                ContactName = org.ContactName,
+                CompanyRegistrationDetails = org.CompanyRegistrationDetails,
+                CharityRegistrationDetails = org.CharityRegistrationDetails,
+                VATRegistrationDetails = org.VATRegistrationDetails,
+                PrivacyLevel = org.PrivacyLevel,
+                GroupPrivacyLevel = org.GroupPrivacyLevel
+            };
+
+            return view;
+        }
+
         #endregion
     }
 }

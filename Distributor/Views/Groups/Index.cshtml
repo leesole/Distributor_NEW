@@ -42,9 +42,8 @@
                 </table>
                 <!-- /.table-responsive -->
             </div>
-            <div class="panel-footer">
-                <a class="btn btn-success btn-lg btn-block" href='@Url.Action("Create", "Groups")'>Add Group</a>
-                <div class="clearfix"></div>
+            <div class="panel-footer clearfix">
+                <button class="btn btn-success btn-lg btn-block" onclick="location.href='@Url.Action("Create", "Groups")'"><span class="glyphicon glyphicon-plus"></span> Add Group</button>
             </div>
         </div>
     </div>
@@ -78,9 +77,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="panel-footer">
+            <div class="panel-footer clearfix">
                 <a class="btn btn-default btn-lg btn-block" href='@Url.Action("PastGroups", "Groups")'>View Active Groups You Have Left</a>
-                <div class="clearfix"></div>
             </div>
         </div>
     </div>

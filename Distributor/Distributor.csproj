@@ -194,6 +194,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppUsersController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\GroupMembersController.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Models\UserTasksModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\AdminViewModels.cs" />
     <Compile Include="ViewModels\AppUserViewModels.cs" />
     <Compile Include="ViewModels\CallingFields.cs" />
     <Compile Include="ViewModels\GroupViewModels.cs" />
@@ -536,7 +538,6 @@
     <Content Include="Views\Groups\Details.cshtml" />
     <Content Include="Views\Groups\Index.cshtml" />
     <Content Include="Views\Groups\Create.cshtml" />
-    <Content Include="Views\Groups\Partials\GroupMemberViewCreateModel.cshtml" />
     <Content Include="Views\GroupMembers\Create.cshtml" />
     <Content Include="Views\GroupMembers\Delete.cshtml" />
     <Content Include="Views\GroupMembers\Details.cshtml" />
@@ -545,6 +546,7 @@
     <Content Include="Views\Groups\AddMembers.cshtml" />
     <Content Include="Views\Groups\PastGroups.cshtml" />
     <Content Include="Views\Groups\Edit.cshtml" />
+    <Content Include="Views\Admin\OrganisationAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

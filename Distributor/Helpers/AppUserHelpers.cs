@@ -170,27 +170,31 @@ namespace Distributor.Helpers
         }
 
         //updates AppUser from the AppUserProfileView (AppUser/UserProfile)
-        public static AppUser UpdateAppUser(AppUserProfileView view, IPrincipal user)
+        public static AppUser UpdateAppUser(AppUserProfileView view, IPrincipal user, bool organisationDetailsExsits)
         {
             ApplicationDbContext db = new ApplicationDbContext();
-            AppUser appUser = UpdateAppUser(db, view, user);
+            AppUser appUser = UpdateAppUser(db, view, user, organisationDetailsExsits);
             db.Dispose();
             return appUser;
         }
         //updates AppUser from the AppUserProfileView (AppUser/UserProfile)
-        public static AppUser UpdateAppUser(ApplicationDbContext db, AppUserProfileView view, IPrincipal user)
+        public static AppUser UpdateAppUser(ApplicationDbContext db, AppUserProfileView view, IPrincipal user, bool organisationDetailsExsits)
         {
             AppUser appUser = GetAppUser(db, view.AppUserId);
             appUser.FirstName = view.FirstName;
             appUser.LastName = view.LastName;
-            appUser.EntityStatus = view.EntityStatus;
-            appUser.LoginEmail = view.LoginEmail;
-            appUser.PrivacyLevel = view.PrivacyLevel;
-            appUser.UserRole = view.UserRole;
-            appUser.OrganisationId = view.SelectedOrganisationId.Value;
             appUser.RecordChange = RecordChangeEnum.RecordUpdated;
             appUser.RecordChangeBy = GetAppUserIdFromUser(user);
             appUser.RecordChangeOn = DateTime.Now;
+
+            if (!organisationDetailsExsits)
+            {
+                appUser.EntityStatus = view.EntityStatus;
+                appUser.LoginEmail = view.LoginEmail;
+                appUser.PrivacyLevel = view.PrivacyLevel;
+                appUser.UserRole = view.UserRole;
+                appUser.OrganisationId = view.SelectedOrganisationId.Value;
+            }
 
             db.Entry(appUser).State = EntityState.Modified;
             db.SaveChanges();

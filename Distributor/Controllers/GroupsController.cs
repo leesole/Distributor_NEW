@@ -12,6 +12,7 @@ using Distributor.Helpers;
 
 namespace Distributor.Controllers
 {
+    [Authorize]
     public class GroupsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -57,13 +58,13 @@ namespace Distributor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Name,VisibilityLevel,InviteLevel,AcceptanceLevel")] GroupViewCreateModel model)
         {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Create");
+            }
+
             if (ModelState.IsValid)
             {
-                if (Request.Form["resetbutton"] != null)
-                {
-                    return RedirectToAction("Create");
-                }
-
                 //Save the group before going to add members as to be here you have pressed either 'Save' or 'Add Members'
                 Group newGroup = GroupHelpers.CreateGroup(db, model, User);
 
@@ -101,13 +102,13 @@ namespace Distributor.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "GroupId,Name,VisibilityLevel,InviteLevel,AcceptanceLevel")] GroupViewEditModel model)
         {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Edit", "Groups", new { id = model.GroupId });
+            }
+
             if (ModelState.IsValid)
             {
-                if (Request.Form["resetbutton"] != null)
-                {
-                    return RedirectToAction("Edit", "Groups", new { id = model.GroupId });
-                }
-
                 GroupHelpers.UpdateGroup(db, model, User);
                 return RedirectToAction("Index");
             }
