@@ -16,7 +16,30 @@ namespace Distributor.Controllers
 
         public ActionResult UserAdmin()
         {
-            return View();
+            List<UserAdminView> model = AppUserViewHelpers.GetUserAdminView(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult UserAdmin(List<UserAdminView> model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("UserAdmin");
+            }
+
+            if (ModelState.IsValid)
+            {
+                AppUserHelpers.UpdateAppUsers(db, model, User);
+
+                if (Request.Form["addusersbutton"] != null)
+                {
+                    return RedirectToAction("AddUser");
+                }
+
+                return RedirectToAction("Dashboard", "Home");
+            }
+            return View(model);
         }
 
         public ActionResult OrganisationAdmin()

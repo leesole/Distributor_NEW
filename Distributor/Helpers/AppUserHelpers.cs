@@ -67,6 +67,15 @@ namespace Distributor.Helpers
             }
         }
 
+        public static List<AppUser> GetAppUsersForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            List<AppUser> users = (from au in db.AppUsers
+                                   where (au.OrganisationId == organisationId && au.EntityStatus == EntityStatusEnum.Active)
+                                   select au).Distinct().ToList();
+
+            return users;
+        }
+
         #endregion
 
         #region Create
@@ -228,10 +237,29 @@ namespace Distributor.Helpers
             return appUser;
         }
 
+        //updates AppUser from the AppUserView (Admin/UserAdmin)
+        public static void UpdateAppUser(ApplicationDbContext db, UserAdminView view, IPrincipal user)
+        {
+            AppUser appUser = GetAppUser(db, view.AppUserId);
+            appUser.PrivacyLevel = view.PrivacyLevel;
+            appUser.UserRole = view.UserRole;
+            appUser.RecordChange = RecordChangeEnum.RecordUpdated;
+            appUser.RecordChangeBy = GetAppUserIdFromUser(user);
+            appUser.RecordChangeOn = DateTime.Now;
+
+            db.Entry(appUser).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+        public static void UpdateAppUsers(ApplicationDbContext db, List<UserAdminView> listView, IPrincipal user)
+        {
+            foreach (UserAdminView view in listView)
+                UpdateAppUser(db, view, user);
+        }
+
         #endregion
 
         #region Delete
-        
+
         public static void DeleteAppUser(Guid appUserId)
         {
             ApplicationDbContext db = new ApplicationDbContext();
@@ -349,6 +377,34 @@ namespace Distributor.Helpers
             };
 
             return view;
+        }
+
+        #endregion
+
+        #region Get
+
+        public static List<UserAdminView> GetUserAdminView(ApplicationDbContext db, Guid organisationId)
+        {
+            List<AppUser> users = AppUserHelpers.GetAppUsersForOrganisation(db, organisationId);
+
+            List<UserAdminView> list = new List<UserAdminView>();
+
+            foreach (AppUser user in users)
+            {
+                UserAdminView view = new UserAdminView()
+                {
+                    AppUserId = user.AppUserId,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    LoginEmail = user.LoginEmail,
+                    PrivacyLevel = user.PrivacyLevel,
+                    UserRole = user.UserRole
+                };
+
+                list.Add(view);
+            }
+
+            return list;
         }
 
         #endregion

@@ -21,10 +21,6 @@ namespace Distributor.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Current organisation")]
-        public Guid OrganisationId { get; set; }
-
-        [Required]
         [Display(Name = "Login email")]
         public string LoginEmail { get; set; }
 
