@@ -12,12 +12,12 @@ namespace Distributor.Enums
         //Do not change this order as the number values are used within Javascript
         public enum UserRoleEnum
         {
-            [Description("Admin")]
-            [Display(Name = "Admin")]
-            Admin = 0,
             [Description("User")]
             [Display(Name = "User")]
-            User = 1,
+            User = 0,
+            [Description("Admin")]
+            [Display(Name = "Admin")]
+            Admin = 1,
             [Description("Super user")]
             [Display(Name = "Super user")]
             SuperUser = 2 //used as the top level of security for admin of system

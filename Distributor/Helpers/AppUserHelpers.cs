@@ -115,6 +115,29 @@ namespace Distributor.Helpers
             return appUser;
         }
 
+        public static AppUser CreateAppUser(ApplicationDbContext db, UserAdminAddUserView view, IPrincipal user)
+        {
+            AppUser appUser = new AppUser()
+            {
+                AppUserId = Guid.NewGuid(),
+                FirstName = view.FirstName,
+                LastName = view.LastName,
+                EntityStatus = EntityStatusEnum.PasswordResetRequired,
+                OrganisationId = GetOrganisationIdFromUser(db, user),
+                LoginEmail = view.LoginEmail,
+                PrivacyLevel = view.PrivacyLevel,
+                UserRole = view.UserRole,
+                RecordChange = RecordChangeEnum.NewRecord,
+                RecordChangeBy = GetAppUserIdFromUser(user),
+                RecordChangeOn = DateTime.Now
+            };
+
+            db.AppUsers.Add(appUser);
+            db.SaveChanges();
+
+            return appUser;
+        }
+
         #endregion
 
         #region Update

@@ -98,4 +98,34 @@ namespace Distributor.ViewModels
         [Display(Name = "'Group' privacy level")]
         public PrivacyLevelEnum GroupPrivacyLevel { get; set; }
     }
+
+
+    public class UserAdminAddUserView
+    {
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+
+        [EmailAddress]
+        [Display(Name = "Login email")]
+        public string LoginEmail { get; set; }
+
+        [Display(Name = "Login password")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string LoginPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Re-enter password")]
+        [Compare("LoginPassword", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Privacy level")]
+        public PrivacyLevelEnum PrivacyLevel { get; set; }
+
+        [Display(Name = "User role")]
+        public UserRoleEnum UserRole { get; set; }
+    }
 }

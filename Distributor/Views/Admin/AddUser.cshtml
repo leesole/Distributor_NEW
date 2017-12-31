@@ -1,0 +1,113 @@
+﻿@model Distributor.ViewModels.UserAdminAddUserView
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">User Admin <small>Add User</small></h1>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("User Admin", "UserAdmin", "Admin")
+            </li>
+            <li class="active">Add user</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm("AddUser", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-green">
+                <div class="panel-heading">New User</div>
+                <div class="panel-body">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LoginEmail, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.LoginEmail, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LoginEmail, "", new { @class = "text-danger", @id = "loginemailerror" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LoginPassword, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(model => model.LoginPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LoginPassword, "", new { @class = "text-danger", @id = "loginpassworderror" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PrivacyLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EnumDropDownListFor(model => model.PrivacyLevel, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.PrivacyLevel, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserRole, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EnumDropDownListFor(model => model.UserRole, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UserRole, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-footer clearfix">
+                    <div class="col-sm-4"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" onclick="ValidateFields()"><span class="glyphicon glyphicon-save"></span> Save</button></div>
+                    <div class="col-sm-4"><button type="submit" name="adduserbutton" class="btn btn-primary btn-lg btn-block" onclick="ValidateFields()"><span class="glyphicon glyphicon-user"></span> Save & Add</button></div>
+                    <div class="col-sm-4"><button type="submit" name="resetbutton" class="btn btn-danger btn-lg btn-block"><span class="glyphicon glyphicon-repeat"></span> Reset</button></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function ValidateFields() {
+            var error = false;
+            if ($("#LoginEmail").val() == "") {
+                error = true;
+                $("#loginemailerror").html("The Email field is required");
+            }
+            if ($("#LoginPassword").val() == "") {
+                error = true;
+                $("#loginpassworderror").html("The Password field is required");
+            }
+            if (error) {
+                event.preventDefault();
+            }
+        }
+    </script>
+
+}

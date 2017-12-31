@@ -31,7 +31,10 @@ namespace Distributor.Enums
             Closed = 5,
             [Description("Removed")]
             [Display(Name = "Removed")]
-            Removed = 6
+            Removed = 6,
+            [Description("Password reset required")]
+            [Display(Name = "Password reset required")]
+            PasswordResetRequired = 7
         }
     }
 }
