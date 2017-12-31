@@ -7,6 +7,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Distributor.Models;
+using Distributor.Helpers;
+using Distributor.Extensions;
 
 namespace Distributor.Controllers
 {
@@ -238,6 +240,7 @@ namespace Distributor.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+                AppUserHelpers.UpdateAppUserEntityStatusIfForcedPasswordChange(AppUserHelpers.GetAppUserIdFromUser(User), User);
                 return RedirectToAction("Index", "Home");
             }
             AddErrors(result);

@@ -70,7 +70,7 @@ namespace Distributor.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> 
-            Login(LoginViewModel model, string returnUrl)
+        Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
@@ -100,6 +100,8 @@ namespace Distributor.Controllers
                             ModelState.AddModelError("", "This user is currently rejected.  You will need to contact your account administrator to active your account.");
                             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
                             return View(model);
+                        case EntityStatusEnum.PasswordResetRequired:
+                            return RedirectToAction("ChangePassword", "Manage");
                     }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:

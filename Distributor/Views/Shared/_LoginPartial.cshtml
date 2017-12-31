@@ -78,7 +78,7 @@
                                 <a href='@Url.Action("UserAdmin", "Admin")'><i class="fa fa-user fa-fw"></i> User Admin</a>
                             </li>
                             <li>
-                                <a href='@Url.Action("OrganisationAdmin", "Admin")'><i class="fa fa-institution fa-fw"></i> Company Admin</a>
+                                <a href='@Url.Action("OrganisationAdmin", "Admin")'><i class="fa fa-institution fa-fw"></i> Organisation Admin</a>
                             </li>
                         </ul>
                     </li>
@@ -91,13 +91,16 @@
                 <ul class="dropdown-menu dropdown-user">
                     @if (orgId != Guid.Empty)
                     {
-                        <li>
-                            <a href='@Url.Action("UserProfile", "AppUsers")'><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Settings", "AppUsers")'><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
-                        <li class="divider"></li>
+                        if (userStatus != EntityEnums.EntityStatusEnum.PasswordResetRequired)
+                        {
+                            <li>
+                                <a href='@Url.Action("UserProfile", "AppUsers")'><i class="fa fa-user fa-fw"></i> User Profile</a>
+                            </li>
+                            <li>
+                                <a href='@Url.Action("Settings", "AppUsers")'><i class="fa fa-gear fa-fw"></i> Settings</a>
+                            </li>
+                            <li class="divider"></li>
+                        }
                         <li>
                             <a href='@Url.Action("ChangePassword", "Manage")'><i class="fa fa-lock fa-fw"></i> Change Password</a>
                         </li>

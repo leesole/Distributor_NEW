@@ -84,7 +84,7 @@ namespace Distributor.Helpers
         {
             Guid appUserId = GetAppUserIdFromUser(user);
             ApplicationDbContext db = new ApplicationDbContext();
-            AppUser appUser = CreateAppUser(db, model,appUserId, role);
+            AppUser appUser = CreateAppUser(db, model, appUserId, role);
             db.Dispose();
             return appUser;
         }
@@ -160,6 +160,17 @@ namespace Distributor.Helpers
             db.Entry(appUser).State = EntityState.Modified;
             db.SaveChanges();
 
+            return appUser;
+        }
+
+        //Only changes the Entity status if the current status is 'PasswordResetRequired', if it is make it active
+        public static AppUser UpdateAppUserEntityStatusIfForcedPasswordChange(Guid updatedUserId, IPrincipal user)
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            AppUser appUser = GetAppUser(db, updatedUserId);
+            if (appUser.EntityStatus == EntityStatusEnum.PasswordResetRequired)
+                appUser = UpdateAppUserEntityStatus(db, updatedUserId, EntityStatusEnum.Active, user);
+            db.Dispose();
             return appUser;
         }
 
