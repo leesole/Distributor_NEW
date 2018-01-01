@@ -67,10 +67,19 @@ namespace Distributor.Helpers
             }
         }
 
-        public static List<AppUser> GetAppUsersForOrganisation(ApplicationDbContext db, Guid organisationId)
+        public static List<AppUser> GetAppUsersForOrganisationWithEntityStatus(ApplicationDbContext db, Guid organisationId, EntityStatusEnum status)
         {
             List<AppUser> users = (from au in db.AppUsers
-                                   where (au.OrganisationId == organisationId && au.EntityStatus == EntityStatusEnum.Active)
+                                   where (au.OrganisationId == organisationId && au.EntityStatus == status)
+                                   select au).Distinct().ToList();
+
+            return users;
+        }
+
+        public static List<AppUser> GetNonActiveAppUsersForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            List<AppUser> users = (from au in db.AppUsers
+                                   where (au.OrganisationId == organisationId && au.EntityStatus != EntityStatusEnum.Active && au.EntityStatus != EntityStatusEnum.PasswordResetRequired)
                                    select au).Distinct().ToList();
 
             return users;
@@ -271,12 +280,18 @@ namespace Distributor.Helpers
             return appUser;
         }
 
-        //updates AppUser from the AppUserView (Admin/UserAdmin)
-        public static void UpdateAppUser(ApplicationDbContext db, UserAdminView view, IPrincipal user)
+        //updates AppUser from the AppUserActiveView (Admin/UserAdmin)
+        public static void UpdateAppUser(ApplicationDbContext db, UserAdminDetailsView view, bool activeView, IPrincipal user)
         {
             AppUser appUser = GetAppUser(db, view.AppUserId);
-            appUser.PrivacyLevel = view.PrivacyLevel;
-            appUser.UserRole = view.UserRole;
+
+            if (activeView)
+            {
+                appUser.PrivacyLevel = view.PrivacyLevel;
+                appUser.UserRole = view.UserRole;
+            }
+
+            appUser.EntityStatus = view.EntityStatus;
             appUser.RecordChange = RecordChangeEnum.RecordUpdated;
             appUser.RecordChangeBy = GetAppUserIdFromUser(user);
             appUser.RecordChangeOn = DateTime.Now;
@@ -284,10 +299,10 @@ namespace Distributor.Helpers
             db.Entry(appUser).State = EntityState.Modified;
             db.SaveChanges();
         }
-        public static void UpdateAppUsers(ApplicationDbContext db, List<UserAdminView> listView, IPrincipal user)
+        public static void UpdateAppUsers(ApplicationDbContext db, List<UserAdminDetailsView> listView, bool activeView, IPrincipal user)
         {
-            foreach (UserAdminView view in listView)
-                UpdateAppUser(db, view, user);
+            foreach (UserAdminDetailsView view in listView)
+                UpdateAppUser(db, view, activeView, user);
         }
 
         #endregion
@@ -413,32 +428,54 @@ namespace Distributor.Helpers
             return view;
         }
 
-        #endregion
-
-        #region Get
-
-        public static List<UserAdminView> GetUserAdminView(ApplicationDbContext db, Guid organisationId)
+        public static List<UserAdminDetailsView> GetUserAdminDetailsView(ApplicationDbContext db, Guid organisationId, EntityStatusEnum? status)
         {
-            List<AppUser> users = AppUserHelpers.GetAppUsersForOrganisation(db, organisationId);
+            List<AppUser> users = new List<AppUser>();
 
-            List<UserAdminView> list = new List<UserAdminView>();
+            if (status == null)
+                users = AppUserHelpers.GetNonActiveAppUsersForOrganisation(db, organisationId);
+            else
+                users = AppUserHelpers.GetAppUsersForOrganisationWithEntityStatus(db, organisationId, status.Value);
+
+            List<UserAdminDetailsView> list = new List<UserAdminDetailsView>();
 
             foreach (AppUser user in users)
             {
-                UserAdminView view = new UserAdminView()
+                UserAdminDetailsView view = new UserAdminDetailsView()
                 {
                     AppUserId = user.AppUserId,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     LoginEmail = user.LoginEmail,
                     PrivacyLevel = user.PrivacyLevel,
-                    UserRole = user.UserRole
+                    UserRole = user.UserRole,
+                    EntityStatus = user.EntityStatus
                 };
 
                 list.Add(view);
             }
 
             return list;
+        }
+
+        #endregion
+
+        #region Get
+
+        public static UserAdminView GetUserAdminView(ApplicationDbContext db, Guid organisationId)
+        {
+            List<UserAdminDetailsView> UserAdminActiveView = GetUserAdminDetailsView(db, organisationId, EntityStatusEnum.Active);
+            List<UserAdminDetailsView> UserAdminPasswordChangeView = GetUserAdminDetailsView(db, organisationId, EntityStatusEnum.PasswordResetRequired);
+            List<UserAdminDetailsView> UserAdminNonActiveView = GetUserAdminDetailsView(db, organisationId, null);
+
+            UserAdminView view = new UserAdminView()
+            {
+                UserAdminActiveView = UserAdminActiveView,
+                UserAdminPasswordChangeView = UserAdminPasswordChangeView,
+                UserAdminNonActiveView = UserAdminNonActiveView
+            };
+
+            return view;
         }
 
         #endregion

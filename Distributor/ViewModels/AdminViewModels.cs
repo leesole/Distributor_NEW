@@ -12,6 +12,14 @@ namespace Distributor.ViewModels
 {
     public class UserAdminView
     {
+        public List<UserAdminDetailsView> UserAdminActiveView { get; set; }
+
+        public List<UserAdminDetailsView> UserAdminPasswordChangeView { get; set; }
+
+        public List<UserAdminDetailsView> UserAdminNonActiveView { get; set; }
+    }
+    public class UserAdminDetailsView
+    {
         public Guid AppUserId { get; set; }
 
         [Display(Name = "First name")]
@@ -31,6 +39,10 @@ namespace Distributor.ViewModels
         [Required]
         [Display(Name = "User role")]
         public UserRoleEnum UserRole { get; set; }
+
+        [Required]
+        [Display(Name = "Status")]
+        public EntityStatusEnum EntityStatus { get; set; }
     }
 
     public class OrganisationAdminView

@@ -41,12 +41,12 @@ namespace Distributor.Controllers
 
         public ActionResult UserAdmin()
         {
-            List<UserAdminView> model = AppUserViewHelpers.GetUserAdminView(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            UserAdminView model = AppUserViewHelpers.GetUserAdminView(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult UserAdmin(List<UserAdminView> model)
+        public ActionResult UserAdmin(UserAdminView model)
         {
             if (Request.Form["resetbutton"] != null)
             {
@@ -55,11 +55,22 @@ namespace Distributor.Controllers
 
             if (ModelState.IsValid)
             {
-                AppUserHelpers.UpdateAppUsers(db, model, User);
+                if (Request.Form["savebutton"] != null)
+                {
+                    AppUserHelpers.UpdateAppUsers(db, model.UserAdminActiveView, true, User);
+                    return RedirectToAction("Dashboard", "Home");
+                }
 
                 if (Request.Form["addusersbutton"] != null)
                 {
+                    AppUserHelpers.UpdateAppUsers(db, model.UserAdminActiveView, true, User);
                     return RedirectToAction("AddUser");
+                }
+
+                if (Request.Form["saveinactivebutton"] != null)
+                {
+                    AppUserHelpers.UpdateAppUsers(db, model.UserAdminNonActiveView, false, User);
+                    return RedirectToAction("Dashboard", "Home");
                 }
 
                 return RedirectToAction("Dashboard", "Home");

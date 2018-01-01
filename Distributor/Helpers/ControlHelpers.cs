@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using static Distributor.Enums.EntityEnums;
 
 namespace Distributor.Helpers
 {
@@ -43,6 +44,28 @@ namespace Distributor.Helpers
                         OrganisationId = o.OrganisationId,
                         OrganisationDetails = o.OrganisationName + ": " + o.AddressLine1 + ", " + o.AddressTownCity
                     }), "OrganisationId", "OrganisationDetails");
+        }
+
+        public static SelectList EntityStatusEnumsForUsersDropDown(EntityStatusEnum status)
+        {
+            var enumList = (from EntityStatusEnum bt in Enum.GetValues(typeof(EntityStatusEnum))
+                            select new
+                            {
+                                Id = bt,
+                                Name = EnumHelpers.GetDescription((EntityStatusEnum)bt)
+                            });
+
+            SelectList list = new SelectList(enumList, "Id", "Name", status);
+
+            //remove the non AppUser values...
+            list = new SelectList(list
+                            .Where(x => (x.Value != "Rejected") && (x.Value != "Closed") && (x.Value != "Removed"))
+                            .ToList(),
+                            "Value",
+                            "Text",
+                            status);
+            
+            return list;
         }
 
         #endregion
