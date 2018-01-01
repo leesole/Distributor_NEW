@@ -30,20 +30,20 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        // GET: Groups/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Group group = db.Groups.Find(id);
-            if (group == null)
-            {
-                return HttpNotFound();
-            }
-            return View(group);
-        }
+        //// GET: Groups/Details/5
+        //public ActionResult Details(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Group group = db.Groups.Find(id);
+        //    if (group == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(group);
+        //}
 
         // GET: Groups/Create
         public ActionResult Create()
@@ -115,31 +115,31 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        // GET: Groups/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Group group = db.Groups.Find(id);
-            if (group == null)
-            {
-                return HttpNotFound();
-            }
-            return View(group);
-        }
+        //// GET: Groups/Delete/5
+        //public ActionResult Delete(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Group group = db.Groups.Find(id);
+        //    if (group == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(group);
+        //}
 
-        // POST: Groups/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
-        {
-            Group group = db.Groups.Find(id);
-            db.Groups.Remove(group);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// POST: Groups/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(Guid id)
+        //{
+        //    Group group = db.Groups.Find(id);
+        //    db.Groups.Remove(group);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         public ActionResult AddMembers(Guid? groupId)
         {

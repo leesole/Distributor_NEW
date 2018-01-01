@@ -17,26 +17,26 @@ namespace Distributor.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: AppUsers
-        public ActionResult Index()
-        {
-            return View(db.AppUsers.ToList());
-        }
+        //// GET: AppUsers
+        //public ActionResult Index()
+        //{
+        //    return View(db.AppUsers.ToList());
+        //}
 
-        // GET: AppUsers/Details/5
-        public ActionResult Details(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.AppUsers.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
+        //// GET: AppUsers/Details/5
+        //public ActionResult Details(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AppUser appUser = db.AppUsers.Find(id);
+        //    if (appUser == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(appUser);
+        //}
 
         // GET: AppUsers/Create
         public ActionResult Create()
@@ -62,63 +62,63 @@ namespace Distributor.Controllers
             return View(appUser);
         }
 
-        // GET: AppUsers/Edit/5
-        public ActionResult Edit()
-        {
-            Guid id = AppUserHelpers.GetAppUserIdFromUser(User);
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.AppUsers.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
+        //// GET: AppUsers/Edit/5
+        //public ActionResult Edit()
+        //{
+        //    Guid id = AppUserHelpers.GetAppUserIdFromUser(User);
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AppUser appUser = db.AppUsers.Find(id);
+        //    if (appUser == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(appUser);
+        //}
 
-        // POST: AppUsers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "AppUserId,FirstName,LastName,EntityStatus,OrganisationId,LoginEmail,PrivacyLevel,UserRole,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,DisplayMyOrganisationListingsFilter,RecordChange,RecordChangeOn,RecordChangeBy")] AppUser appUser)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(appUser).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(appUser);
-        }
+        //// POST: AppUsers/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit([Bind(Include = "AppUserId,FirstName,LastName,EntityStatus,OrganisationId,LoginEmail,PrivacyLevel,UserRole,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,DisplayMyOrganisationListingsFilter,RecordChange,RecordChangeOn,RecordChangeBy")] AppUser appUser)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        db.Entry(appUser).State = EntityState.Modified;
+        //        db.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(appUser);
+        //}
 
-        // GET: AppUsers/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            AppUser appUser = db.AppUsers.Find(id);
-            if (appUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(appUser);
-        }
+        //// GET: AppUsers/Delete/5
+        //public ActionResult Delete(Guid? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    AppUser appUser = db.AppUsers.Find(id);
+        //    if (appUser == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(appUser);
+        //}
 
-        // POST: AppUsers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
-        {
-            AppUser appUser = db.AppUsers.Find(id);
-            db.AppUsers.Remove(appUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //// POST: AppUsers/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult DeleteConfirmed(Guid id)
+        //{
+        //    AppUser appUser = db.AppUsers.Find(id);
+        //    db.AppUsers.Remove(appUser);
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         // GET: AppUsers/Profile/5
         public ActionResult UserProfile()
