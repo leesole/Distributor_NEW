@@ -301,8 +301,11 @@ namespace Distributor.Helpers
         }
         public static void UpdateAppUsers(ApplicationDbContext db, List<UserAdminDetailsView> listView, bool activeView, IPrincipal user)
         {
-            foreach (UserAdminDetailsView view in listView)
-                UpdateAppUser(db, view, activeView, user);
+            if (listView != null)
+            {
+                foreach (UserAdminDetailsView view in listView)
+                    UpdateAppUser(db, view, activeView, user);
+            }   
         }
 
         #endregion

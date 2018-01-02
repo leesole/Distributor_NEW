@@ -16,7 +16,7 @@
             <div class="panel panel-green">
                 <div class="panel-heading">Active users of organisation</div>
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="activeUsersTable">
                         <thead>
                             <tr class="primary">
                                 <th>First name</th>
@@ -32,12 +32,12 @@
                             @for (int i = 0; i < Model.UserAdminActiveView.Count(); i++)
                             {
                                 var appUserId = Model.UserAdminActiveView[i].AppUserId;
-                                @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].AppUserId)
-                                @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].FirstName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].LastName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].LoginEmail)
 
                                 <tr>
+                                    @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].AppUserId)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].FirstName)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].LastName)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminActiveView[i].LoginEmail)
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminActiveView[i].FirstName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminActiveView[i].LastName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminActiveView[i].LoginEmail)</td>
@@ -63,7 +63,7 @@
             <div class="panel panel-green">
                 <div class="panel-heading">Users of organisation awaiting password change</div>
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="awaitingUsersTable">
                         <thead>
                             <tr class="primary">
                                 <th>First name</th>
@@ -78,12 +78,12 @@
                             @for (int i = 0; i < Model.UserAdminPasswordChangeView.Count(); i++)
                             {
                                 var appUserId = Model.UserAdminPasswordChangeView[i].AppUserId;
-                                @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].AppUserId)
-                                @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].FirstName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].LastName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].LoginEmail)
 
                                 <tr>
+                                    @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].AppUserId)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].PrivacyLevel)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].UserRole)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminPasswordChangeView[i].EntityStatus)
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminPasswordChangeView[i].FirstName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminPasswordChangeView[i].LastName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminPasswordChangeView[i].LoginEmail)</td>
@@ -103,7 +103,7 @@
             <div class="panel panel-green">
                 <div class="panel-heading">Inactive users of organisation</div>
                 <div class="panel-body">
-                    <table width="100%" class="table table-striped table-bordered table-hover">
+                    <table width="100%" class="table table-striped table-bordered table-hover" id="inactiveUsersTable">
                         <thead>
                             <tr class="primary">
                                 <th>First name</th>
@@ -119,12 +119,14 @@
                             @for (int i = 0; i < Model.UserAdminNonActiveView.Count(); i++)
                             {
                                 var appUserId = Model.UserAdminNonActiveView[i].AppUserId;
-                                @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].AppUserId)
-                                @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].FirstName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].LastName)
-                                @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].LoginEmail)
 
                                 <tr>
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].AppUserId)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].FirstName)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].LastName)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].LoginEmail)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].PrivacyLevel)
+                                    @Html.HiddenFor(modelItem => Model.UserAdminNonActiveView[i].UserRole)
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminNonActiveView[i].FirstName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminNonActiveView[i].LastName)</td>
                                     <td>@Html.DisplayFor(modelItem => Model.UserAdminNonActiveView[i].LoginEmail)</td>
@@ -147,4 +149,27 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        //Render tables
+        $(document).ready(function () {
+            $('#activeUsersTable').dataTable({
+                responsive: true
+            });
+        });
+
+        //Render tables
+        $(document).ready(function () {
+            $('#awaitingUsersTable').dataTable({
+                responsive: true
+            });
+        });
+
+        //Render tables
+        $(document).ready(function () {
+            $('#inactiveUsersTable').dataTable({
+                responsive: true
+            });
+        });
+
+    </script>
 }

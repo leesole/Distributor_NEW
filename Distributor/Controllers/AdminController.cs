@@ -172,5 +172,14 @@ namespace Distributor.Controllers
         //    }
         //    return View(model);
         //}
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

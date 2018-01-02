@@ -38,6 +38,9 @@ namespace Distributor.Models
         public DbSet<GroupMember> GroupMembers { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
 
+        public DbSet<AvailableListing> AvailableListings { get; set; }
+        public DbSet<RequiredListing> RequiredListings { get; set; }
+
 
         public static ApplicationDbContext Create()
         {

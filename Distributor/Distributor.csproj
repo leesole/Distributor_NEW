@@ -197,10 +197,12 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppUsersController.cs" />
     <Compile Include="Controllers\DataController.cs" />
+    <Compile Include="Controllers\GeneralInfoController.cs" />
     <Compile Include="Controllers\GroupMembersController.cs" />
     <Compile Include="Controllers\GroupsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageInfoController.cs" />
     <Compile Include="Controllers\OrganisationsController.cs" />
     <Compile Include="Controllers\UserTasksController.cs" />
     <Compile Include="Enums\BranchEnums.cs" />
@@ -219,6 +221,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AppUserHelpers.cs" />
+    <Compile Include="Helpers\AvailableListingHelpers.cs" />
     <Compile Include="Helpers\ControlHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="Helpers\GeneralHelpers.cs" />
@@ -282,11 +285,16 @@
     <Compile Include="Migrations\201712291700429_14th.Designer.cs">
       <DependentUpon>201712291700429_14th.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801011504210_15th.cs" />
+    <Compile Include="Migrations\201801011504210_15th.Designer.cs">
+      <DependentUpon>201801011504210_15th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
     <Compile Include="Models\GroupModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\LisitingModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Organisation.cs" />
     <Compile Include="Models\UserTasksModels.cs" />
@@ -298,6 +306,7 @@
     <Compile Include="ViewModels\GroupViewModels.cs" />
     <Compile Include="ViewModels\HomeDashboardView.cs" />
     <Compile Include="ViewModels\HomeOrganisationDetailsView.cs" />
+    <Compile Include="ViewModels\ListingViewModels.cs" />
     <Compile Include="ViewModels\UserTasksViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -549,10 +558,15 @@
     <Content Include="Views\Admin\OrganisationAdmin.cshtml" />
     <Content Include="Views\Admin\AddUser.cshtml" />
     <Content Include="Views\Admin\UserAdmin.cshtml" />
+    <Content Include="Views\ManageInfo\Available.cshtml" />
+    <Content Include="Views\Admin\UserAdminDetailsView.cshtml" />
+    <Content Include="Views\Shared\UserAdminDetailsView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AvailableListing\" />
     <Folder Include="Views\Data\" />
+    <Folder Include="Views\GeneralInfo\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -599,6 +613,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201712291700429_14th.resx">
       <DependentUpon>201712291700429_14th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801011504210_15th.resx">
+      <DependentUpon>201801011504210_15th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
