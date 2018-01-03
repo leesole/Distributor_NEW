@@ -289,6 +289,10 @@
     <Compile Include="Migrations\201801011504210_15th.Designer.cs">
       <DependentUpon>201801011504210_15th.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801021449280_16th.cs" />
+    <Compile Include="Migrations\201801021449280_16th.Designer.cs">
+      <DependentUpon>201801021449280_16th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -314,6 +318,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\Images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\Images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\Images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\Images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.min.css" />
     <Content Include="Content\jquery-ui.structure.css" />
@@ -561,6 +571,8 @@
     <Content Include="Views\ManageInfo\Available.cshtml" />
     <Content Include="Views\Admin\UserAdminDetailsView.cshtml" />
     <Content Include="Views\Shared\UserAdminDetailsView.cshtml" />
+    <Content Include="Views\ManageInfo\AvailableHistory.cshtml" />
+    <Content Include="Views\ManageInfo\CreateAvailable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -616,6 +628,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801011504210_15th.resx">
       <DependentUpon>201801011504210_15th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801021449280_16th.resx">
+      <DependentUpon>201801021449280_16th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

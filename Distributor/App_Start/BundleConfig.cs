@@ -35,7 +35,6 @@ namespace Distributor
                       "~/Scripts/jquery-{version}.js",
                       "~/Scripts/jquery-ui.min.js",
                       "~/Scripts/jquery.validate*",
-                      "~/Content/vendor/jquery/jquery.min.js",
                       "~/Scripts/jquery.dynatable.js",
                       "~/Scripts/bootstrap.min.js",
                       "~/Scripts/respond.min.js",

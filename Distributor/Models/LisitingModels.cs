@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.ItemEnums;
 
 namespace Distributor.Models
@@ -67,6 +68,11 @@ namespace Distributor.Models
 
         [Display(Name = "Listing location")]
         public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
+
+
+        public RecordChangeEnum RecordChange { get; set; }
+        public DateTime RecordChangeOn { get; set; }
+        public Guid RecordChangeBy { get; set; }
 
         //references to the listing originator
         public Guid ListingOriginatorAppUserId { get; set; }

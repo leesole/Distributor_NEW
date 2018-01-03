@@ -30,7 +30,10 @@ namespace Distributor.Helpers
         }
         public static AppUser GetAppUser(ApplicationDbContext db, Guid appUserId)
         {
-            return db.AppUsers.Find(appUserId);
+            if (appUserId == Guid.Empty)
+                return null;
+            else
+                return db.AppUsers.Find(appUserId);
         }
         public static AppUser GetAppUser(IPrincipal user)
         {
