@@ -96,7 +96,10 @@ namespace Distributor.Enums
             Cancelled = 3,
             [Description("Expired")]
             [Display(Name = "Expired")]  //set when time expires and not fully fulfilled
-            Expired = 4
+            Expired = 4,
+            [Description("Closed")]
+            [Display(Name = "Closed")] 
+            Closed = 5
         }
     }
 }

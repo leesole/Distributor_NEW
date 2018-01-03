@@ -1,5 +1,10 @@
 ﻿@model IList<Distributor.ViewModels.AvailableListingManageHistoryViewModel>
 
+@{ 
+    //set up the breadcrumb trail so that this can be passed to the details screen for building it's own breadcrumb as the detail screen is called from multiple places
+    string breadcrumb = "Available,Available,ManageInfo" ;
+    string callingActionDisplayName = "History";
+}
 
 <div class="row">
     <div class="col-md-12">
@@ -39,7 +44,7 @@
 
                             <tr>
                                 @Html.HiddenFor(modelItem => Model[i].ListingId)
-                                <td>@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
+                                <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
                                 <td>@Html.DisplayFor(modelItem => Model[i].ItemType)</td>
                                 <td>@Html.DisplayFor(modelItem => Model[i].QuantityAvailable)</td>
                                 <td>@Html.DisplayFor(modelItem => Model[i].QuantityOutstanding)</td>

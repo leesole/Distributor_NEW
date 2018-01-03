@@ -293,6 +293,18 @@
     <Compile Include="Migrations\201801021449280_16th.Designer.cs">
       <DependentUpon>201801021449280_16th.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801030935050_17th.cs" />
+    <Compile Include="Migrations\201801030935050_17th.Designer.cs">
+      <DependentUpon>201801030935050_17th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801030945437_18th.cs" />
+    <Compile Include="Migrations\201801030945437_18th.Designer.cs">
+      <DependentUpon>201801030945437_18th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801031426412_19th.cs" />
+    <Compile Include="Migrations\201801031426412_19th.Designer.cs">
+      <DependentUpon>201801031426412_19th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -573,6 +585,7 @@
     <Content Include="Views\Shared\UserAdminDetailsView.cshtml" />
     <Content Include="Views\ManageInfo\AvailableHistory.cshtml" />
     <Content Include="Views\ManageInfo\CreateAvailable.cshtml" />
+    <Content Include="Views\ManageInfo\DisplayAvailable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -631,6 +644,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801021449280_16th.resx">
       <DependentUpon>201801021449280_16th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801030935050_17th.resx">
+      <DependentUpon>201801030935050_17th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801030945437_18th.resx">
+      <DependentUpon>201801030945437_18th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801031426412_19th.resx">
+      <DependentUpon>201801031426412_19th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

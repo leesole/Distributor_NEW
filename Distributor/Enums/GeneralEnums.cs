@@ -21,7 +21,11 @@ namespace Distributor.Enums
 
             [Description("Entity status change")]
             [Display(Name = "Entity status change")]
-            StatusChange = 2
+            StatusChange = 2,
+
+            [Description("Listing status change")]
+            [Display(Name = "Listing status change")]
+            ListingStatusChange = 3
         }
 
 

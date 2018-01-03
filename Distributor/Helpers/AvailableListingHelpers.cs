@@ -3,10 +3,13 @@ using Distributor.Models;
 using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Routing;
 using static Distributor.Enums.EntityEnums;
+using static Distributor.Enums.ItemEnums;
 
 namespace Distributor.Helpers
 {
@@ -27,7 +30,7 @@ namespace Distributor.Helpers
             if (historyListing)
             {
                 list = (from al in db.AvailableListings
-                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired))
+                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
                         select al).Distinct().ToList();
             }
             else
@@ -46,6 +49,9 @@ namespace Distributor.Helpers
 
         public static AvailableListing CreateListing(ApplicationDbContext db, AvailableListingManageCreateViewModel model, IPrincipal user)
         {
+            AppUser thisUser = AppUserHelpers.GetAppUser(db, user);
+            Organisation thisOrg = OrganisationHelpers.GetOrganisation(db, thisUser.OrganisationId);
+
             AvailableListing listing = new AvailableListing()
             {
                 ListingId = Guid.NewGuid(),
@@ -60,14 +66,49 @@ namespace Distributor.Helpers
                 DisplayUntilDate = model.DisplayUntilDate,
                 SellByDate = model.SellByDate,
                 UseByDate = model.UseByDate,
-                DeliveryAvailable = model.DeliveryAvailable
-
+                DeliveryAvailable = model.DeliveryAvailable,
+                ListingStatus = ItemEnums.ItemRequiredListingStatusEnum.Open,
+                ListingOrganisationPostcode = thisOrg.AddressPostcode,
+                RecordChange = GeneralEnums.RecordChangeEnum.NewRecord,
+                RecordChangeBy = thisUser.AppUserId,
+                RecordChangeOn = DateTime.Now,
+                ListingOriginatorAppUserId = thisUser.AppUserId,
+                ListingOriginatorOrganisationId = thisOrg.OrganisationId,
+                ListingOriginatorDateTime = DateTime.Now
             };
 
             db.AvailableListings.Add(listing);
             db.SaveChanges();
 
             return listing;
+        }
+
+        #endregion
+
+        #region Update
+
+        public static AvailableListing UpdateAvailableListingListingStatus(ApplicationDbContext db, Guid listingId, ItemRequiredListingStatusEnum listingStatus, IPrincipal user)
+        {
+            AvailableListing listing = GetAvailableListing(db, listingId);
+
+            if (listing != null)
+            {
+                listing.ListingStatus = listingStatus;
+                listing.RecordChange = GeneralEnums.RecordChangeEnum.ListingStatusChange;
+                listing.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+                listing.RecordChangeOn = DateTime.Now;
+
+                db.Entry(listing).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return listing;
+        }
+
+        public static void UpdateAvailableListings(ApplicationDbContext db, List<AvailableListingManageViewModel> model, IPrincipal user)
+        {
+            foreach (AvailableListingManageViewModel modelItem in model)
+                UpdateAvailableListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
         }
 
         #endregion
@@ -86,6 +127,9 @@ namespace Distributor.Helpers
             {
                 // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
                 DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
+                string deliveryAvailable = "No";
+                if (item.DeliveryAvailable)
+                    deliveryAvailable = "Yes";
 
                 AvailableListingManageViewModel listItem = new AvailableListingManageViewModel()
                 {
@@ -97,7 +141,7 @@ namespace Distributor.Helpers
                     AvailableTo = item.AvailableTo,
                     ItemCondition = item.ItemCondition,
                     ExpiryDate = expiryDate,
-                    DeliveryAvailable = item.DeliveryAvailable,
+                    DeliveryAvailable = deliveryAvailable,
                     ListingStatus = item.ListingStatus
                 };
 
@@ -131,6 +175,61 @@ namespace Distributor.Helpers
             }
 
             return list;
+        }
+
+        #endregion
+
+        #region Create
+
+        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary)
+        {
+            AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
+
+            if (listing != null)
+            {
+                //Set up the calling fields
+                GeneralHelpers.GetCallingDetailsFromRequest(request, controllerValue, actionValue, out controllerValue, out actionValue);
+
+                AppUser recordChangedBy = AppUserHelpers.GetAppUser(db, listing.RecordChangeBy);
+                AppUser listingOriginatorAppUser = AppUserHelpers.GetAppUser(db, listing.ListingOriginatorAppUserId);
+                Organisation listingOriginatorOrganisation = OrganisationHelpers.GetOrganisation(db, listing.ListingOriginatorOrganisationId);
+
+                AvailableListingDetailsViewModel model = new AvailableListingDetailsViewModel()
+                {
+                    ListingId = listing.ListingId,
+                    ItemDescription = listing.ItemDescription,
+                    ItemCategory = listing.ItemCategory,
+                    ItemType = listing.ItemType,
+                    QuantityAvailable = listing.QuantityAvailable,
+                    QuantityFulfilled = listing.QuantityFulfilled,
+                    QuantityOutstanding = listing.QuantityOutstanding,
+                    UoM = listing.UoM,
+                    AvailableFrom = listing.AvailableFrom,
+                    AvailableTo = listing.AvailableTo,
+                    ItemCondition = listing.ItemCondition,
+                    DisplayUntilDate = listing.DisplayUntilDate,
+                    SellByDate = listing.SellByDate,
+                    UseByDate = listing.UseByDate,
+                    DeliveryAvailable = listing.DeliveryAvailable,
+                    ListingStatus = listing.ListingStatus,
+                    ListingOrganisationPostcode = listing.ListingOrganisationPostcode,
+                    RecordChange = listing.RecordChange,
+                    RecordChangeOn = listing.RecordChangeOn,
+                    RecordChangeBy = recordChangedBy,
+                    ListingOriginatorAppUser = listingOriginatorAppUser,
+                    ListingOriginatorOrganisation = listingOriginatorOrganisation,
+                    ListingOriginatorDateTime = listing.ListingOriginatorDateTime,
+                    CallingController = controllerValue,
+                    CallingAction = actionValue,
+                    CallingActionDisplayName = callingActionDisplayName,
+                    BreadcrumbTrail = breadcrumbDictionary
+                };
+
+                return model;
+            }
+            else
+                return null;
+
         }
 
         #endregion

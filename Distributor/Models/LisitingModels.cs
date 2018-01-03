@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using static Distributor.Enums.GeneralEnums;
@@ -67,7 +68,7 @@ namespace Distributor.Models
         public ItemRequiredListingStatusEnum ListingStatus { get; set; }
 
         [Display(Name = "Listing location")]
-        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
 
 
         public RecordChangeEnum RecordChange { get; set; }
