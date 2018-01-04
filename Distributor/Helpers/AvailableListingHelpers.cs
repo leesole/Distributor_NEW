@@ -192,7 +192,6 @@ namespace Distributor.Helpers
 
                 AppUser recordChangedBy = AppUserHelpers.GetAppUser(db, listing.RecordChangeBy);
                 AppUser listingOriginatorAppUser = AppUserHelpers.GetAppUser(db, listing.ListingOriginatorAppUserId);
-                Organisation listingOriginatorOrganisation = OrganisationHelpers.GetOrganisation(db, listing.ListingOriginatorOrganisationId);
 
                 AvailableListingDetailsViewModel model = new AvailableListingDetailsViewModel()
                 {
@@ -215,9 +214,10 @@ namespace Distributor.Helpers
                     ListingOrganisationPostcode = listing.ListingOrganisationPostcode,
                     RecordChange = listing.RecordChange,
                     RecordChangeOn = listing.RecordChangeOn,
-                    RecordChangeBy = recordChangedBy,
-                    ListingOriginatorAppUser = listingOriginatorAppUser,
-                    ListingOriginatorOrganisation = listingOriginatorOrganisation,
+                    RecordChangeByName = recordChangedBy.FirstName + " " + recordChangedBy.LastName,
+                    RecordChangeByEmail = recordChangedBy.LoginEmail,
+                    ListingOriginatorAppUserName = listingOriginatorAppUser.FirstName + " " + listingOriginatorAppUser.LastName,
+                    ListingOriginatorAppUserEmail = listingOriginatorAppUser.LoginEmail,
                     ListingOriginatorDateTime = listing.ListingOriginatorDateTime,
                     CallingController = controllerValue,
                     CallingAction = actionValue,

@@ -48,13 +48,13 @@
                                     @Html.HiddenFor(modelItem => Model[i].UoM)
                                     @Html.HiddenFor(modelItem => Model[i].DeliveryAvailable)
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].ItemType)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].QuantityOutstanding)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].UoM)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].AvailableTo)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].ItemCondition)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].ExpiryDate)</td>
-                                    <td>@Html.DisplayFor(modelItem => Model[i].DeliveryAvailable)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].ItemType)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].QuantityOutstanding)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].UoM)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].AvailableTo)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].ItemCondition)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].ExpiryDate)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'">@Html.DisplayFor(modelItem => Model[i].DeliveryAvailable)</td>
                                     <td>@Html.EnumDropDownListFor(modelItem => Model[i].ListingStatus, new { @class = "form-control" })</td>
                                 </tr>
                             }

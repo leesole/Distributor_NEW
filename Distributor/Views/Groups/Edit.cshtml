@@ -68,13 +68,12 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
         function ValidateFields() {
             var error = false;
             if ($("#Name").val() == "") {
                 error = true;
-                $("#nameerror").html("The name field is required");
+                $("#nameerror").html("The Name field is required");
             }
             if (error) {
                 event.preventDefault();

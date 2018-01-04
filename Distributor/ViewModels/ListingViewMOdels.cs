@@ -132,15 +132,12 @@ namespace Distributor.ViewModels
     {
         public Guid ListingId { get; set; }
 
-        [Required]
         [Display(Name = "Description")]
         public string ItemDescription { get; set; }
 
-        [Required]
         [Display(Name = "Item category")]
         public ItemCategoryEnum ItemCategory { get; set; }
 
-        [Required]
         [Display(Name = "Item type")]
         public ItemTypeEnum ItemType { get; set; }
 
@@ -189,13 +186,21 @@ namespace Distributor.ViewModels
         public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
 
 
+        [Display(Name = "Change")]
         public RecordChangeEnum RecordChange { get; set; }
+        [Display(Name = "Date changed")]
         public DateTime RecordChangeOn { get; set; }
-        public AppUser RecordChangeBy { get; set; }
+        [Display(Name = "Changed by")]
+        public string RecordChangeByName { get; set; }
+        [Display(Name = "Changed by (email)")]
+        public string RecordChangeByEmail { get; set; }
 
         //references to the listing originator
-        public AppUser ListingOriginatorAppUser { get; set; }
-        public Organisation ListingOriginatorOrganisation { get; set; }
+        [Display(Name = "Created by")]
+        public string ListingOriginatorAppUserName { get; set; }
+        [Display(Name = "Created by (email)")]
+        public string ListingOriginatorAppUserEmail { get; set; }
+        [Display(Name = "Date created")]
         public DateTime ListingOriginatorDateTime { get; set; }
     }
 
