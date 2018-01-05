@@ -26,6 +26,7 @@ namespace Distributor.Models
         [Display(Name = "Item type")]
         public ItemTypeEnum ItemType { get; set; }
 
+        [Required]
         [Display(Name = "Quantity available")]
         public decimal QuantityAvailable { get; set; }
 
@@ -35,6 +36,7 @@ namespace Distributor.Models
         [Display(Name = "Quantity available")]
         public decimal QuantityOutstanding { get; set; }
 
+        [Required]
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }
 

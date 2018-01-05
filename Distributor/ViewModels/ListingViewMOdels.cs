@@ -149,13 +149,13 @@ namespace Distributor.ViewModels
         public ItemTypeEnum ItemType { get; set; }
 
         [Display(Name = "Quantity available")]
-        public decimal QuantityAvailable { get; set; }
+        public decimal? QuantityAvailable { get; set; }
 
         [Display(Name = "Quantity reserved")]
-        public decimal QuantityFulfilled { get; set; }
+        public decimal? QuantityFulfilled { get; set; }
 
-        [Display(Name = "Quantity available")]
-        public decimal QuantityOutstanding { get; set; }
+        [Display(Name = "Quantity outstanding")]
+        public decimal? QuantityOutstanding { get; set; }
 
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }

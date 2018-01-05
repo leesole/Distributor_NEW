@@ -91,14 +91,21 @@ namespace Distributor.Helpers
         {
             AvailableListing listing = GetAvailableListing(db, model.ListingId);
 
+            decimal qtyAvailable;
+            decimal.TryParse(model.QuantityAvailable.ToString(), out qtyAvailable);
+            decimal qtyFulfilled;
+            decimal.TryParse(model.QuantityFulfilled.ToString(), out qtyFulfilled);
+            decimal qtyOutstanding;
+            decimal.TryParse(model.QuantityOutstanding.ToString(), out qtyOutstanding);
+
             if (listing != null)
             {
                 listing.ItemDescription = model.ItemDescription;
                 listing.ItemCategory = model.ItemCategory;
                 listing.ItemType = model.ItemType;
-                listing.QuantityAvailable = model.QuantityAvailable;
-                listing.QuantityFulfilled = model.QuantityFulfilled;
-                listing.QuantityOutstanding = model.QuantityOutstanding;
+                listing.QuantityAvailable = qtyAvailable;
+                listing.QuantityFulfilled = qtyFulfilled;
+                listing.QuantityOutstanding = qtyOutstanding;
                 listing.UoM = model.UoM;
                 listing.AvailableFrom = model.AvailableFrom;
                 listing.AvailableTo = model.AvailableTo;

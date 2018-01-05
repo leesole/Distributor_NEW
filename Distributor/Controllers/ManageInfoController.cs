@@ -98,7 +98,7 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
+        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
         {
             if (Request.Form["resetbutton"] != null)
             {

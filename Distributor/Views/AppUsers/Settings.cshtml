@@ -18,36 +18,36 @@
                 </div>
                 
                 <div class="panel-body">
-                    <form role="form">
+                    <div class="form-horizontal">
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary("", new { @class = "text-danger" })
 
                         @Html.HiddenFor(model => model.AppUserId)
                             
                         <div class="form-group col-md-12">
-                            @Html.LabelFor(model => model.MaxDistanceFilter, htmlAttributes: new { @class = "control-label col-md-4" })
-                            <div class="col-md-8">
+                            @Html.LabelFor(model => model.MaxDistanceFilter, htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-6">
                                 @Html.EditorFor(model => model.MaxDistanceFilter, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.MaxDistanceFilter, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group col-md-12">
-                            @Html.LabelFor(model => model.MaxAgeFilter, htmlAttributes: new { @class = "control-label col-md-4" })
-                            <div class="col-md-8">
+                            @Html.LabelFor(model => model.MaxAgeFilter, htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-6">
                                 @Html.EditorFor(model => model.MaxAgeFilter, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.MaxAgeFilter, "", new { @class = "text-danger" })
                             </div>
                         </div>
 
                         <div class="form-group col-md-12">
-                            @Html.LabelFor(model => model.DisplayMyOrganisationListingsFilter, htmlAttributes: new { @class = "control-label col-md-4" })
-                            <div class="col-md-8">
+                            @Html.LabelFor(model => model.DisplayMyOrganisationListingsFilter, htmlAttributes: new { @class = "control-label col-md-6" })
+                            <div class="col-md-6">
                                 @Html.CheckBoxFor(model => model.DisplayMyOrganisationListingsFilter, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.DisplayMyOrganisationListingsFilter, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
 
                 <div class="panel-footer clearfix">

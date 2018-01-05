@@ -60,7 +60,7 @@
                         @Html.LabelFor(model => model.UoM, htmlAttributes: new { @class = "control-label col-md-4" })
                         <div class="col-md-8">
                             @Html.EditorFor(model => model.UoM, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.UoM, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.UoM, "", new { @class = "text-danger", @id = "uomerror" })
                         </div>
                     </div>
 
@@ -146,6 +146,10 @@
             if ($("#QuantityAvailable").val() == "") {
                 error = true;
                 $("#quantityavailableerror").html("The Quantity Available field is required");
+            }
+            if ($("#UoM").val() == "") {
+                error = true;
+                $("#uomerror").html("The Unit Of Measure field is required");
             }
             if (error) {
                 event.preventDefault();
