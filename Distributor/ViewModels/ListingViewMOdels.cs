@@ -130,6 +130,13 @@ namespace Distributor.ViewModels
 
     public class AvailableListingDetailsViewModel : CallingFields
     {
+        public string Breadcrumb { get; set; }  //Holds the breadcrumb list passed from the previous view
+
+        public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
+
+        public bool HistoryRecord { get; set; }  //hold the History record flag passed from previous view
+
+
         public Guid ListingId { get; set; }
 
         [Display(Name = "Description")]

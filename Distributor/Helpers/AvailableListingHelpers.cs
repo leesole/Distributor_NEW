@@ -87,6 +87,39 @@ namespace Distributor.Helpers
 
         #region Update
 
+        public static AvailableListing UpdateAvailableListing(ApplicationDbContext db, AvailableListingDetailsViewModel model, IPrincipal user)
+        {
+            AvailableListing listing = GetAvailableListing(db, model.ListingId);
+
+            if (listing != null)
+            {
+                listing.ItemDescription = model.ItemDescription;
+                listing.ItemCategory = model.ItemCategory;
+                listing.ItemType = model.ItemType;
+                listing.QuantityAvailable = model.QuantityAvailable;
+                listing.QuantityFulfilled = model.QuantityFulfilled;
+                listing.QuantityOutstanding = model.QuantityOutstanding;
+                listing.UoM = model.UoM;
+                listing.AvailableFrom = model.AvailableFrom;
+                listing.AvailableTo = model.AvailableTo;
+                listing.ItemCondition = model.ItemCondition;
+                listing.DisplayUntilDate = model.DisplayUntilDate;
+                listing.SellByDate = model.SellByDate;
+                listing.UseByDate = model.UseByDate;
+                listing.DeliveryAvailable = model.DeliveryAvailable;
+                listing.ListingStatus = model.ListingStatus;
+                listing.ListingOrganisationPostcode = model.ListingOrganisationPostcode;
+                listing.RecordChange = GeneralEnums.RecordChangeEnum.ListingStatusChange;
+                listing.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+                listing.RecordChangeOn = DateTime.Now;
+
+                db.Entry(listing).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return listing;
+        }
+
         public static AvailableListing UpdateAvailableListingListingStatus(ApplicationDbContext db, Guid listingId, ItemRequiredListingStatusEnum listingStatus, IPrincipal user)
         {
             AvailableListing listing = GetAvailableListing(db, listingId);
@@ -181,20 +214,23 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary)
+        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool historyDisplay, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
         {
             AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
 
             if (listing != null)
             {
                 //Set up the calling fields
-                GeneralHelpers.GetCallingDetailsFromRequest(request, controllerValue, actionValue, out controllerValue, out actionValue);
+                if (!recalled.HasValue)
+                    GeneralHelpers.GetCallingDetailsFromRequest(request, controllerValue, actionValue, out controllerValue, out actionValue);
 
                 AppUser recordChangedBy = AppUserHelpers.GetAppUser(db, listing.RecordChangeBy);
                 AppUser listingOriginatorAppUser = AppUserHelpers.GetAppUser(db, listing.ListingOriginatorAppUserId);
 
                 AvailableListingDetailsViewModel model = new AvailableListingDetailsViewModel()
                 {
+                    Breadcrumb = breadcrumb,
+                    HistoryRecord = historyDisplay,
                     ListingId = listing.ListingId,
                     ItemDescription = listing.ItemDescription,
                     ItemCategory = listing.ItemCategory,

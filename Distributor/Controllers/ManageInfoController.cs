@@ -72,7 +72,7 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName)
+        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
         {
             if (id == null)
             {
@@ -81,12 +81,36 @@ namespace Distributor.Controllers
 
             Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
             breadcrumbDictionary.Add(0, breadcrumb);
-            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, Request, "ManageInfo", "Available", callingActionDisplayName, breadcrumbDictionary);
-                        
+
+            if (!recalled.HasValue)
+            {
+                defaultController = "ManageInfo";
+                defaultAction = "Available";
+            }
+
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            
             if (model == null)
             {
                 return HttpNotFound();
             }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("DisplayAvailable", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+            }
+
+            if (ModelState.IsValid)
+            {
+                AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+                return RedirectToAction(model.CallingAction, model.CallingController);
+            }
+
             return View(model);
         }
 
