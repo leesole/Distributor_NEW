@@ -100,6 +100,7 @@ namespace Distributor.Models
         [Display(Name = "Item type")]
         public ItemTypeEnum ItemType { get; set; }
 
+        [Required]
         [Display(Name = "Quantity required")]
         public decimal QuantityRequired { get; set; }
 
@@ -109,6 +110,7 @@ namespace Distributor.Models
         [Display(Name = "Quantity needed")]
         public decimal QuantityOutstanding { get; set; }
 
+        [Required]
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }
 
@@ -134,6 +136,11 @@ namespace Distributor.Models
 
         [Display(Name = "Listing location")]
         public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
+
+
+        public RecordChangeEnum RecordChange { get; set; }
+        public DateTime RecordChangeOn { get; set; }
+        public Guid RecordChangeBy { get; set; }
 
         //references to the listing originator
         public Guid ListingOriginatorAppUserId { get; set; }
