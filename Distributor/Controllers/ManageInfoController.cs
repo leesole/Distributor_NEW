@@ -117,6 +117,33 @@ namespace Distributor.Controllers
         #endregion
 
         #region RequiredListings
+
+        //public ActionResult Required()
+        //{
+        //    List<RequiredListingManageViewModel> model = RequiredListingViewHelpers.GetRequiredListingManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //public ActionResult Required(List<RequiredListingManageViewModel> model)
+        //{
+        //    if (Request.Form["resetbutton"] != null)
+        //    {
+        //        return RedirectToAction("Required");
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (Request.Form["savebutton"] != null)
+        //        {
+        //            RequiredListingHelpers.UpdateAvailableListings(db, model, User);
+        //        }
+
+        //        return RedirectToAction("Required");
+        //    }
+        //    return View(model);
+        //}
+
         #endregion
 
         protected override void Dispose(bool disposing)

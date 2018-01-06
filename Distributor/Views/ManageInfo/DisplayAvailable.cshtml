@@ -349,6 +349,9 @@
     })
 
     function ValidateFields() {
+        var qtyFulfilled = parseFloat($("#QuantityFulfilled").val(), 10);
+        var qtyOutstanding = parseFloat($("#QuantityOutstanding").val(), 10);
+        var qtytotal = (qtyFulfilled + qtyOutstanding);
         var error = false;
         if ($("#ItemDescription").val() == "") {
             error = true;
@@ -362,6 +365,10 @@
         if ($("#UoM").val() == "") {
             error = true;
             $("#uomerror").html("The Unit Of Measure field is required");
+        }
+        if ($("#QuantityAvailable").val() != qtytotal) {
+            error = true;
+            $("#quantityavailableerror").html("The Quantity Available should equal the Fulfilled + Outstanding");
         }
         if (error) {
             event.preventDefault();

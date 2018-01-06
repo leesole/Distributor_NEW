@@ -30,10 +30,10 @@ namespace Distributor.Models
         [Display(Name = "Quantity available")]
         public decimal QuantityAvailable { get; set; }
 
-        [Display(Name = "Quantity reserved")]
+        [Display(Name = "Quantity fulfilled")]
         public decimal QuantityFulfilled { get; set; }
 
-        [Display(Name = "Quantity available")]
+        [Display(Name = "Quantity outstanding")]
         public decimal QuantityOutstanding { get; set; }
 
         [Required]
@@ -107,7 +107,7 @@ namespace Distributor.Models
         [Display(Name = "Quantity fulfilled")]
         public decimal QuantityFulfilled { get; set; }
 
-        [Display(Name = "Quantity needed")]
+        [Display(Name = "Quantity outstanding")]
         public decimal QuantityOutstanding { get; set; }
 
         [Required]

@@ -44,7 +44,7 @@ namespace Distributor.ViewModels
         public DateTime? ExpiryDate { get; set; }
 
         [Display(Name = "Can deliver?")]
-        public string DeliveryAvailable { get; set; }
+        public bool DeliveryAvailable { get; set; }
 
         [Display(Name = "Listing status")]
         public ItemRequiredListingStatusEnum ListingStatus { get; set; }
@@ -151,7 +151,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Quantity available")]
         public decimal? QuantityAvailable { get; set; }
 
-        [Display(Name = "Quantity reserved")]
+        [Display(Name = "Quantity fulfilled")]
         public decimal? QuantityFulfilled { get; set; }
 
         [Display(Name = "Quantity outstanding")]
@@ -234,7 +234,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Item type")]
         public ItemTypeEnum ItemType { get; set; }
 
-        [Display(Name = "Quantity available")]
+        [Display(Name = "Quantity needed")]
         public decimal QuantityOutstanding { get; set; }
 
         [Display(Name = "Unit of measure")]
@@ -272,7 +272,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Quantity required")]
         public decimal QuantityRequired { get; set; }
 
-        [Display(Name = "Final quantity needed")]
+        [Display(Name = "Final quantity required")]
         public decimal QuantityOutstanding { get; set; }
 
         [Display(Name = "Unit of measure")]
@@ -349,7 +349,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Quantity fulfilled")]
         public decimal QuantityFulfilled { get; set; }
 
-        [Display(Name = "Quantity needed")]
+        [Display(Name = "Quantity outstanding")]
         public decimal QuantityOutstanding { get; set; }
 
         [Display(Name = "Unit of measure")]

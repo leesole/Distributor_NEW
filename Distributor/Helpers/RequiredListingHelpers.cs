@@ -7,35 +7,33 @@ using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
-using System.Web.Routing;
-using static Distributor.Enums.EntityEnums;
 using static Distributor.Enums.ItemEnums;
 
 namespace Distributor.Helpers
 {
-    public static class AvailableListingHelpers
+    public static class RequiredListingHelpers
     {
         #region Get
 
-        public static AvailableListing GetAvailableListing(ApplicationDbContext db, Guid listingId)
+        public static RequiredListing GetRequiredListing(ApplicationDbContext db, Guid listingId)
         {
-            return db.AvailableListings.Find(listingId);
+            return db.RequiredListings.Find(listingId);
         }
 
-        public static List<AvailableListing> GetAvailableListingForOrganisation(ApplicationDbContext db, Guid organisationId, bool historyListing)
+        public static List<RequiredListing> GetRequiredListingForOrganisation(ApplicationDbContext db, Guid organisationId, bool historyListing)
         {
 
-            List<AvailableListing> list;
+            List<RequiredListing> list;
 
             if (historyListing)
             {
-                list = (from al in db.AvailableListings
+                list = (from al in db.RequiredListings
                         where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
                         select al).Distinct().ToList();
             }
             else
             {
-                list = (from al in db.AvailableListings
+                list = (from al in db.RequiredListings
                         where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
                         select al).Distinct().ToList();
             }
@@ -47,27 +45,25 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static AvailableListing CreateListing(ApplicationDbContext db, AvailableListingManageCreateViewModel model, IPrincipal user)
+        public static RequiredListing CreateListing(ApplicationDbContext db, RequiredListingManageCreateViewModel model, IPrincipal user)
         {
             AppUser thisUser = AppUserHelpers.GetAppUser(db, user);
             Organisation thisOrg = OrganisationHelpers.GetOrganisation(db, thisUser.OrganisationId);
 
-            AvailableListing listing = new AvailableListing()
+            RequiredListing listing = new RequiredListing()
             {
                 ListingId = Guid.NewGuid(),
                 ItemDescription = model.ItemDescription,
                 ItemCategory = model.ItemCategory,
                 ItemType = model.ItemType,
-                QuantityAvailable = model.QuantityAvailable,
-                QuantityOutstanding = model.QuantityAvailable,
+                QuantityRequired = model.QuantityRequired,
+                QuantityOutstanding = model.QuantityRequired,
                 UoM = model.UoM,
-                AvailableFrom = model.AvailableFrom,
-                AvailableTo = model.AvailableTo,
-                ItemCondition = model.ItemCondition,
-                DisplayUntilDate = model.DisplayUntilDate,
-                SellByDate = model.SellByDate,
-                UseByDate = model.UseByDate,
-                DeliveryAvailable = model.DeliveryAvailable,
+                RequiredFrom = model.RequiredFrom,
+                RequiredTo = model.RequiredTo,
+                AcceptDamagedItems = model.AcceptDamagedItems,
+                AcceptOutOfDateItems = model.AcceptOutOfDateItems,
+                CollectionAvailable = model.CollectionAvailable,
                 ListingStatus = ItemEnums.ItemRequiredListingStatusEnum.Open,
                 ListingOrganisationPostcode = thisOrg.AddressPostcode,
                 RecordChange = GeneralEnums.RecordChangeEnum.NewRecord,
@@ -78,7 +74,7 @@ namespace Distributor.Helpers
                 ListingOriginatorDateTime = DateTime.Now
             };
 
-            db.AvailableListings.Add(listing);
+            db.RequiredListings.Add(listing);
             db.SaveChanges();
 
             return listing;
@@ -88,12 +84,12 @@ namespace Distributor.Helpers
 
         #region Update
 
-        public static AvailableListing UpdateAvailableListing(ApplicationDbContext db, AvailableListingDetailsViewModel model, IPrincipal user)
+        public static RequiredListing UpdateRequiredListing(ApplicationDbContext db, RequiredListingDetailsViewModel model, IPrincipal user)
         {
-            AvailableListing listing = GetAvailableListing(db, model.ListingId);
+            RequiredListing listing = GetRequiredListing(db, model.ListingId);
 
-            decimal qtyAvailable;
-            decimal.TryParse(model.QuantityAvailable.ToString(), out qtyAvailable);
+            decimal qtyRequired;
+            decimal.TryParse(model.QuantityRequired.ToString(), out qtyRequired);
             decimal qtyFulfilled;
             decimal.TryParse(model.QuantityFulfilled.ToString(), out qtyFulfilled);
             decimal qtyOutstanding;
@@ -104,17 +100,15 @@ namespace Distributor.Helpers
                 listing.ItemDescription = model.ItemDescription;
                 listing.ItemCategory = model.ItemCategory;
                 listing.ItemType = model.ItemType;
-                listing.QuantityAvailable = qtyAvailable;
+                listing.QuantityRequired = qtyRequired;
                 listing.QuantityFulfilled = qtyFulfilled;
                 listing.QuantityOutstanding = qtyOutstanding;
                 listing.UoM = model.UoM;
-                listing.AvailableFrom = model.AvailableFrom;
-                listing.AvailableTo = model.AvailableTo;
-                listing.ItemCondition = model.ItemCondition;
-                listing.DisplayUntilDate = model.DisplayUntilDate;
-                listing.SellByDate = model.SellByDate;
-                listing.UseByDate = model.UseByDate;
-                listing.DeliveryAvailable = model.DeliveryAvailable;
+                listing.RequiredFrom = model.RequiredFrom;
+                listing.RequiredTo = model.RequiredTo;
+                listing.AcceptDamagedItems = model.AcceptDamagedItems;
+                listing.AcceptOutOfDateItems = model.AcceptOutOfDateItems;
+                listing.CollectionAvailable = model.CollectionAvailable;
                 listing.ListingStatus = model.ListingStatus;
                 listing.ListingOrganisationPostcode = model.ListingOrganisationPostcode;
                 listing.RecordChange = GeneralEnums.RecordChangeEnum.ListingStatusChange;
@@ -128,9 +122,9 @@ namespace Distributor.Helpers
             return listing;
         }
 
-        public static AvailableListing UpdateAvailableListingListingStatus(ApplicationDbContext db, Guid listingId, ItemRequiredListingStatusEnum listingStatus, IPrincipal user)
+        public static RequiredListing UpdateRequiredListingListingStatus(ApplicationDbContext db, Guid listingId, ItemRequiredListingStatusEnum listingStatus, IPrincipal user)
         {
-            AvailableListing listing = GetAvailableListing(db, listingId);
+            RequiredListing listing = GetRequiredListing(db, listingId);
 
             if (listing != null)
             {
@@ -146,40 +140,37 @@ namespace Distributor.Helpers
             return listing;
         }
 
-        public static void UpdateAvailableListings(ApplicationDbContext db, List<AvailableListingManageViewModel> model, IPrincipal user)
+        public static void UpdateRequiredListings(ApplicationDbContext db, List<RequiredListingManageViewModel> model, IPrincipal user)
         {
-            foreach (AvailableListingManageViewModel modelItem in model)
-                UpdateAvailableListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
+            foreach (RequiredListingManageViewModel modelItem in model)
+                UpdateRequiredListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
         }
 
         #endregion
     }
 
-    public static class AvailableListingViewHelpers
+    public static class RequiredListingViewHelpers
     {
         #region Get
 
-        public static List<AvailableListingManageViewModel> GetAvailableListingManageViewModel(ApplicationDbContext db, Guid organisationId)
+        public static List<RequiredListingManageViewModel> GetRequiredListingManageViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, false);
-            List<AvailableListingManageViewModel> list = new List<AvailableListingManageViewModel>();
+            List<RequiredListing> required = RequiredListingHelpers.GetRequiredListingForOrganisation(db, organisationId, false);
+            List<RequiredListingManageViewModel> list = new List<RequiredListingManageViewModel>();
 
-            foreach (AvailableListing item in available)
+            foreach (RequiredListing item in required)
             {
-                // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
-                DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
-
-                AvailableListingManageViewModel listItem = new AvailableListingManageViewModel()
+                RequiredListingManageViewModel listItem = new RequiredListingManageViewModel()
                 {
                     ListingId = item.ListingId,
                     ItemDescription = item.ItemDescription,
                     ItemType = item.ItemType,
                     QuantityOutstanding = item.QuantityOutstanding,
                     UoM = item.UoM,
-                    AvailableTo = item.AvailableTo,
-                    ItemCondition = item.ItemCondition,
-                    ExpiryDate = expiryDate,
-                    DeliveryAvailable = item.DeliveryAvailable,
+                    RequiredTo = item.RequiredTo,
+                    AcceptDamagedItems = item.AcceptDamagedItems,
+                    AcceptOutOfDateItems = item.AcceptOutOfDateItems,
+                    CollectionAvailable = item.CollectionAvailable,
                     ListingStatus = item.ListingStatus
                 };
 
@@ -189,22 +180,21 @@ namespace Distributor.Helpers
             return list;
         }
 
-        public static List<AvailableListingManageHistoryViewModel> GetAvailableListingManageHistoryViewModel(ApplicationDbContext db, Guid organisationId)
+        public static List<RequiredListingManageHistoryViewModel> GetRequiredListingManageHistoryViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> history = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, true);
-            List<AvailableListingManageHistoryViewModel> list = new List<AvailableListingManageHistoryViewModel>();
+            List<RequiredListing> history = RequiredListingHelpers.GetRequiredListingForOrganisation(db, organisationId, true);
+            List<RequiredListingManageHistoryViewModel> list = new List<RequiredListingManageHistoryViewModel>();
 
-            foreach (AvailableListing item in history)
+            foreach (RequiredListing item in history)
             {
-                AvailableListingManageHistoryViewModel listItem = new AvailableListingManageHistoryViewModel()
+                RequiredListingManageHistoryViewModel listItem = new RequiredListingManageHistoryViewModel()
                 {
                     ListingId = item.ListingId,
                     ItemDescription = item.ItemDescription,
                     ItemType = item.ItemType,
-                    QuantityAvailable = item.QuantityAvailable,
+                    QuantityRequired = item.QuantityRequired,
                     QuantityOutstanding = item.QuantityOutstanding,
                     UoM = item.UoM,
-                    ItemCondition = item.ItemCondition,
                     RecordChangeOn = item.RecordChangeOn,
                     ListingStatus = item.ListingStatus
                 };
@@ -215,13 +205,14 @@ namespace Distributor.Helpers
             return list;
         }
 
+
         #endregion
 
         #region Create
 
-        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool historyDisplay, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
+        public static RequiredListingDetailsViewModel CreateRequiredListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool historyDisplay, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
         {
-            AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
+            RequiredListing listing = RequiredListingHelpers.GetRequiredListing(db, listingId);
 
             if (listing != null)
             {
@@ -232,7 +223,7 @@ namespace Distributor.Helpers
                 AppUser recordChangedBy = AppUserHelpers.GetAppUser(db, listing.RecordChangeBy);
                 AppUser listingOriginatorAppUser = AppUserHelpers.GetAppUser(db, listing.ListingOriginatorAppUserId);
 
-                AvailableListingDetailsViewModel model = new AvailableListingDetailsViewModel()
+                RequiredListingDetailsViewModel model = new RequiredListingDetailsViewModel()
                 {
                     Breadcrumb = breadcrumb,
                     HistoryRecord = historyDisplay,
@@ -240,17 +231,15 @@ namespace Distributor.Helpers
                     ItemDescription = listing.ItemDescription,
                     ItemCategory = listing.ItemCategory,
                     ItemType = listing.ItemType,
-                    QuantityAvailable = listing.QuantityAvailable,
+                    QuantityRequired = listing.QuantityRequired,
                     QuantityFulfilled = listing.QuantityFulfilled,
                     QuantityOutstanding = listing.QuantityOutstanding,
                     UoM = listing.UoM,
-                    AvailableFrom = listing.AvailableFrom,
-                    AvailableTo = listing.AvailableTo,
-                    ItemCondition = listing.ItemCondition,
-                    DisplayUntilDate = listing.DisplayUntilDate,
-                    SellByDate = listing.SellByDate,
-                    UseByDate = listing.UseByDate,
-                    DeliveryAvailable = listing.DeliveryAvailable,
+                    RequiredFrom = listing.RequiredFrom,
+                    RequiredTo = listing.RequiredTo,
+                    AcceptDamagedItems = listing.AcceptDamagedItems,
+                    AcceptOutOfDateItems = listing.AcceptOutOfDateItems,
+                    CollectionAvailable = listing.CollectionAvailable,
                     ListingStatus = listing.ListingStatus,
                     ListingOrganisationPostcode = listing.ListingOrganisationPostcode,
                     RecordChange = listing.RecordChange,

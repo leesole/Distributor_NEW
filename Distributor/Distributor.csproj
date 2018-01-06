@@ -228,6 +228,7 @@
     <Compile Include="Helpers\GroupHelpers.cs" />
     <Compile Include="Helpers\HomeViewHelpers.cs" />
     <Compile Include="Helpers\OrganisationHelpers.cs" />
+    <Compile Include="Helpers\RequiredListingHelpers.cs" />
     <Compile Include="Helpers\UserTasksHelpers.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.Designer.cs">
