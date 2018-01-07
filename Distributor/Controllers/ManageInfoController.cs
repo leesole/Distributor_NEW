@@ -118,29 +118,99 @@ namespace Distributor.Controllers
 
         #region RequiredListings
 
-        //public ActionResult Required()
+        public ActionResult Required()
+        {
+            List<RequiredListingManageViewModel> model = RequiredListingViewHelpers.GetRequiredListingManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Required(List<RequiredListingManageViewModel> model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Required");
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["savebutton"] != null)
+                {
+                    RequiredListingHelpers.UpdateRequiredListings(db, model, User);
+                }
+
+                return RedirectToAction("Required");
+            }
+            return View(model);
+        }
+
+        //public ActionResult RequiredHistory()
         //{
-        //    List<RequiredListingManageViewModel> model = RequiredListingViewHelpers.GetRequiredListingManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+        //    List<AvailableListingManageHistoryViewModel> model = AvailableListingViewHelpers.GetAvailableListingManageHistoryViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
         //    return View(model);
         //}
 
+        //public ActionResult RequiredAvailable()
+        //{
+        //    return View();
+        //}
+
         //[HttpPost]
-        //public ActionResult Required(List<RequiredListingManageViewModel> model)
+        //public ActionResult RequiredAvailable([Bind(Include = "ItemDescription,ItemCategory,ItemType,QuantityAvailable,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable")] AvailableListingManageCreateViewModel model)
         //{
         //    if (Request.Form["resetbutton"] != null)
         //    {
-        //        return RedirectToAction("Required");
+        //        return RedirectToAction("RequiredAvailable");
         //    }
 
         //    if (ModelState.IsValid)
         //    {
-        //        if (Request.Form["savebutton"] != null)
-        //        {
-        //            RequiredListingHelpers.UpdateAvailableListings(db, model, User);
-        //        }
-
+        //        AvailableListingHelpers.CreateListing(db, model, User);
         //        return RedirectToAction("Required");
         //    }
+
+        //    return View(model);
+        //}
+
+        //public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+
+        //    Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+        //    breadcrumbDictionary.Add(0, breadcrumb);
+
+        //    if (!recalled.HasValue)
+        //    {
+        //        defaultController = "ManageInfo";
+        //        defaultAction = "Available";
+        //    }
+
+        //    AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+
+        //    if (model == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //public ActionResult DisplayRequired([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
+        //{
+        //    if (Request.Form["resetbutton"] != null)
+        //    {
+        //        return RedirectToAction("DisplayAvailable", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+        //        return RedirectToAction(model.CallingAction, model.CallingController);
+        //    }
+
         //    return View(model);
         //}
 

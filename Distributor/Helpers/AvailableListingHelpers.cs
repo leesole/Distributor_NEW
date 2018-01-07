@@ -148,8 +148,9 @@ namespace Distributor.Helpers
 
         public static void UpdateAvailableListings(ApplicationDbContext db, List<AvailableListingManageViewModel> model, IPrincipal user)
         {
-            foreach (AvailableListingManageViewModel modelItem in model)
-                UpdateAvailableListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
+            if (model != null)
+                foreach (AvailableListingManageViewModel modelItem in model)
+                    UpdateAvailableListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
         }
 
         #endregion

@@ -1,0 +1,88 @@
+﻿@model IList<Distributor.ViewModels.RequiredListingManageViewModel>
+
+@{
+    //set up the breadcrumb trail so that this can be passed to the details screen for building it's own breadcrumb as the detail screen is called from multiple places
+    string breadcrumb = "";
+    string callingActionDisplayName = "Required";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Manage Listings <small>Required</small></h1>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-green">
+                <div class="panel-heading">Your current required listings</div>
+                <div class="panel-body">
+                    <table style="width:100%;" class="table table-striped table-bordered table-hover" id="requiredTable">
+                        <thead>
+                            <tr class="primary">
+                                <th>Description</th>
+                                <th>Type</th>
+                                <th>Qty Needed</th>
+                                <th>UoM</th>
+                                <th>Required To</th>
+                                <th>Damaged</th>
+                                <th>Out Of Date</th>
+                                <th>Collection</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                var listingId = Model[i].ListingId;
+
+                                <tr>
+                                    @Html.HiddenFor(modelItem => Model[i].ListingId)
+                                    @Html.HiddenFor(modelItem => Model[i].ItemDescription)
+                                    @Html.HiddenFor(modelItem => Model[i].QuantityOutstanding)
+                                    @Html.HiddenFor(modelItem => Model[i].UoM)
+                                    @Html.HiddenFor(modelItem => Model[i].AcceptDamagedItems)
+                                    @Html.HiddenFor(modelItem => Model[i].AcceptOutOfDateItems)
+                                    @Html.HiddenFor(modelItem => Model[i].CollectionAvailable)
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].ItemType)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].QuantityOutstanding)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].UoM)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].RequiredTo)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].AcceptDamagedItems)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].AcceptOutOfDateItems)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayRequired", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].CollectionAvailable)</td>
+                                    <td>@Html.EnumDropDownListFor(modelItem => Model[i].ListingStatus, new { @class = "form-control" })</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer clearfix">
+                    <div class="col-sm-3"><a class="btn btn-primary btn-lg btn-block" href='@Url.Action("CreateRequired", "ManageInfo")'><span class="glyphicon glyphicon-plus"></span> Create</a></div>
+                    <div class="col-sm-3"><a class="btn btn-default btn-lg btn-block" href='@Url.Action("RequiredHistory", "ManageInfo")'><span class="fa fa-history"></span> History</a></div>
+                    <div class="col-sm-3"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-save"></span> Save</button></div>
+                    <div class="col-sm-3"><button type="submit" name="resetbutton" class="btn btn-danger btn-lg btn-block"><span class="glyphicon glyphicon-repeat"></span> Reset</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        //Render tables
+        $(document).ready(function () {
+            $('#requiredTable').dataTable({
+                responsive: true
+            });
+        });
+
+    </script>
+}

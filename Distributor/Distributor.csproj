@@ -595,6 +595,7 @@
     <Content Include="Views\ManageInfo\AvailableHistory.cshtml" />
     <Content Include="Views\ManageInfo\CreateAvailable.cshtml" />
     <Content Include="Views\ManageInfo\DisplayAvailable.cshtml" />
+    <Content Include="Views\ManageInfo\Required.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -142,8 +142,9 @@ namespace Distributor.Helpers
 
         public static void UpdateRequiredListings(ApplicationDbContext db, List<RequiredListingManageViewModel> model, IPrincipal user)
         {
-            foreach (RequiredListingManageViewModel modelItem in model)
-                UpdateRequiredListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
+            if (model != null)
+                foreach (RequiredListingManageViewModel modelItem in model)
+                    UpdateRequiredListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
         }
 
         #endregion
