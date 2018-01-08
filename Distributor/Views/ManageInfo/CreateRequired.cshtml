@@ -1,0 +1,143 @@
+﻿@model Distributor.ViewModels.RequiredListingManageCreateViewModel
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Manage Listings <small>Add Required Listing</small></h1>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Required", "Required", "ManageInfo")
+            </li>
+            <li class="active">Add listing</li>
+        </ol>
+    </div>
+</div>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-green">
+                <div class="panel-heading">Create 'Available' Listing</div>
+                <div class="panel-body">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ItemDescription, "", new { @class = "text-danger", @id = "itemdescriptionerror" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.ItemCategory, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EnumDropDownListFor(model => model.ItemCategory, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ItemCategory, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EnumDropDownListFor(model => model.ItemType, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ItemType, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.QuantityRequired, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.QuantityRequired, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.QuantityRequired, "", new { @class = "text-danger", @id = "quantityrequirederror" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.UoM, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.UoM, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.UoM, "", new { @class = "text-danger", @id = "uomerror" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.RequiredFrom, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.RequiredFrom, "{0:dd/MM/yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                            @Html.ValidationMessageFor(model => model.RequiredFrom, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.RequiredTo, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.RequiredTo, "{0:dd/MM/yyyy}", new { htmlAttributes = new { @class = "form-control date-picker" } })
+                            @Html.ValidationMessageFor(model => model.RequiredTo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.AcceptDamagedItems, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.CheckBoxFor(model => model.AcceptDamagedItems, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AcceptDamagedItems, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.AcceptOutOfDateItems, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.CheckBoxFor(model => model.AcceptOutOfDateItems, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AcceptOutOfDateItems, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.CollectionAvailable, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.CheckBoxFor(model => model.CollectionAvailable, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CollectionAvailable, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer clearfix">
+                    <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" onclick="ValidateFields()"><span class="glyphicon glyphicon-save"></span> Save</button></div>
+                    <div class="col-sm-6"><button type="submit" name="resetbutton" class="btn btn-danger btn-lg btn-block"><span class="glyphicon glyphicon-repeat"></span> Reset</button></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker({ dateFormat: 'dd/mm/yy' });
+        })
+
+        function ValidateFields() {
+            var error = false;
+            if ($("#ItemDescription").val() == "") {
+                error = true;
+                $("#itemdescriptionerror").html("The Description field is required");
+            }
+            if ($("#QuantityRequired").val() == "") {
+                error = true;
+                $("#quantityrequirederror").html("The Quantity Required field is required");
+            }
+            if ($("#UoM").val() == "") {
+                error = true;
+                $("#uomerror").html("The Unit Of Measure field is required");
+            }
+            if (error) {
+                event.preventDefault();
+            }
+        }
+    </script>
+}

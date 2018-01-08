@@ -150,69 +150,69 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        public ActionResult RequiredAvailable()
+        public ActionResult CreateRequired()
         {
             return View();
         }
 
-        //[HttpPost]
-        //public ActionResult RequiredAvailable([Bind(Include = "ItemDescription,ItemCategory,ItemType,QuantityAvailable,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable")] AvailableListingManageCreateViewModel model)
-        //{
-        //    if (Request.Form["resetbutton"] != null)
-        //    {
-        //        return RedirectToAction("RequiredAvailable");
-        //    }
+        [HttpPost]
+        public ActionResult CreateRequired([Bind(Include = "ItemDescription,ItemCategory,ItemType,QuantityRequired,UoM,RequiredFrom,RequiredTo,AcceptDamagedItems,AcceptOutOfDateItems,CollectionAvailable")] RequiredListingManageCreateViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("CreateRequired");
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        AvailableListingHelpers.CreateListing(db, model, User);
-        //        return RedirectToAction("Required");
-        //    }
+            if (ModelState.IsValid)
+            {
+                RequiredListingHelpers.CreateListing(db, model, User);
+                return RedirectToAction("Required");
+            }
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
+        public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-        //    Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
-        //    breadcrumbDictionary.Add(0, breadcrumb);
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, breadcrumb);
 
-        //    if (!recalled.HasValue)
-        //    {
-        //        defaultController = "ManageInfo";
-        //        defaultAction = "Available";
-        //    }
+            if (!recalled.HasValue)
+            {
+                defaultController = "ManageInfo";
+                defaultAction = "Required";
+            }
 
-        //    AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
 
-        //    if (model == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(model);
-        //}
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+            return View(model);
+        }
 
-        //[HttpPost]
-        //public ActionResult DisplayRequired([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
-        //{
-        //    if (Request.Form["resetbutton"] != null)
-        //    {
-        //        return RedirectToAction("DisplayAvailable", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
-        //    }
+        [HttpPost]
+        public ActionResult DisplayRequired([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityRequired,QuantityFulfilled,QuantityOutstanding,UoM,RequiredFrom,RequiredTo,AcceptDamagedItems,AcceptOutOfDateItems,CollectionAvailable,ListingStatus,ListingOrganisationPostcode")] RequiredListingDetailsViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("DisplayRequired", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        AvailableListingHelpers.UpdateAvailableListing(db, model, User);
-        //        return RedirectToAction(model.CallingAction, model.CallingController);
-        //    }
+            if (ModelState.IsValid)
+            {
+                RequiredListingHelpers.UpdateRequiredListing(db, model, User);
+                return RedirectToAction(model.CallingAction, model.CallingController);
+            }
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
         #endregion
 

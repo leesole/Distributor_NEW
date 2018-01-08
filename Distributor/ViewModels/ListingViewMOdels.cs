@@ -96,7 +96,7 @@ namespace Distributor.ViewModels
         public ItemTypeEnum ItemType { get; set; }
 
         [Display(Name = "Quantity available")]
-        public decimal QuantityAvailable { get; set; }
+        public decimal? QuantityAvailable { get; set; }
 
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }
@@ -300,7 +300,7 @@ namespace Distributor.ViewModels
         public ItemTypeEnum ItemType { get; set; }
 
         [Display(Name = "Quantity required")]
-        public decimal QuantityRequired { get; set; }
+        public decimal? QuantityRequired { get; set; }
 
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }
@@ -344,13 +344,13 @@ namespace Distributor.ViewModels
         public ItemTypeEnum ItemType { get; set; }
 
         [Display(Name = "Quantity required")]
-        public decimal QuantityRequired { get; set; }
+        public decimal? QuantityRequired { get; set; }
 
         [Display(Name = "Quantity fulfilled")]
-        public decimal QuantityFulfilled { get; set; }
+        public decimal? QuantityFulfilled { get; set; }
 
         [Display(Name = "Quantity outstanding")]
-        public decimal QuantityOutstanding { get; set; }
+        public decimal? QuantityOutstanding { get; set; }
 
         [Display(Name = "Unit of measure")]
         public string UoM { get; set; }

@@ -1,4 +1,4 @@
-﻿@model Distributor.ViewModels.AvailableListingDetailsViewModel
+﻿@model Distributor.ViewModels.RequiredListingDetailsViewModel
 @using Distributor.Helpers
 
 @{
@@ -23,7 +23,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">Manage Listings <small>Available - Details</small></h1>
+        <h1 class="page-header">Manage Listings <small>Required - Details</small></h1>
         <ol class="breadcrumb">
             @for (var i = 0; i < breadcrumbs.Count; i++)
             {
@@ -74,8 +74,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.QuantityAvailable, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.QuantityAvailable, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    @Html.LabelFor(model => model.QuantityRequired, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.QuantityRequired, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
@@ -94,38 +94,28 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.AvailableFrom, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.AvailableFrom, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    @Html.LabelFor(model => model.RequiredFrom, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.RequiredFrom, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.AvailableTo, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.AvailableTo, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    @Html.LabelFor(model => model.RequiredTo, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.RequiredTo, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.ItemCondition, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.ItemCondition.DisplayName()</div>
+                                    @Html.LabelFor(model => model.AcceptDamagedItems, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.AcceptDamagedItems, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.DisplayUntilDate, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.DisplayUntilDate, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    @Html.LabelFor(model => model.AcceptOutOfDateItems, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.AcceptOutOfDateItems, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.SellByDate, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.SellByDate, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.UseByDate, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.UseByDate, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.DeliveryAvailable, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.DeliveryAvailable, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    @Html.LabelFor(model => model.CollectionAvailable, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.CollectionAvailable, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
@@ -165,10 +155,10 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.QuantityAvailable, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.QuantityRequired, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EditorFor(model => model.QuantityAvailable, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.QuantityAvailable, "", new { @class = "text-danger", @id = "quantityavailableerror" })
+                                        @Html.EditorFor(model => model.QuantityRequired, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.QuantityRequired, "", new { @class = "text-danger", @id = "quantityrequirederror" })
                                     </div>
                                 </div>
 
@@ -197,58 +187,42 @@
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.AvailableFrom, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.RequiredFrom, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EditorFor(model => model.AvailableFrom, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                                        @Html.ValidationMessageFor(model => model.AvailableFrom, "", new { @class = "text-danger" })
+                                        @Html.EditorFor(model => model.RequiredFrom, new { htmlAttributes = new { @class = "form-control date-picker" } })
+                                        @Html.ValidationMessageFor(model => model.RequiredFrom, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.AvailableTo, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.RequiredTo, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EditorFor(model => model.AvailableTo, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                                        @Html.ValidationMessageFor(model => model.AvailableTo, "", new { @class = "text-danger" })
+                                        @Html.EditorFor(model => model.RequiredTo, new { htmlAttributes = new { @class = "form-control date-picker" } })
+                                        @Html.ValidationMessageFor(model => model.RequiredTo, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.ItemCondition, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.AcceptDamagedItems, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EnumDropDownListFor(model => model.ItemCondition, new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.ItemCondition, "", new { @class = "text-danger" })
+                                        @Html.CheckBoxFor(model => model.AcceptDamagedItems, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.AcceptDamagedItems, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.DisplayUntilDate, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.AcceptOutOfDateItems, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EditorFor(model => model.DisplayUntilDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                                        @Html.ValidationMessageFor(model => model.DisplayUntilDate, "", new { @class = "text-danger" })
+                                        @Html.CheckBoxFor(model => model.AcceptOutOfDateItems, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.AcceptOutOfDateItems, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.SellByDate, htmlAttributes: new { @class = "control-label col-md-5" })
+                                    @Html.LabelFor(model => model.CollectionAvailable, htmlAttributes: new { @class = "control-label col-md-5" })
                                     <div class="col-md-7">
-                                        @Html.EditorFor(model => model.SellByDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                                        @Html.ValidationMessageFor(model => model.SellByDate, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.UseByDate, htmlAttributes: new { @class = "control-label col-md-5" })
-                                    <div class="col-md-7">
-                                        @Html.EditorFor(model => model.UseByDate, new { htmlAttributes = new { @class = "form-control date-picker" } })
-                                        @Html.ValidationMessageFor(model => model.UseByDate, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.DeliveryAvailable, htmlAttributes: new { @class = "control-label col-md-5" })
-                                    <div class="col-md-7">
-                                        @Html.CheckBoxFor(model => model.DeliveryAvailable, htmlAttributes: new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.DeliveryAvailable, "", new { @class = "text-danger" })
+                                        @Html.CheckBoxFor(model => model.CollectionAvailable, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CollectionAvailable, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 
@@ -357,18 +331,18 @@
                 error = true;
                 $("#itemdescriptionerror").html("The Description field is required");
             }
-            if ($("#QuantityAvailable").val() == 0) {
+            if ($("#QuantityRequired").val() == 0) {
                 error = true;
-                $("#quantityavailableerror").html("The Quantity Available field cannot 0, original value has been restored");
-                $("#QuantityAvailable").val(@Model.QuantityAvailable.Value);
+                $("#quantityrequirederror").html("The Quantity Required field cannot 0, original value has been restored");
+                $("#QuantityRequired").val(@Model.QuantityRequired.Value);
             }
             if ($("#UoM").val() == "") {
                 error = true;
                 $("#uomerror").html("The Unit Of Measure field is required");
             }
-            if ($("#QuantityAvailable").val() != qtytotal) {
+            if ($("#QuantityRequired").val() != qtytotal) {
                 error = true;
-                $("#quantityavailableerror").html("The Quantity Available should equal the Fulfilled + Outstanding");
+                $("#quantityrequirederror").html("The Quantity Required should equal the Fulfilled + Outstanding");
             }
             if (error) {
                 event.preventDefault();
