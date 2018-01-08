@@ -1,17 +1,17 @@
-﻿@model IList<Distributor.ViewModels.AvailableListingManageHistoryViewModel>
+﻿@model IList<Distributor.ViewModels.RequiredListingManageHistoryViewModel>
 
-@{ 
+@{
     //set up the breadcrumb trail so that this can be passed to the details screen for building it's own breadcrumb as the detail screen is called from multiple places
-    string breadcrumb = "Available,Available,ManageInfo" ;
+    string breadcrumb = "Required,Required,ManageInfo";
     string callingActionDisplayName = "History";
 }
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="page-header">Manage Listings <small>Available - History</small></h1>
+        <h1 class="page-header">Manage Listings <small>Required - History</small></h1>
         <ol class="breadcrumb">
             <li>
-                @Html.ActionLink("Available", "Available", "ManageInfo")
+                @Html.ActionLink("Required", "Required", "ManageInfo")
             </li>
             <li class="active">History</li>
         </ol>
@@ -21,17 +21,16 @@
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-green">
-            <div class="panel-heading">Your historical available listings</div>
+            <div class="panel-heading">Your historical required listings</div>
             <div class="panel-body">
-                <table style="width:100%;" class="table table-striped table-bordered table-hover" id="availableHistoryTable">
+                <table style="width:100%;" class="table table-striped table-bordered table-hover" id="requiredHistoryTable">
                     <thead>
                         <tr class="primary">
                             <th>Description</th>
                             <th>Type</th>
-                            <th>Initial Qty</th>
-                            <th>Qty Left</th>
+                            <th>Qty Needed</th>
+                            <th>Qty Outstanding</th>
                             <th>UoM</th>
-                            <th>Condition</th>
                             <th>Last Updated</th>
                             <th>Status</th>
                         </tr>
@@ -46,10 +45,9 @@
                                 @Html.HiddenFor(modelItem => Model[i].ListingId)
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].ItemType)</td>
-                                <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].QuantityAvailable)</td>
+                                <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].QuantityRequired)</td>
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].QuantityOutstanding)</td>
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].UoM)</td>
-                                <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].ItemCondition)</td>
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].RecordChangeOn)</td>
                                 <td onclick="location.href='@Url.Action("DisplayAvailable", "ManageInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = true })'">@Html.DisplayFor(modelItem => Model[i].ListingStatus)</td>
                             </tr>
@@ -66,7 +64,7 @@
 
         //Render tables
         $(document).ready(function () {
-            $('#availableHistoryTable').dataTable({
+            $('#requiredHistoryTable').dataTable({
                 responsive: true
             });
         });

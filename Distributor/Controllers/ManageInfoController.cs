@@ -144,16 +144,16 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        //public ActionResult RequiredHistory()
-        //{
-        //    List<AvailableListingManageHistoryViewModel> model = AvailableListingViewHelpers.GetAvailableListingManageHistoryViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
-        //    return View(model);
-        //}
+        public ActionResult RequiredHistory()
+        {
+            List<RequiredListingManageHistoryViewModel> model = RequiredListingViewHelpers.GetRequiredListingManageHistoryViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            return View(model);
+        }
 
-        //public ActionResult RequiredAvailable()
-        //{
-        //    return View();
-        //}
+        public ActionResult RequiredAvailable()
+        {
+            return View();
+        }
 
         //[HttpPost]
         //public ActionResult RequiredAvailable([Bind(Include = "ItemDescription,ItemCategory,ItemType,QuantityAvailable,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable")] AvailableListingManageCreateViewModel model)
