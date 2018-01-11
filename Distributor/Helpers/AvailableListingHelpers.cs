@@ -9,6 +9,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Routing;
 using static Distributor.Enums.EntityEnums;
+using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.ItemEnums;
 
 namespace Distributor.Helpers
@@ -22,18 +23,39 @@ namespace Distributor.Helpers
             return db.AvailableListings.Find(listingId);
         }
 
-        public static List<AvailableListing> GetAvailableListingForOrganisation(ApplicationDbContext db, Guid organisationId, bool historyListing)
+        public static List<AvailableListing> GetAvailableListingForOrganisation(ApplicationDbContext db, Guid organisationId, ExternalSearchLevelEnum? selectionLevelFilter, int? maxDistanceFilter, double? maxAgeFilter, bool generalInfo, bool historyListing)
         {
-
             List<AvailableListing> list;
 
+            //history is currently only for ManageInfo (if this changes then need to do similar check on 'generalInfo' as below
             if (historyListing)
             {
                 list = (from al in db.AvailableListings
                         where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
                         select al).Distinct().ToList();
             }
-            else
+            else if (generalInfo)  //bring back those that DO NOT belong to this user's organisation
+            {
+                //build the age filter to apply when building list
+                double negativeDays = 0 - maxAgeFilter.Value;
+                var dateCheck = DateTime.Now.AddDays(negativeDays);
+
+                list = (from al in db.AvailableListings
+                        where (al.ListingOriginatorOrganisationId != organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                            && al.ListingOriginatorDateTime >= dateCheck)
+                        select al).Distinct().ToList();
+
+                selectionLevelFilter = selectionLevelFilter ?? ExternalSearchLevelEnum.All;
+
+                //filter the list by group if required
+                if (selectionLevelFilter.Value == ExternalSearchLevelEnum.Group)
+                    list = GroupFilters.FilterAvailableListingsByGroup(db, list, organisationId);
+
+                //LSLSLS TODO? - Extra Filters  (probably add ages, types, etc..)
+                //filter the list by distance
+                list = SearchHelpers.FilterAvailableListingsByDistance(db, list, organisationId, maxDistanceFilter.Value);
+            }
+            else //bring back those that ONLY belong to this user's organisation
             {
                 list = (from al in db.AvailableListings
                         where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
@@ -160,9 +182,58 @@ namespace Distributor.Helpers
     {
         #region Get
 
+        #region General Info
+
+        public static List<AvailableListingGeneralViewModel> GetAvailableListingGeneralViewModel(ApplicationDbContext db, IPrincipal user, int? maxDistance, double? maxAge)
+        {
+            //Get user so we can get the settings to initialise the search on the screen
+            AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
+            Organisation currentOrg = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
+
+            //set the search criteria.  If nothing passed in then take the values from the settings.  If values past in then this is the dynamic changes made on the list screen and resubmitted
+            int? maxDistanceFilter = maxDistance ?? currentUser.MaxDistanceFilter ?? 1500;
+            double? maxAgeFilter = maxAge ?? currentUser.MaxAgeFilter ?? 9999;
+
+            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, currentUser.OrganisationId, currentUser.SelectionLevelFilter, maxDistanceFilter, maxAgeFilter, true, false);
+            List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
+
+            foreach (AvailableListing item in available)
+            {
+                // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
+                DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
+
+                Organisation supplier = OrganisationHelpers.GetOrganisation(db, item.ListingOriginatorOrganisationId);
+
+                AvailableListingGeneralViewModel listItem = new AvailableListingGeneralViewModel()
+                {
+                    MaxDistance = maxDistanceFilter,
+                    MaxAge = maxAgeFilter,
+                    ListingId = item.ListingId,
+                    ItemDescription = item.ItemDescription,
+                    ItemType = item.ItemType,
+                    QuantityOutstanding = item.QuantityOutstanding,
+                    UoM = item.UoM,
+                    AvailableTo = item.AvailableTo,
+                    ItemCondition = item.ItemCondition,
+                    ExpiryDate = expiryDate,
+                    DeliveryAvailable = item.DeliveryAvailable,
+                    SupplierDetails = supplier.OrganisationName,
+                    Distance = DistanceHelpers.GetDistance(currentOrg.AddressPostcode, item.ListingOrganisationPostcode)
+                };
+
+                list.Add(listItem);
+            }
+
+            return list;
+        }
+
+        #endregion
+
+        #region Manage Info
+
         public static List<AvailableListingManageViewModel> GetAvailableListingManageViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, false);
+            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, null, null, null, false, false);
             List<AvailableListingManageViewModel> list = new List<AvailableListingManageViewModel>();
 
             foreach (AvailableListing item in available)
@@ -192,7 +263,7 @@ namespace Distributor.Helpers
 
         public static List<AvailableListingManageHistoryViewModel> GetAvailableListingManageHistoryViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> history = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, true);
+            List<AvailableListing> history = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, null, null, null, false, true);
             List<AvailableListingManageHistoryViewModel> list = new List<AvailableListingManageHistoryViewModel>();
 
             foreach (AvailableListing item in history)
@@ -215,6 +286,8 @@ namespace Distributor.Helpers
 
             return list;
         }
+
+        #endregion
 
         #endregion
 

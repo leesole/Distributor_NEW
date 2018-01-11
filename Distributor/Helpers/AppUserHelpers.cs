@@ -272,7 +272,6 @@ namespace Distributor.Helpers
             appUser.MaxDistanceFilter = view.MaxDistanceFilter;
             appUser.MaxAgeFilter = view.MaxAgeFilter;
             appUser.SelectionLevelFilter = view.SelectionLevelFilter;
-            appUser.DisplayMyOrganisationListingsFilter = view.DisplayMyOrganisationListingsFilter;
             appUser.RecordChange = RecordChangeEnum.RecordUpdated;
             appUser.RecordChangeBy = GetAppUserIdFromUser(user);
             appUser.RecordChangeOn = DateTime.Now;
@@ -427,8 +426,7 @@ namespace Distributor.Helpers
                 AppUserId = appUser.AppUserId,
                 MaxDistanceFilter = appUser.MaxDistanceFilter,
                 MaxAgeFilter = appUser.MaxAgeFilter,
-                SelectionLevelFilter = appUser.SelectionLevelFilter,
-                DisplayMyOrganisationListingsFilter = appUser.DisplayMyOrganisationListingsFilter
+                SelectionLevelFilter = appUser.SelectionLevelFilter
             };
 
             return view;

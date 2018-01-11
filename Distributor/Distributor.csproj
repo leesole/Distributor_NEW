@@ -314,6 +314,14 @@
     <Compile Include="Migrations\201801052122282_21st.Designer.cs">
       <DependentUpon>201801052122282_21st.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801091329552_22nd.cs" />
+    <Compile Include="Migrations\201801091329552_22nd.Designer.cs">
+      <DependentUpon>201801091329552_22nd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801101056027_23rd.cs" />
+    <Compile Include="Migrations\201801101056027_23rd.Designer.cs">
+      <DependentUpon>201801101056027_23rd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -599,12 +607,12 @@
     <Content Include="Views\ManageInfo\RequiredHistory.cshtml" />
     <Content Include="Views\ManageInfo\CreateRequired.cshtml" />
     <Content Include="Views\ManageInfo\DisplayRequired.cshtml" />
+    <Content Include="Views\GeneralInfo\Available.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\AvailableListing\" />
     <Folder Include="Views\Data\" />
-    <Folder Include="Views\GeneralInfo\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -672,6 +680,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801052122282_21st.resx">
       <DependentUpon>201801052122282_21st.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801091329552_22nd.resx">
+      <DependentUpon>201801091329552_22nd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801101056027_23rd.resx">
+      <DependentUpon>201801101056027_23rd.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -79,10 +79,6 @@ namespace Distributor.ViewModels
         [Display(Name = "Selection level filter")]
         public ExternalSearchLevelEnum SelectionLevelFilter { get; set; }
 
-        [Required]
-        [Display(Name = "Display my organisation listings filter")]
-        public bool DisplayMyOrganisationListingsFilter { get; set; }
-
         //SETTINGS - Authorisation Levels  - LSLSLS Might not use, might just only allow ADMIN
     }
 }

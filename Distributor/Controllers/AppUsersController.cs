@@ -49,7 +49,7 @@ namespace Distributor.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "AppUserId,FirstName,LastName,EntityStatus,OrganisationId,LoginEmail,PrivacyLevel,UserRole,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,DisplayMyOrganisationListingsFilter,RecordChange,RecordChangeOn,RecordChangeBy")] AppUser appUser)
+        public ActionResult Create([Bind(Include = "AppUserId,FirstName,LastName,EntityStatus,OrganisationId,LoginEmail,PrivacyLevel,UserRole,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,RecordChange,RecordChangeOn,RecordChangeBy")] AppUser appUser)
         {
             if (ModelState.IsValid)
             {
@@ -189,7 +189,7 @@ namespace Distributor.Controllers
         // POST: AppUsers/Settings/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Settings([Bind(Include = "AppUserId,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter,DisplayMyOrganisationListingsFilter")] AppUserSettingsView view)
+        public ActionResult Settings([Bind(Include = "AppUserId,MaxDistanceFilter,MaxAgeFilter,SelectionLevelFilter")] AppUserSettingsView view)
         {
             if (Request.Form["resetbutton"] != null)
             {

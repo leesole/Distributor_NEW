@@ -68,13 +68,9 @@ namespace Distributor.Enums
             [Display(Name = "All")]
             All = 0,
 
-            [Description("Organisation")]
-            [Display(Name = "Organisation")]
-            Organisation = 1,
-
             [Description("Group")]
             [Display(Name = "Group")]  //These are user built closed groups
-            Group = 2
+            Group = 1
         }
 
         /// <summary>

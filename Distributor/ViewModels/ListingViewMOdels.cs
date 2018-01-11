@@ -214,6 +214,53 @@ namespace Distributor.ViewModels
     #endregion
 
     #region General Info Views
+
+    public class AvailableListingGeneralViewModel
+    {
+        [Display(Name = "Max age")]
+        public double? MaxAge { get; set; }
+
+        [Display(Name = "Max distance")]
+        public int? MaxDistance { get; set; }
+
+        public Guid ListingId { get; set; }
+
+        [Required]
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
+
+        [Required]
+        [Display(Name = "Item type")]
+        public ItemTypeEnum ItemType { get; set; }
+
+        [Display(Name = "Quantity available")]
+        public decimal QuantityOutstanding { get; set; }
+
+        [Display(Name = "Unit of measure")]
+        public string UoM { get; set; }
+
+        [Display(Name = "Available to")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? AvailableTo { get; set; }
+
+        [Display(Name = "Item condition")]
+        public ItemConditionEnum ItemCondition { get; set; }
+
+        [Display(Name = "Expiry date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? ExpiryDate { get; set; }
+
+        [Display(Name = "Can deliver?")]
+        public bool DeliveryAvailable { get; set; }
+
+        [Display(Name = "Supplier details")]
+        public string SupplierDetails { get; set; }
+
+        [Display(Name = "Distance")]
+        public int Distance { get; set; }
+
+    }
+
     #endregion
 
     #endregion
@@ -401,6 +448,15 @@ namespace Distributor.ViewModels
 
     #region General Info Views
     #endregion
+
+    #endregion
+
+    #region Processing Views
+
+    public class ListingSearchCriteria
+    {
+
+    }
 
     #endregion
 }

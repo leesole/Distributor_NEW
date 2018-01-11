@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using static Distributor.Enums.EntityEnums;
+using static Distributor.Enums.GeneralEnums;
 
 namespace Distributor.Helpers
 {
@@ -64,8 +65,20 @@ namespace Distributor.Helpers
                             "Value",
                             "Text",
                             status);
-            
+
             return list;
+        }
+
+        public static SelectList ExternalSearchLevelEnumsDropDown(ExternalSearchLevelEnum level)
+        { 
+            var enumList = (from ExternalSearchLevelEnum bt in Enum.GetValues(typeof(ExternalSearchLevelEnum))
+                            select new
+                            {
+                                Id = bt,
+                                Name = EnumHelpers.GetDescription((ExternalSearchLevelEnum)bt)
+                            });
+
+            return new SelectList(enumList, "Id", "Name", level);
         }
 
         #endregion

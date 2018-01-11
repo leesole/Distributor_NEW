@@ -41,6 +41,17 @@ namespace Distributor.Helpers
             return groups;
         }
 
+        //Get all groups that have members belonging to an organisation 
+        public static List<Group> GetGroupsForOrg(ApplicationDbContext db, Guid organisationId)
+        {
+            List<Group> groups = (from g in db.Groups
+                                  join gm in db.GroupMembers on g.GroupId equals gm.GroupId
+                                  where (gm.OrganisationId == organisationId && g.EntityStatus == EntityStatusEnum.Active && gm.EntityStatus == EntityStatusEnum.Active)
+                                  select g).Distinct().ToList();
+
+            return groups;
+        }
+
         #endregion
 
         #region Create
@@ -158,6 +169,29 @@ namespace Distributor.Helpers
                                       select gm).Distinct().ToList();
 
             return list;
+        }
+
+        //Get all groupmembers IDs from all groups that have members belonging to an organisation 
+        public static List<Guid> GetGroupsMembersOrgGuidsForGroupsFromOrg(ApplicationDbContext db, Guid organisationId)
+        {
+            List<Group> groupsForOrg = GroupHelpers.GetGroupsForOrg(db, organisationId);
+
+            List<Guid> groupMembersOrgId = (from gm in db.GroupMembers
+                                            join g in db.Groups on gm.GroupId equals g.GroupId
+                                            select gm.OrganisationId).Distinct().ToList();
+
+            return groupMembersOrgId;
+        }
+
+        //Get all groupmembers IDs from all groups that have members NOT belonging to an organisation 
+        public static List<Guid> GetGroupsMembersOrgGuidsForGroupsNotFromOrg(ApplicationDbContext db, Guid organisationId)
+        {
+            List<Guid> groupMembersOrgId = (from gm in db.GroupMembers
+                                            join g in db.Groups on gm.GroupId equals g.GroupId
+                                            where (gm.OrganisationId != organisationId && g.EntityStatus == EntityStatusEnum.Active)
+                                            select gm.OrganisationId).Distinct().ToList();
+
+            return groupMembersOrgId;
         }
 
         #endregion
@@ -334,7 +368,7 @@ namespace Distributor.Helpers
 
             //get list of groups containing this organisation
             List<Group> groupsContainingOrg = GroupHelpers.GetGroupsContainingOrg(db, organisation.OrganisationId, memberStatus);
-            
+
             //build view
             foreach (Group group in groupsContainingOrg)
             {
@@ -453,5 +487,20 @@ namespace Distributor.Helpers
         }
 
         #endregion
+    }
+
+    public static class GroupFilters
+    {
+        public static List<AvailableListing> FilterAvailableListingsByGroup(ApplicationDbContext db, List<AvailableListing> currentList, Guid organisationId)
+        {
+            //Get the group Member IDs from groups that this user/organisation are part of, so we can remove them from the list
+            List<Guid> groupMemberOrgIds = GroupMembersHelpers.GetGroupsMembersOrgGuidsForGroupsFromOrg(db, organisationId);
+
+            if (groupMemberOrgIds.Count == 0)
+                return new List<AvailableListing>();
+            else
+                //Select from currentList only those records containing the list ouf found orgIds
+                return currentList.Where(x => groupMemberOrgIds.Contains(x.ListingOriginatorOrganisationId)).ToList();
+        }
     }
 }
