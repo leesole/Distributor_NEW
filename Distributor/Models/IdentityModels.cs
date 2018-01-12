@@ -40,6 +40,8 @@ namespace Distributor.Models
 
         public DbSet<AvailableListing> AvailableListings { get; set; }
         public DbSet<RequiredListing> RequiredListings { get; set; }
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
 
         public static ApplicationDbContext Create()

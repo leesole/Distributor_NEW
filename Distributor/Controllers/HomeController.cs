@@ -56,7 +56,7 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult OrganisationDetails([Bind(Include = "AppUserId,SelectedOrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,PrivacyLevel,GroupPrivacyLevel")] HomeOrganisationDetailsView model)
+        public ActionResult OrganisationDetails([Bind(Include = "AppUserId,SelectedOrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,ListingPrivacyLevel,PrivacyLevel,GroupPrivacyLevel")] HomeOrganisationDetailsView model)
         {
             if (Request.Form["resetbutton"] != null)
                 return RedirectToAction("OrganisationDetails", "Home");

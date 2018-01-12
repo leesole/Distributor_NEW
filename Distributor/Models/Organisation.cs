@@ -65,13 +65,17 @@ namespace Distributor.Models
         public string VATRegistrationDetails { get; set; }
 
         [Required]
+        [Display(Name = "'General Info' listing privacy level")]
+        public LevelEnum ListingPrivacyLevel { get; set; }
+
+        [Required]
         [Display(Name = "Privacy level")]
         public PrivacyLevelEnum PrivacyLevel { get; set; }
 
         [Required]
         [Display(Name = "'Group' privacy level")]
         public PrivacyLevelEnum GroupPrivacyLevel { get; set; }
-        
+
         [Required]
         [Display(Name = "Status")]
         public EntityStatusEnum EntityStatus { get; set; }

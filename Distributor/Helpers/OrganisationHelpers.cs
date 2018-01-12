@@ -76,6 +76,7 @@ namespace Distributor.Helpers
                 CompanyRegistrationDetails = model.CompanyRegistrationDetails ?? "",
                 CharityRegistrationDetails = model.CharityRegistrationDetails ?? "",
                 VATRegistrationDetails = model.VATRegistrationDetails ?? "",
+                ListingPrivacyLevel = model.ListingPrivacyLevel,
                 PrivacyLevel = model.PrivacyLevel,
                 GroupPrivacyLevel = model.GroupPrivacyLevel,
                 EntityStatus = EntityStatusEnum.Active,
@@ -112,6 +113,7 @@ namespace Distributor.Helpers
             organisation.CompanyRegistrationDetails = view.CompanyRegistrationDetails;
             organisation.CharityRegistrationDetails = view.CharityRegistrationDetails;
             organisation.VATRegistrationDetails = view.VATRegistrationDetails;
+            organisation.ListingPrivacyLevel = view.ListingPrivacyLevel;
             organisation.PrivacyLevel = view.PrivacyLevel;
             organisation.GroupPrivacyLevel = view.GroupPrivacyLevel;
             organisation.RecordChange = RecordChangeEnum.RecordUpdated;
@@ -156,6 +158,7 @@ namespace Distributor.Helpers
                 CompanyRegistrationDetails = org.CompanyRegistrationDetails,
                 CharityRegistrationDetails = org.CharityRegistrationDetails,
                 VATRegistrationDetails = org.VATRegistrationDetails,
+                ListingPrivacyLevel = org.ListingPrivacyLevel,
                 PrivacyLevel = org.PrivacyLevel,
                 GroupPrivacyLevel = org.GroupPrivacyLevel
             };

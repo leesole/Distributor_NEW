@@ -67,6 +67,10 @@ namespace Distributor.ViewModels
         public string VATRegistrationDetails { get; set; }
 
         [Required]
+        [Display(Name = "'General Info' listing privacy level")]
+        public LevelEnum ListingPrivacyLevel { get; set; }
+
+        [Required]
         [Display(Name = "Privacy level")]
         public PrivacyLevelEnum PrivacyLevel { get; set; }
 

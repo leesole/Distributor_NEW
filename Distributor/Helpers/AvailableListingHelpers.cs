@@ -203,7 +203,7 @@ namespace Distributor.Helpers
                 DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
 
                 Organisation supplier = OrganisationHelpers.GetOrganisation(db, item.ListingOriginatorOrganisationId);
-
+                
                 AvailableListingGeneralViewModel listItem = new AvailableListingGeneralViewModel()
                 {
                     MaxDistance = maxDistanceFilter,

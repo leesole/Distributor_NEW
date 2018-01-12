@@ -79,6 +79,7 @@ else
                                 <th>Delivery</th>
                                 <th>Supplier</th>
                                 <th>Distance</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -105,15 +106,11 @@ else
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].DeliveryAvailable)</td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].SupplierDetails)</td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, historyDisplay = false })'">@Html.DisplayFor(modelItem => Model[i].Distance)</td>
+                                    <td><a class="btn btn-primary" href='@Url.Action("OfferAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName })'><span class="glyphicon glyphicon-edit"></span></a></td>
                                 </tr>
                             }
                         </tbody>
                     </table>
-                </div>
-                <div class="panel-footer clearfix">
-                    <div class="col-sm-4"><a class="btn btn-primary btn-lg btn-block" href='@Url.Action("CreateAvailable", "GeneralInfo")'><span class="glyphicon glyphicon-plus"></span> Create</a></div>
-                    <div class="col-sm-4"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-save"></span> Save</button></div>
-                    <div class="col-sm-4"><button type="submit" name="resetbutton" class="btn btn-danger btn-lg btn-block"><span class="fa fa-undo"></span> Reset</button></div>
                 </div>
             </div>
         </div>
@@ -128,6 +125,19 @@ else
         //Render tables
         $(document).ready(function () {
             $('#availableTable').dataTable({
+                'columns': [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { 'orderable': false }
+                ],
                 responsive: true
             });
         });

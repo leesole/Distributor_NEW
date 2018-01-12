@@ -147,9 +147,17 @@
                                 </div>
 
                                 <div class="form-group col-md-12">
+                                    @Html.LabelFor(model => model.ListingPrivacyLevel, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.EnumDropDownListFor(model => model.ListingPrivacyLevel, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.ListingPrivacyLevel, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
                                     @Html.LabelFor(model => model.PrivacyLevel, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-8">
-                                        @Html.EnumDropDownListFor(model => model.PrivacyLevel, htmlAttributes: new { @class = "form-control", placeholder = "Privacy level" })
+                                        @Html.EnumDropDownListFor(model => model.PrivacyLevel, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(model => model.PrivacyLevel, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -157,7 +165,7 @@
                                 <div class="form-group col-md-12">
                                     @Html.LabelFor(model => model.GroupPrivacyLevel, htmlAttributes: new { @class = "control-label col-md-4" })
                                     <div class="col-md-8">
-                                        @Html.EnumDropDownListFor(model => model.GroupPrivacyLevel, htmlAttributes: new { @class = "form-control", placeholder = "'Group' Privacy level" })
+                                        @Html.EnumDropDownListFor(model => model.GroupPrivacyLevel, new { @class = "form-control" })
                                         @Html.ValidationMessageFor(model => model.GroupPrivacyLevel, "", new { @class = "text-danger" })
                                     </div>
                                 </div>

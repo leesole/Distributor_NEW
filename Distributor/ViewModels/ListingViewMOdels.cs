@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.ItemEnums;
+using static Distributor.Enums.OfferEnums;
 
 namespace Distributor.ViewModels
 {
@@ -259,6 +260,13 @@ namespace Distributor.ViewModels
         [Display(Name = "Distance")]
         public int Distance { get; set; }
 
+        ////Offer details - link to offer
+        //public string OfferDescription { get; set; }
+        //public Guid? OfferId { get; set; }
+        //public decimal? OfferQty { get; set; }
+        //public decimal? OfferCounterQty { get; set; }
+        //public OfferStatusEnum? OfferStatus { get; set; }
+
     }
 
     #endregion
@@ -450,13 +458,5 @@ namespace Distributor.ViewModels
     #endregion
 
     #endregion
-
-    #region Processing Views
-
-    public class ListingSearchCriteria
-    {
-
-    }
-
-    #endregion
+    
 }

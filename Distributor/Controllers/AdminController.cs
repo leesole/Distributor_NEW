@@ -85,7 +85,7 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult OrganisationAdmin([Bind(Include = "OrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,PrivacyLevel,GroupPrivacyLevel")] OrganisationAdminView model)
+        public ActionResult OrganisationAdmin([Bind(Include = "OrganisationId,OrganisationName,BusinessType,AddressLine1,AddressLine2,AddressLine3,AddressTownCity,AddressCounty,AddressPostcode,TelephoneNumber,Email,Website,ContactName,CompanyRegistrationDetails,CharityRegistrationDetails,VATRegistrationDetails,ListingPrivacyLevel,PrivacyLevel,GroupPrivacyLevel")] OrganisationAdminView model)
         {
             if (Request.Form["resetbutton"] != null)
             {
