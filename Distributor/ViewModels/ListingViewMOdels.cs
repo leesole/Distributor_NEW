@@ -13,6 +13,96 @@ namespace Distributor.ViewModels
 {
     #region Available Listings
 
+    public class AvailableListingDetailsViewModel : CallingFields
+    {
+        public string Breadcrumb { get; set; }  //Holds the breadcrumb list passed from the previous view
+
+        public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
+
+        public bool DisplayOnly { get; set; }  //Display Only flag for record
+
+
+        public Guid ListingId { get; set; }
+
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
+
+        [Display(Name = "Item category")]
+        public ItemCategoryEnum ItemCategory { get; set; }
+
+        [Display(Name = "Item type")]
+        public ItemTypeEnum ItemType { get; set; }
+
+        [Display(Name = "Quantity available")]
+        public decimal? QuantityAvailable { get; set; }
+
+        [Display(Name = "Quantity fulfilled")]
+        public decimal? QuantityFulfilled { get; set; }
+
+        [Display(Name = "Quantity outstanding")]
+        public decimal? QuantityOutstanding { get; set; }
+
+        [Display(Name = "Unit of measure")]
+        public string UoM { get; set; }
+
+        [Display(Name = "Available from")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? AvailableFrom { get; set; }
+
+        [Display(Name = "Available to")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? AvailableTo { get; set; }
+
+        [Display(Name = "Item condition")]
+        public ItemConditionEnum ItemCondition { get; set; }
+
+        [Display(Name = "Earliest display-until date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? DisplayUntilDate { get; set; }
+
+        [Display(Name = "Earliest sell-by date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? SellByDate { get; set; }
+
+        [Display(Name = "Earliest use-by date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? UseByDate { get; set; }
+
+        [Display(Name = "Can deliver?")]
+        public bool DeliveryAvailable { get; set; }
+
+        [Display(Name = "Listing status")]
+        public ItemRequiredListingStatusEnum ListingStatus { get; set; }
+
+        [Display(Name = "Listing location")]
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
+
+
+        [Display(Name = "Change")]
+        public RecordChangeEnum RecordChange { get; set; }
+        [Display(Name = "Date changed")]
+        public DateTime RecordChangeOn { get; set; }
+        [Display(Name = "Changed by")]
+        public string RecordChangeByName { get; set; }
+        [Display(Name = "Changed by (email)")]
+        public string RecordChangeByEmail { get; set; }
+
+        //references to the listing originator
+        [Display(Name = "Created by")]
+        public string ListingOriginatorAppUserName { get; set; }
+        [Display(Name = "Created by (email)")]
+        public string ListingOriginatorAppUserEmail { get; set; }
+        [Display(Name = "Date created")]
+        public DateTime ListingOriginatorDateTime { get; set; }
+
+        //Offer details - link to offer
+        public string OfferDescription { get; set; }
+        public Guid? OfferId { get; set; }
+        public decimal? OfferQty { get; set; }
+        public decimal? OfferCounterQty { get; set; }
+        public OfferStatusEnum? OfferStatus { get; set; }
+    }
+
     #region Managed Views
 
     public class AvailableListingManageViewModel
@@ -129,89 +219,6 @@ namespace Distributor.ViewModels
         public bool DeliveryAvailable { get; set; }
     }
 
-    public class AvailableListingDetailsViewModel : CallingFields
-    {
-        public string Breadcrumb { get; set; }  //Holds the breadcrumb list passed from the previous view
-
-        public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
-
-        public bool HistoryRecord { get; set; }  //hold the History record flag passed from previous view
-
-
-        public Guid ListingId { get; set; }
-
-        [Display(Name = "Description")]
-        public string ItemDescription { get; set; }
-
-        [Display(Name = "Item category")]
-        public ItemCategoryEnum ItemCategory { get; set; }
-
-        [Display(Name = "Item type")]
-        public ItemTypeEnum ItemType { get; set; }
-
-        [Display(Name = "Quantity available")]
-        public decimal? QuantityAvailable { get; set; }
-
-        [Display(Name = "Quantity fulfilled")]
-        public decimal? QuantityFulfilled { get; set; }
-
-        [Display(Name = "Quantity outstanding")]
-        public decimal? QuantityOutstanding { get; set; }
-
-        [Display(Name = "Unit of measure")]
-        public string UoM { get; set; }
-
-        [Display(Name = "Available from")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? AvailableFrom { get; set; }
-
-        [Display(Name = "Available to")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? AvailableTo { get; set; }
-
-        [Display(Name = "Item condition")]
-        public ItemConditionEnum ItemCondition { get; set; }
-
-        [Display(Name = "Earliest display-until date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? DisplayUntilDate { get; set; }
-
-        [Display(Name = "Earliest sell-by date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? SellByDate { get; set; }
-
-        [Display(Name = "Earliest use-by date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? UseByDate { get; set; }
-
-        [Display(Name = "Can deliver?")]
-        public bool DeliveryAvailable { get; set; }
-
-        [Display(Name = "Listing status")]
-        public ItemRequiredListingStatusEnum ListingStatus { get; set; }
-
-        [Display(Name = "Listing location")]
-        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
-
-
-        [Display(Name = "Change")]
-        public RecordChangeEnum RecordChange { get; set; }
-        [Display(Name = "Date changed")]
-        public DateTime RecordChangeOn { get; set; }
-        [Display(Name = "Changed by")]
-        public string RecordChangeByName { get; set; }
-        [Display(Name = "Changed by (email)")]
-        public string RecordChangeByEmail { get; set; }
-
-        //references to the listing originator
-        [Display(Name = "Created by")]
-        public string ListingOriginatorAppUserName { get; set; }
-        [Display(Name = "Created by (email)")]
-        public string ListingOriginatorAppUserEmail { get; set; }
-        [Display(Name = "Date created")]
-        public DateTime ListingOriginatorDateTime { get; set; }
-    }
-
     #endregion
 
     #region General Info Views
@@ -259,14 +266,6 @@ namespace Distributor.ViewModels
 
         [Display(Name = "Distance")]
         public int Distance { get; set; }
-
-        ////Offer details - link to offer
-        //public string OfferDescription { get; set; }
-        //public Guid? OfferId { get; set; }
-        //public decimal? OfferQty { get; set; }
-        //public decimal? OfferCounterQty { get; set; }
-        //public OfferStatusEnum? OfferStatus { get; set; }
-
     }
 
     #endregion
@@ -384,7 +383,7 @@ namespace Distributor.ViewModels
 
         public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
 
-        public bool HistoryRecord { get; set; }  //hold the History record flag passed from previous view
+        public bool DisplayOnly { get; set; }  //either display or allow edit flag
 
 
         public Guid ListingId { get; set; }

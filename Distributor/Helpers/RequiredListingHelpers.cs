@@ -211,7 +211,7 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static RequiredListingDetailsViewModel CreateRequiredListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool historyDisplay, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
+        public static RequiredListingDetailsViewModel CreateRequiredListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
         {
             RequiredListing listing = RequiredListingHelpers.GetRequiredListing(db, listingId);
 
@@ -227,7 +227,7 @@ namespace Distributor.Helpers
                 RequiredListingDetailsViewModel model = new RequiredListingDetailsViewModel()
                 {
                     Breadcrumb = breadcrumb,
-                    HistoryRecord = historyDisplay,
+                    DisplayOnly = displayOnly,
                     ListingId = listing.ListingId,
                     ItemDescription = listing.ItemDescription,
                     ItemCategory = listing.ItemCategory,

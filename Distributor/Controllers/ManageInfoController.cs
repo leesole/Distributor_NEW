@@ -72,7 +72,7 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
+        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction)
         {
             if (id == null)
             {
@@ -88,21 +88,23 @@ namespace Distributor.Controllers
                 defaultAction = "Available";
             }
 
-            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
             
             if (model == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.ListingType = "Manage Listings";
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
+        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode")] AvailableListingDetailsViewModel model)
         {
             if (Request.Form["resetbutton"] != null)
             {
-                return RedirectToAction("DisplayAvailable", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+                return RedirectToAction("DisplayAvailable", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
             }
 
             if (ModelState.IsValid)
@@ -172,7 +174,7 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool historyDisplay, bool? recalled, string defaultController, string defaultAction)
+        public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction)
         {
             if (id == null)
             {
@@ -188,7 +190,7 @@ namespace Distributor.Controllers
                 defaultAction = "Required";
             }
 
-            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, historyDisplay, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
 
             if (model == null)
             {
@@ -198,11 +200,11 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult DisplayRequired([Bind(Include = "Breadcrumb,HistoryRecord,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityRequired,QuantityFulfilled,QuantityOutstanding,UoM,RequiredFrom,RequiredTo,AcceptDamagedItems,AcceptOutOfDateItems,CollectionAvailable,ListingStatus,ListingOrganisationPostcode")] RequiredListingDetailsViewModel model)
+        public ActionResult DisplayRequired([Bind(Include = "Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityRequired,QuantityFulfilled,QuantityOutstanding,UoM,RequiredFrom,RequiredTo,AcceptDamagedItems,AcceptOutOfDateItems,CollectionAvailable,ListingStatus,ListingOrganisationPostcode")] RequiredListingDetailsViewModel model)
         {
             if (Request.Form["resetbutton"] != null)
             {
-                return RedirectToAction("DisplayRequired", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, historyDisplay = model.HistoryRecord, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+                return RedirectToAction("DisplayRequired", "ManageInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
             }
 
             if (ModelState.IsValid)

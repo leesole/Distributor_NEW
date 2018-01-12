@@ -50,13 +50,13 @@
                         <div class="form-horizontal">
                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             @Html.HiddenFor(model => model.Breadcrumb)
-                            @Html.HiddenFor(model => model.HistoryRecord)
+                            @Html.HiddenFor(model => model.DisplayOnly)
                             @Html.HiddenFor(model => model.CallingAction)
                             @Html.HiddenFor(model => model.CallingController)
                             @Html.HiddenFor(model => model.CallingActionDisplayName)
                             @Html.HiddenFor(model => model.ListingId)
 
-                            @if (Model.HistoryRecord)
+                            @if (Model.DisplayOnly)
                             {
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "text-right col-md-5" })
@@ -303,7 +303,7 @@
                         </div>
                     </div>
                 </div>
-                @if (!Model.HistoryRecord)
+                @if (!Model.DisplayOnly)
                 {
                     <div class="panel-footer clearfix">
                         <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-primary btn-lg btn-block" onclick="ValidateFields()"><span class="glyphicon glyphicon-save"></span> Save</button></div>

@@ -4,6 +4,7 @@ using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using static Distributor.Enums.GeneralEnums;
@@ -23,6 +24,55 @@ namespace Distributor.Controllers
             return View(model);
         }
 
+        public ActionResult OfferAvailable(Guid? id, string breadcrumb, string callingActionDisplayName)
+        {
+            //LSLSLS todo
+            return View();
+        }
+
+        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, breadcrumb);
+
+            if (!recalled.HasValue)
+            {
+                defaultController = "GeneralInfo";
+                defaultAction = "Available";
+            }
+
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.ListingType = "General Information";
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode,OfferDescription,OfferId,OfferQty,OfferCounterQty,OfferStatus")] AvailableListingDetailsViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("DisplayAvailable", "GeneralInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+            }
+
+            if (ModelState.IsValid)
+            {
+                AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+                return RedirectToAction(model.CallingAction, model.CallingController);
+            }
+
+            return View(model);
+        }
         #endregion
 
         #region RequiredListings
