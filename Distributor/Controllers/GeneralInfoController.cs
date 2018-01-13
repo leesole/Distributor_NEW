@@ -19,15 +19,29 @@ namespace Distributor.Controllers
 
         public ActionResult Available(int? maxDistance, double? maxAge)
         {
-            List<AvailableListingGeneralViewModel> model = AvailableListingViewHelpers.GetAvailableListingGeneralViewModel(db, User, maxDistance, maxAge);
-            
+            AvailableListingGeneralViewListModel model = AvailableListingViewHelpers.GetAvailableListingGeneralViewListModel(db, User, maxDistance, maxAge);
+
             return View(model);
         }
 
-        public ActionResult OfferAvailable(Guid? id, string breadcrumb, string callingActionDisplayName)
+        [HttpPost]
+        public ActionResult Available(AvailableListingGeneralViewListModel model)
         {
-            //LSLSLS todo
-            return View();
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["savebutton"] != null)
+                {
+                    //Create offers
+                    //AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+                }
+
+                if (model.Listing.Count == 0)
+                    return RedirectToAction("Available", "GeneralInfo");
+                else
+                    return RedirectToAction("Available", "GeneralInfo", new { maxDistance = model.MaxDistance, maxAge = model.MaxAge });
+            }
+
+            return View(model);
         }
 
         public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction)
@@ -46,7 +60,7 @@ namespace Distributor.Controllers
                 defaultAction = "Available";
             }
 
-            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User);
 
             if (model == null)
             {

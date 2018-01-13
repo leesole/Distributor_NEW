@@ -184,7 +184,7 @@ namespace Distributor.Helpers
 
         #region General Info
 
-        public static List<AvailableListingGeneralViewModel> GetAvailableListingGeneralViewModel(ApplicationDbContext db, IPrincipal user, int? maxDistance, double? maxAge)
+        public static AvailableListingGeneralViewListModel GetAvailableListingGeneralViewListModel(ApplicationDbContext db, IPrincipal user, int? maxDistance, double? maxAge)
         {
             //Get user so we can get the settings to initialise the search on the screen
             AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
@@ -203,11 +203,9 @@ namespace Distributor.Helpers
                 DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
 
                 Organisation supplier = OrganisationHelpers.GetOrganisation(db, item.ListingOriginatorOrganisationId);
-                
+
                 AvailableListingGeneralViewModel listItem = new AvailableListingGeneralViewModel()
                 {
-                    MaxDistance = maxDistanceFilter,
-                    MaxAge = maxAgeFilter,
                     ListingId = item.ListingId,
                     ItemDescription = item.ItemDescription,
                     ItemType = item.ItemType,
@@ -221,10 +219,29 @@ namespace Distributor.Helpers
                     Distance = DistanceHelpers.GetDistance(currentOrg.AddressPostcode, item.ListingOrganisationPostcode)
                 };
 
+                Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+                if (offer == null)
+                {
+                    listItem.OfferQty = 0.00M;
+                }
+                else
+                {
+                    listItem.OfferId = offer.OfferId;
+                    listItem.OfferQty = offer.CurrentOfferQuantity;
+                }
+
                 list.Add(listItem);
             }
 
-            return list;
+            AvailableListingGeneralViewListModel model = new AvailableListingGeneralViewListModel()
+            {
+                MaxDistance = maxDistanceFilter,
+                MaxAge = maxAgeFilter,
+                Listing = list
+            };
+
+            return model;
         }
 
         #endregion
@@ -293,7 +310,7 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
+        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled, IPrincipal user)
         {
             AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
 
@@ -339,6 +356,28 @@ namespace Distributor.Helpers
                     CallingActionDisplayName = callingActionDisplayName,
                     BreadcrumbTrail = breadcrumbDictionary
                 };
+
+                if (controllerValue == "GeneralInfo" && actionValue == "Available")
+                {
+                    //Get user info for the offer side of the display
+                    AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
+                    Organisation currentOrg = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
+
+                    Offer offer = OfferHelpers.GetOfferForListingByUser(db, listing.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+                    if (offer == null)
+                    {
+                        model.OfferDescription = "Make an offer";
+                    }
+                    else
+                    {
+                        model.OfferDescription = "Current offer";
+                        model.OfferId = offer.OfferId;
+                        model.OfferQty = offer.CurrentOfferQuantity;
+                        model.OfferCounterQty = offer.CounterOfferQuantity;
+                        model.OfferStatus = offer.OfferStatus;
+                    }
+                }
 
                 return model;
             }

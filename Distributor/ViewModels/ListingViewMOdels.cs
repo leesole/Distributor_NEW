@@ -98,8 +98,11 @@ namespace Distributor.ViewModels
         //Offer details - link to offer
         public string OfferDescription { get; set; }
         public Guid? OfferId { get; set; }
+        [Display(Name = "Quantity offered")]
         public decimal? OfferQty { get; set; }
+        [Display(Name = "Counter offer")]
         public decimal? OfferCounterQty { get; set; }
+        [Display(Name = "Offer status")]
         public OfferStatusEnum? OfferStatus { get; set; }
     }
 
@@ -225,12 +228,6 @@ namespace Distributor.ViewModels
 
     public class AvailableListingGeneralViewModel
     {
-        [Display(Name = "Max age")]
-        public double? MaxAge { get; set; }
-
-        [Display(Name = "Max distance")]
-        public int? MaxDistance { get; set; }
-
         public Guid ListingId { get; set; }
 
         [Required]
@@ -266,6 +263,21 @@ namespace Distributor.ViewModels
 
         [Display(Name = "Distance")]
         public int Distance { get; set; }
+
+        public Guid? OfferId { get; set; }
+        [Display(Name = "Quantity offered")]
+        public decimal? OfferQty { get; set; }
+    }
+
+    public class AvailableListingGeneralViewListModel
+    {
+        [Display(Name = "Max age")]
+        public double? MaxAge { get; set; }
+
+        [Display(Name = "Max distance")]
+        public int? MaxDistance { get; set; }
+
+        public List<AvailableListingGeneralViewModel> Listing { get; set; }
     }
 
     #endregion

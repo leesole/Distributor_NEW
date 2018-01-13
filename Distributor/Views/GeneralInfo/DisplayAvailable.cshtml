@@ -276,7 +276,11 @@
                     </div>
                     <div class="col-md-5">
                         <div class="panel panel-primary">
-                            <div class="panel-heading clearfix">@Html.LabelFor(model => model.OfferDescription, htmlAttributes: new { @class = "text-right col-md-6" })</div>
+                            <div class="panel-heading clearfix">
+                                <div class="col-md-6">
+                                    @Html.DisplayFor(model => model.OfferDescription, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
                             <div class="panel-body">
                                 <div class="form-horizontal">
                                     <div class="form-group">
@@ -300,7 +304,7 @@
                                 </div>
                             </div>
                             <div class="panel-footer clearfix">
-                                <a class="btn btn-primary btn-lg btn-block" href='@Url.Action("OfferAvailable", "GeneralInfo", new { id = Model.ListingId, breadcrumb = Model.Breadcrumb, callingActionDisplayName = Model.CallingActionDisplayName })'><span class="glyphicon glyphicon-edit"></span> Make Offer</a>
+                                <a class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</a>
                             </div>
                         </div>
                         <div class="panel panel-default">
