@@ -24,27 +24,23 @@ namespace Distributor.Controllers
             return View(model);
         }
 
+        //LSLSLS - Need validation on qty (not over available) within screens Available & DisplayAvailable
         [HttpPost]
         public ActionResult Available(AvailableListingGeneralViewListModel model)
         {
             if (ModelState.IsValid)
             {
                 if (Request.Form["savebutton"] != null)
-                {
                     //Create offers
-                    //AvailableListingHelpers.UpdateAvailableListing(db, model, User);
-                }
+                    OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
 
-                if (model.Listing.Count == 0)
-                    return RedirectToAction("Available", "GeneralInfo");
-                else
-                    return RedirectToAction("Available", "GeneralInfo", new { maxDistance = model.MaxDistance, maxAge = model.MaxAge });
+                return RedirectToAction("Available", "GeneralInfo", new { maxDistance = model.MaxDistance, maxAge = model.MaxAge });
             }
 
             return View(model);
         }
 
-        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction)
+        public ActionResult DisplayAvailable(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction, int? maxDistance, double? maxAge)
         {
             if (id == null)
             {
@@ -60,7 +56,7 @@ namespace Distributor.Controllers
                 defaultAction = "Available";
             }
 
-            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User);
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User, maxDistance, maxAge);
 
             if (model == null)
             {
@@ -72,16 +68,21 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult DisplayAvailable([Bind(Include = "Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode,OfferDescription,OfferId,OfferQty,OfferCounterQty,OfferStatus")] AvailableListingDetailsViewModel model)
+        public ActionResult DisplayAvailable([Bind(Include = "MaxDistance,MaxAge,Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityAvailable,QuantityFulfilled,QuantityOutstanding,UoM,AvailableFrom,AvailableTo,ItemCondition,DisplayUntilDate,SellByDate,UseByDate,DeliveryAvailable,ListingStatus,ListingOrganisationPostcode,OfferDescription,OfferId,OfferQty,OfferCounterQty,OfferStatus")] AvailableListingDetailsViewModel model)
         {
             if (Request.Form["resetbutton"] != null)
             {
-                return RedirectToAction("DisplayAvailable", "GeneralInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction });
+                return RedirectToAction("DisplayAvailable", "GeneralInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction, maxDistance = model.MaxDistance, maxAge = model.MaxAge });
             }
 
             if (ModelState.IsValid)
             {
-                AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+                if (Request.Form["saveofferbutton"] != null)
+                    OfferHelpers.CreateOffer(db, model.ListingId, model.OfferQty, ListingTypeEnum.Available, AppUserHelpers.GetAppUser(db, User));
+
+                if (Request.Form["savebutton"] != null)
+                    AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+
                 return RedirectToAction(model.CallingAction, model.CallingController);
             }
 

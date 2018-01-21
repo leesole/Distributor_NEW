@@ -355,6 +355,7 @@
     <Compile Include="ViewModels\HomeDashboardView.cs" />
     <Compile Include="ViewModels\HomeOrganisationDetailsView.cs" />
     <Compile Include="ViewModels\ListingViewModels.cs" />
+    <Compile Include="ViewModels\OfferViewModels.cs" />
     <Compile Include="ViewModels\UserTasksViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -624,6 +625,7 @@
     <Content Include="Views\ManageInfo\DisplayRequired.cshtml" />
     <Content Include="Views\GeneralInfo\DisplayAvailable.cshtml" />
     <Content Include="Views\GeneralInfo\Available.cshtml" />
+    <Content Include="Views\ManageInfo\Offers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

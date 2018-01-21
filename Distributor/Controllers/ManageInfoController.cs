@@ -88,7 +88,7 @@ namespace Distributor.Controllers
                 defaultAction = "Available";
             }
 
-            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User);
+            AvailableListingDetailsViewModel model = AvailableListingViewHelpers.CreateAvailableListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User, null, null);
             
             if (model == null)
             {
@@ -213,6 +213,22 @@ namespace Distributor.Controllers
                 return RedirectToAction(model.CallingAction, model.CallingController);
             }
 
+            return View(model);
+        }
+
+        #endregion
+
+        #region Offer
+
+        public ActionResult Offers()
+        {
+            OfferManageViewModel model = OfferViewHelpers.GetOfferManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Offers(List<OfferManageViewModel> model)
+        {
             return View(model);
         }
 

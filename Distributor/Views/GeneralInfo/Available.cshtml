@@ -61,9 +61,12 @@ else
     </div>
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "availableGeneralInfoForm", onsubmit = "return Validate();" }))
 {
     @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.MaxDistance)
+    @Html.HiddenFor(model => model.MaxAge)
 
     <div class="row">
         <div class="col-md-12">
@@ -100,24 +103,36 @@ else
                                     @Html.HiddenFor(modelItem => Model.Listing[i].DeliveryAvailable)
                                     @Html.HiddenFor(modelItem => Model.Listing[i].SupplierDetails)
                                     @Html.HiddenFor(modelItem => Model.Listing[i].Distance)
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemDescription)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemType)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].QuantityOutstanding)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].UoM)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].AvailableTo)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemCondition)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].ExpiryDate)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].DeliveryAvailable)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].SupplierDetails)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true })'">@Html.DisplayFor(modelItem => Model.Listing[i].Distance)</td>
-                                    <td>@Html.EditorFor(modelItem => Model.Listing[i].OfferQty, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemDescription)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemType)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].QuantityOutstanding)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].UoM)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].AvailableTo)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemCondition)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ExpiryDate)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].DeliveryAvailable)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].SupplierDetails)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].Distance)</td>
+                                    @if (Model.Listing[i].OfferId.HasValue)
+                                    {
+                                        <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].OfferQty, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                    }
+                                    else
+                                    {
+                                        var fieldId = "offerQty" + i.ToString();
+                                        var errorId = "offerErrorQty" + i.ToString();
+                                        <td>
+                                            @Html.EditorFor(modelItem => Model.Listing[i].OfferQty, new { htmlAttributes = new { @class = "form-control", style = "width:100px", id = fieldId } })
+                                            @Html.ValidationMessageFor(modelItem => Model.Listing[i].OfferQty, "", new { @class = "text-danger", id = errorId })
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
                 <div class="panel-footer clearfix">
-                    <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" onclick="Validate()"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                    <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" ><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
                     <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Available", "GeneralInfo")?maxDistance=' + document.getElementById('MaxDistance').value + '&maxAge=' + document.getElementById('MaxAge').value"><span class="fa fa-undo"></span> Reset</button></div>
                 </div>
             </div>
@@ -132,28 +147,16 @@ else
         //Render tables
         $(document).ready(function () {
             $('#availableTable').dataTable({
-                'columns': [
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    { 'orderable': false }
-                ],
                 responsive: true
             });
         });
 
         function Validate() {
-            //validate
+            //validate the offers are not greater than the value available
 
-
-
+            if (!window.confirm("Save offers?")) {
+                return false;  //don't submit'
+            }
         }
     </script>
 }

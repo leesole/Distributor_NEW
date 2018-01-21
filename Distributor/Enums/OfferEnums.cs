@@ -25,7 +25,11 @@ namespace Distributor.Enums
 
             [Description("Countered")]
             [Display(Name = "Countered")]
-            Countered = 3
+            Countered = 3,
+
+            [Description("Re-offer")]
+            [Display(Name = "Re-offer")]
+            Reoffer = 4
         }
     }
 }

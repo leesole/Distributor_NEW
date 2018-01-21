@@ -15,6 +15,13 @@ namespace Distributor.ViewModels
 
     public class AvailableListingDetailsViewModel : CallingFields
     {
+        //Max Age/Distance used when called from GeneralInfo/Available
+        [Display(Name = "Max age")]
+        public double? MaxAge { get; set; }
+
+        [Display(Name = "Max distance")]
+        public int? MaxDistance { get; set; }
+
         public string Breadcrumb { get; set; }  //Holds the breadcrumb list passed from the previous view
 
         public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
@@ -95,7 +102,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Date created")]
         public DateTime ListingOriginatorDateTime { get; set; }
 
-        //Offer details - link to offer
+        //Offer details - link to offer (for the user organisation that is viewing as there could be multiple offers from different organisations)
         public string OfferDescription { get; set; }
         public Guid? OfferId { get; set; }
         [Display(Name = "Quantity offered")]

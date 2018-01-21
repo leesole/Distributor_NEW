@@ -310,7 +310,7 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled, IPrincipal user)
+        public static AvailableListingDetailsViewModel CreateAvailableListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled, IPrincipal user, int? maxDistance, double? maxAge)
         {
             AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
 
@@ -325,6 +325,8 @@ namespace Distributor.Helpers
 
                 AvailableListingDetailsViewModel model = new AvailableListingDetailsViewModel()
                 {
+                    MaxDistance = maxDistance,
+                    MaxAge = maxAge,
                     Breadcrumb = breadcrumb,
                     DisplayOnly = displayOnly,
                     ListingId = listing.ListingId,

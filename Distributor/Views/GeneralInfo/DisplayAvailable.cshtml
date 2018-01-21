@@ -41,6 +41,16 @@
 {
     @Html.AntiForgeryToken()
 
+    @Html.HiddenFor(model => model.MaxDistance)
+    @Html.HiddenFor(model => model.MaxAge)
+    @Html.HiddenFor(model => model.Breadcrumb)
+    @Html.HiddenFor(model => model.DisplayOnly)
+    @Html.HiddenFor(model => model.CallingAction)
+    @Html.HiddenFor(model => model.CallingController)
+    @Html.HiddenFor(model => model.CallingActionDisplayName)
+    @Html.HiddenFor(model => model.ListingId)
+
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-green">
@@ -55,10 +65,6 @@
                             @Html.HiddenFor(model => model.CallingController)
                             @Html.HiddenFor(model => model.CallingActionDisplayName)
                             @Html.HiddenFor(model => model.ListingId)
-                            @Html.HiddenFor(model => model.OfferDescription)
-                            @Html.HiddenFor(model => model.OfferId)
-                            @Html.HiddenFor(model => model.OfferQty)
-                            @Html.HiddenFor(model => model.OfferCounterQty)
 
                             @if (Model.DisplayOnly)
                             {
@@ -275,38 +281,54 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading clearfix">
-                                <div class="col-md-6">
-                                    @Html.DisplayFor(model => model.OfferDescription, new { htmlAttributes = new { @class = "form-control" } })
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferQty, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OfferQty, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferCounterQty, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OfferCounterQty, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferStatus, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Model.OfferStatus.DisplayName()
-                                        </div>
+                        @if (Model.OfferDescription != "")
+                        {
+                            <div class="panel panel-primary">
+                                <div class="panel-heading clearfix">
+                                    <div class="col-md-6">
+                                        @Html.DisplayFor(model => model.OfferDescription, new { htmlAttributes = new { @class = "form-control" } })
                                     </div>
                                 </div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferQty, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            @if (Model.OfferId.HasValue)
+                                            {
+                                                <div class="col-md-6">
+                                                    @Html.DisplayFor(model => model.OfferQty, new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-6">
+                                                    @Html.EditorFor(model => model.OfferQty, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(model => model.OfferQty, "", new { @class = "text-danger", id = "offerErrorQty" })
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferCounterQty, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OfferCounterQty, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferStatus, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Model.OfferStatus.DisplayName()
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @if (!Model.OfferId.HasValue)
+                                {
+                                    <div class="panel-footer clearfix">
+                                        <button type="submit" name="saveofferbutton" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</button>
+                                    </div>
+                                }
                             </div>
-                            <div class="panel-footer clearfix">
-                                <a class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</a>
-                            </div>
-                        </div>
+                        }
                         <div class="panel panel-default">
                             <div class="panel-heading">Owner details</div>
                             <div class="panel-body">
