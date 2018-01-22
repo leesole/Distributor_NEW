@@ -283,7 +283,7 @@
                     <div class="col-md-5">
                         @if (Model.OfferDescription != "")
                         {
-                            <div class="panel panel-primary">
+                            <div class="panel panel-green">
                                 <div class="panel-heading clearfix">
                                     <div class="col-md-6">
                                         @Html.DisplayFor(model => model.OfferDescription, new { htmlAttributes = new { @class = "form-control" } })
@@ -324,7 +324,7 @@
                                 @if (!Model.OfferId.HasValue)
                                 {
                                     <div class="panel-footer clearfix">
-                                        <button type="submit" name="saveofferbutton" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</button>
+                                        <button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</button>
                                     </div>
                                 }
                             </div>

@@ -37,7 +37,7 @@
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity)</td>
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)</td>
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)</td>
-                                <td><button type="submit" class="btn btn-xs btn-danger btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                                <td><button type="submit" class="btn btn-xs btn-success btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-edit"></span></button></td>
                             </tr>
                         }
                     </tbody>
@@ -78,7 +78,7 @@
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)</td>
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)</td>
                                 <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity)</td>
-                                <td><button type="submit" class="btn btn-xs btn-danger btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                                <td><button type="submit" class="btn btn-xs btn-success btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-edit"></span></button></td>
                             </tr>
                         }
                     </tbody>
