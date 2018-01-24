@@ -171,24 +171,19 @@ namespace Distributor.Helpers
             return list;
         }
 
-        //Get all groupmembers IDs from all groups that have members belonging to an organisation 
+        //Get all groupmembers IDs from all groups that have given organisation - do not list given organisation
         public static List<Guid> GetGroupsMembersOrgGuidsForGroupsFromOrg(ApplicationDbContext db, Guid organisationId)
         {
-            List<Group> groupsForOrg = GroupHelpers.GetGroupsForOrg(db, organisationId);
+            //LSLSLS
+            //Having issues with the group member set up - members not right.
+            List<Guid> groupId = (from g in db.Groups
+                                  join gm in db.GroupMembers on g.GroupId equals gm.GroupId
+                                  where (gm.OrganisationId == organisationId && g.EntityStatus == EntityStatusEnum.Active)
+                                  select g.GroupId).Distinct().ToList();
 
             List<Guid> groupMembersOrgId = (from gm in db.GroupMembers
-                                            join g in db.Groups on gm.GroupId equals g.GroupId
-                                            select gm.OrganisationId).Distinct().ToList();
-
-            return groupMembersOrgId;
-        }
-
-        //Get all groupmembers IDs from all groups that have members NOT belonging to an organisation 
-        public static List<Guid> GetGroupsMembersOrgGuidsForGroupsNotFromOrg(ApplicationDbContext db, Guid organisationId)
-        {
-            List<Guid> groupMembersOrgId = (from gm in db.GroupMembers
-                                            join g in db.Groups on gm.GroupId equals g.GroupId
-                                            where (gm.OrganisationId != organisationId && g.EntityStatus == EntityStatusEnum.Active)
+                                            join gID in groupId on gm.GroupId equals gID
+                                            where (gm.OrganisationId != organisationId)
                                             select gm.OrganisationId).Distinct().ToList();
 
             return groupMembersOrgId;
@@ -499,7 +494,7 @@ namespace Distributor.Helpers
             if (groupMemberOrgIds.Count == 0)
                 return new List<AvailableListing>();
             else
-                //Select from currentList only those records containing the list ouf found orgIds
+                //Select from currentList only those records containing the list of found orgIds
                 return currentList.Where(x => groupMemberOrgIds.Contains(x.ListingOriginatorOrganisationId)).ToList();
         }
     }

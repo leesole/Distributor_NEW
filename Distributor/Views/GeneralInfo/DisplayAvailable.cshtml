@@ -95,7 +95,7 @@
 
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.QuantityOutstanding, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.QuantityOutstanding, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    <div class="col-md-7" id="QuantityOutstanding">@Html.DisplayFor(model => model.QuantityOutstanding, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
                                 <div class="form-group">
@@ -302,8 +302,9 @@
                                             else
                                             {
                                                 <div class="col-md-6">
-                                                    @Html.EditorFor(model => model.OfferQty, new { htmlAttributes = new { @class = "form-control" } })
-                                                    @Html.ValidationMessageFor(model => model.OfferQty, "", new { @class = "text-danger", id = "offerErrorQty" })
+                                                    @Html.EditorFor(model => model.OfferQty, new { htmlAttributes = new { @class = "form-control", onfocus = "javascipt:ClearErrors();" } })
+                                                    @Html.ValidationMessageFor(model => model.OfferQty, "", new { @class = "text-danger" })
+                                                    @Html.ValidationMessage("", new { @class = "text-danger", id = "offerErrorQty" })
                                                 </div>
                                             }
                                         </div>
@@ -324,7 +325,7 @@
                                 @if (!Model.OfferId.HasValue)
                                 {
                                     <div class="panel-footer clearfix">
-                                        <button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Save Offer</button>
+                                        <button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block" onclick="ValidateOffer()"><span class="glyphicon glyphicon-edit"></span> Save Offer</button>
                                     </div>
                                 }
                             </div>
@@ -405,6 +406,19 @@
             // This will make every element with the class "date-picker" into a DatePicker element
             $('.date-picker').datepicker({ dateFormat: 'dd/mm/yy' });
         })
+
+        function ClearErrors() {
+            $("#offerErrorQty").text("");
+        }
+
+        function ValidateOffer() {
+            var qtyOutstanding = parseFloat($("#QuantityOutstanding").text(),10);
+            var qtyOffered = parseFloat($("#OfferQty").val(), 10);
+            if (qtyOffered > qtyOutstanding) {
+                $("#offerErrorQty").text("Value exceeds available");
+                event.preventDefault();
+            }
+        }
 
         function ValidateFields() {
             var qtyFulfilled = parseFloat($("#QuantityFulfilled").val(), 10);

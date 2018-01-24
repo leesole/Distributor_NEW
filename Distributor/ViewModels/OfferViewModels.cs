@@ -26,6 +26,9 @@ namespace Distributor.ViewModels
         [Display(Name = "Offer status")]
         public OfferStatusEnum OfferStatus { get; set; }
 
+        [Display(Name = "Quantity outstanding")]
+        public decimal QuantityOutstanding { get; set; }
+
         [Display(Name = "Offer quantity")]
         public decimal CurrentOfferQuantity { get; set; }  //set to 0 if rejected or returned
 

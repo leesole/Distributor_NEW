@@ -20,27 +20,6 @@ namespace Distributor.Helpers
             return db.RequiredListings.Find(listingId);
         }
 
-        public static List<RequiredListing> GetRequiredListingForOrganisation(ApplicationDbContext db, Guid organisationId, bool historyListing)
-        {
-
-            List<RequiredListing> list;
-
-            if (historyListing)
-            {
-                list = (from al in db.RequiredListings
-                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
-                        select al).Distinct().ToList();
-            }
-            else
-            {
-                list = (from al in db.RequiredListings
-                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
-                        select al).Distinct().ToList();
-            }
-
-            return list;
-        }
-
         #endregion
 
         #region Create
@@ -156,53 +135,39 @@ namespace Distributor.Helpers
 
         public static List<RequiredListingManageViewModel> GetRequiredListingManageViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<RequiredListing> required = RequiredListingHelpers.GetRequiredListingForOrganisation(db, organisationId, false);
-            List<RequiredListingManageViewModel> list = new List<RequiredListingManageViewModel>();
-
-            foreach (RequiredListing item in required)
-            {
-                RequiredListingManageViewModel listItem = new RequiredListingManageViewModel()
-                {
-                    ListingId = item.ListingId,
-                    ItemDescription = item.ItemDescription,
-                    ItemType = item.ItemType,
-                    QuantityOutstanding = item.QuantityOutstanding,
-                    UoM = item.UoM,
-                    RequiredTo = item.RequiredTo,
-                    AcceptDamagedItems = item.AcceptDamagedItems,
-                    AcceptOutOfDateItems = item.AcceptOutOfDateItems,
-                    CollectionAvailable = item.CollectionAvailable,
-                    ListingStatus = item.ListingStatus
-                };
-
-                list.Add(listItem);
-            }
-
+           List<RequiredListingManageViewModel> list = (from rl in db.RequiredListings
+                                                        where (rl.ListingOriginatorOrganisationId == organisationId && (rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
+                                                        select new RequiredListingManageViewModel()
+                                                        {
+                                                            ListingId = rl.ListingId,
+                                                            ItemDescription = rl.ItemDescription,
+                                                            ItemType = rl.ItemType,
+                                                            QuantityOutstanding = rl.QuantityOutstanding,
+                                                            UoM = rl.UoM,
+                                                            RequiredTo = rl.RequiredTo,
+                                                            AcceptDamagedItems = rl.AcceptDamagedItems,
+                                                            AcceptOutOfDateItems = rl.AcceptOutOfDateItems,
+                                                            CollectionAvailable = rl.CollectionAvailable,
+                                                            ListingStatus = rl.ListingStatus
+                                                        }).Distinct().ToList();
             return list;
         }
 
         public static List<RequiredListingManageHistoryViewModel> GetRequiredListingManageHistoryViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<RequiredListing> history = RequiredListingHelpers.GetRequiredListingForOrganisation(db, organisationId, true);
-            List<RequiredListingManageHistoryViewModel> list = new List<RequiredListingManageHistoryViewModel>();
-
-            foreach (RequiredListing item in history)
-            {
-                RequiredListingManageHistoryViewModel listItem = new RequiredListingManageHistoryViewModel()
-                {
-                    ListingId = item.ListingId,
-                    ItemDescription = item.ItemDescription,
-                    ItemType = item.ItemType,
-                    QuantityRequired = item.QuantityRequired,
-                    QuantityOutstanding = item.QuantityOutstanding,
-                    UoM = item.UoM,
-                    RecordChangeOn = item.RecordChangeOn,
-                    ListingStatus = item.ListingStatus
-                };
-
-                list.Add(listItem);
-            }
-
+            List<RequiredListingManageHistoryViewModel> list = (from rl in db.RequiredListings
+                                                                where (rl.ListingOriginatorOrganisationId == organisationId && (rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
+                                                                select new RequiredListingManageHistoryViewModel()
+                                                                {
+                                                                    ListingId = rl.ListingId,
+                                                                    ItemDescription = rl.ItemDescription,
+                                                                    ItemType = rl.ItemType,
+                                                                    QuantityRequired = rl.QuantityRequired,
+                                                                    QuantityOutstanding = rl.QuantityOutstanding,
+                                                                    UoM = rl.UoM,
+                                                                    RecordChangeOn = rl.RecordChangeOn,
+                                                                    ListingStatus = rl.ListingStatus
+                                                                }).Distinct().ToList();
             return list;
         }
 

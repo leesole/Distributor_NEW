@@ -94,6 +94,7 @@ else
                             @for (int i = 0; i < Model.Listing.Count(); i++)
                             {
                                 var listingId = Model.Listing[i].ListingId;
+                                var qtyOutstandingId = "qtyOutstanding" + i.ToString();
 
                                 <tr>
                                     @Html.HiddenFor(modelItem => Model.Listing[i].ListingId)
@@ -103,9 +104,10 @@ else
                                     @Html.HiddenFor(modelItem => Model.Listing[i].DeliveryAvailable)
                                     @Html.HiddenFor(modelItem => Model.Listing[i].SupplierDetails)
                                     @Html.HiddenFor(modelItem => Model.Listing[i].Distance)
+                                    @Html.HiddenFor(modelItem => Model.Listing[i].ListingOriginatorOrganisationId)
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemType)</td>
-                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].QuantityOutstanding)</td>
+                                    <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.Listing[i].QuantityOutstanding)</span></td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].UoM)</td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].AvailableTo)</td>
                                     <td onclick="location.href='@Url.Action("DisplayAvailable", "GeneralInfo", new { id = listingId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, recalled = true, defaultController = "GeneralInfo", defaultAction = "Available", maxDistance = Model.MaxDistance, maxAge = Model.MaxAge })'">@Html.DisplayFor(modelItem => Model.Listing[i].ItemCondition)</td>
@@ -122,8 +124,9 @@ else
                                         var fieldId = "offerQty" + i.ToString();
                                         var errorId = "offerErrorQty" + i.ToString();
                                         <td>
-                                            @Html.EditorFor(modelItem => Model.Listing[i].OfferQty, new { htmlAttributes = new { @class = "form-control", style = "width:100px", id = fieldId } })
-                                            @Html.ValidationMessageFor(modelItem => Model.Listing[i].OfferQty, "", new { @class = "text-danger", id = errorId })
+                                            @Html.EditorFor(modelItem => Model.Listing[i].OfferQty, new { htmlAttributes = new { @class = "form-control", style = "width:100px", id = fieldId, onfocus = "javascipt:ClearErrors(id);" } })
+                                            @Html.ValidationMessageFor(modelItem => Model.Listing[i].OfferQty, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessage("", new { @class = "text-danger", @id = errorId })
                                         </td>
                                     }
                                 </tr>
@@ -151,10 +154,34 @@ else
             });
         });
 
+        function ClearErrors(id) {
+            var idNo = id.substring(8, id.length);
+            $("#offerErrorQty" + idNo).text("");
+        }
+
         function Validate() {
             //validate the offers are not greater than the value available
+            var errors = false;
 
-            if (!window.confirm("Save offers?")) {
+            for (i = 0; i < @Model.Listing.Count; i++){
+                try {
+                    var qty = $("#offerQty" + i).val();
+                    var qtyOut = $("#qtyOutstanding" + i).text();
+
+                    if (qty != undefined) {
+                        if (parseFloat(qty) > parseFloat(qtyOut)) {
+                            $("#offerErrorQty" + i).text("Value exceeds available");
+                            errors = true;
+                        }
+                    }
+                }
+                catch(err) {} //maybe cannot find the fields as fields only named on those with input, so just step out with no error
+            }
+
+            if (errors) {
+                return false;
+            }
+            else if (!window.confirm("Save offers?")) {
                 return false;  //don't submit'
             }
         }

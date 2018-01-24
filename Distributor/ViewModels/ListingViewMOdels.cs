@@ -274,6 +274,8 @@ namespace Distributor.ViewModels
         public Guid? OfferId { get; set; }
         [Display(Name = "Quantity offered")]
         public decimal? OfferQty { get; set; }
+
+        public Guid ListingOriginatorOrganisationId { get; set; }
     }
 
     public class AvailableListingGeneralViewListModel

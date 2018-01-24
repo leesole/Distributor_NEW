@@ -227,8 +227,23 @@ namespace Distributor.Controllers
         }
 
         [HttpPost]
-        public ActionResult Offers(List<OfferManageViewModel> model)
+        public ActionResult Offers(OfferManageViewModel model)
         {
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["saveofferbutton"] != null)
+                    //Update offers
+                    //OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
+                    ;
+
+                if (Request.Form["savecounterofferbutton"] != null)
+                    //Update offers
+                    //OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
+                    ;
+
+                return RedirectToAction("Offers", "ManageInfo");
+            }
+
             return View(model);
         }
 

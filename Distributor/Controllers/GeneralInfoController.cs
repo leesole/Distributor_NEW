@@ -24,7 +24,6 @@ namespace Distributor.Controllers
             return View(model);
         }
 
-        //LSLSLS - Need validation on qty (not over available) within screens Available & DisplayAvailable
         [HttpPost]
         public ActionResult Available(AvailableListingGeneralViewListModel model)
         {

@@ -28,39 +28,26 @@ namespace Distributor.Helpers
             List<AvailableListing> list;
 
             //history is currently only for ManageInfo (if this changes then need to do similar check on 'generalInfo' as below
-            if (historyListing)
-            {
-                list = (from al in db.AvailableListings
-                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
-                        select al).Distinct().ToList();
-            }
-            else if (generalInfo)  //bring back those that DO NOT belong to this user's organisation
-            {
-                //build the age filter to apply when building list
-                double negativeDays = 0 - maxAgeFilter.Value;
-                var dateCheck = DateTime.Now.AddDays(negativeDays);
+            //bring back those that DO NOT belong to this user's organisation
+            
+            //build the age filter to apply when building list
+            double negativeDays = 0 - maxAgeFilter.Value;
+            var dateCheck = DateTime.Now.AddDays(negativeDays);
 
-                list = (from al in db.AvailableListings
-                        where (al.ListingOriginatorOrganisationId != organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
-                            && al.ListingOriginatorDateTime >= dateCheck)
-                        select al).Distinct().ToList();
+            list = (from al in db.AvailableListings
+                    where (al.ListingOriginatorOrganisationId != organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                        && al.ListingOriginatorDateTime >= dateCheck)
+                    select al).Distinct().ToList();
 
-                selectionLevelFilter = selectionLevelFilter ?? ExternalSearchLevelEnum.All;
+            selectionLevelFilter = selectionLevelFilter ?? ExternalSearchLevelEnum.All;
 
-                //filter the list by group if required
-                if (selectionLevelFilter.Value == ExternalSearchLevelEnum.Group)
-                    list = GroupFilters.FilterAvailableListingsByGroup(db, list, organisationId);
+            //filter the list by group if required
+            if (selectionLevelFilter.Value == ExternalSearchLevelEnum.Group)
+                list = GroupFilters.FilterAvailableListingsByGroup(db, list, organisationId);
 
-                //LSLSLS TODO? - Extra Filters  (probably add ages, types, etc..)
-                //filter the list by distance
-                list = SearchHelpers.FilterAvailableListingsByDistance(db, list, organisationId, maxDistanceFilter.Value);
-            }
-            else //bring back those that ONLY belong to this user's organisation
-            {
-                list = (from al in db.AvailableListings
-                        where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
-                        select al).Distinct().ToList();
-            }
+            //LSLSLS TODO? - Extra Filters  (probably add ages, types, etc..)
+            //filter the list by distance
+            list = SearchHelpers.FilterAvailableListingsByDistance(db, list, organisationId, maxDistanceFilter.Value);
 
             return list;
         }
@@ -196,7 +183,7 @@ namespace Distributor.Helpers
 
             List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, currentUser.OrganisationId, currentUser.SelectionLevelFilter, maxDistanceFilter, maxAgeFilter, true, false);
             List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
-
+            
             foreach (AvailableListing item in available)
             {
                 // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
@@ -234,6 +221,96 @@ namespace Distributor.Helpers
                 list.Add(listItem);
             }
 
+            ////--------------------------
+            //List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
+
+            ////build the age filter to apply when building list
+            //double negativeDays = 0 - maxAgeFilter.Value;
+            //var dateCheck = DateTime.Now.AddDays(negativeDays);
+
+            //if (currentUser.SelectionLevelFilter == ExternalSearchLevelEnum.Group)
+            //{
+            //    list = (from al in db.AvailableListings
+            //                join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
+            //                where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+            //                    && al.ListingOriginatorDateTime >= dateCheck)
+            //                select new AvailableListingGeneralViewModel()
+            //                {
+            //                    ListingId = al.ListingId,
+            //                    ItemDescription = al.ItemDescription,
+            //                    ItemType = al.ItemType,
+            //                    QuantityOutstanding = al.QuantityOutstanding,
+            //                    UoM = al.UoM,
+            //                    AvailableTo = al.AvailableTo,
+            //                    ItemCondition = al.ItemCondition,
+            //                    ExpiryDate = al.SellByDate ?? al.UseByDate,
+            //                    DeliveryAvailable = al.DeliveryAvailable,
+            //                    SupplierDetails = org.OrganisationName,
+            //                    ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId
+            //                }).Distinct().ToList();
+
+            //    //filter distance
+
+
+            //    //filter the list by group if required
+            //    list = GroupFilters.FilterAvailableListingsByGroup(db, list, currentUser.OrganisationId);
+
+            //    foreach (AvailableListingGeneralViewModel itemLS in list)
+            //    {
+            //        Offer offer = OfferHelpers.GetOfferForListingByUser(db, itemLS.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+            //        if (offer == null)
+            //        {
+            //            itemLS.OfferQty = 0.00M;
+            //        }
+            //        else
+            //        {
+            //            itemLS.OfferId = offer.OfferId;
+            //            itemLS.OfferQty = offer.CurrentOfferQuantity;
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    list = (from al in db.AvailableListings
+            //              join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
+            //              where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+            //                  && al.ListingOriginatorDateTime >= dateCheck)
+            //              select new AvailableListingGeneralViewModel()
+            //              {
+            //                  ListingId = al.ListingId,
+            //                  ItemDescription = al.ItemDescription,
+            //                  ItemType = al.ItemType,
+            //                  QuantityOutstanding = al.QuantityOutstanding,
+            //                  UoM = al.UoM,
+            //                  AvailableTo = al.AvailableTo,
+            //                  ItemCondition = al.ItemCondition,
+            //                  ExpiryDate = al.SellByDate ?? al.UseByDate,
+            //                  DeliveryAvailable = al.DeliveryAvailable,
+            //                  SupplierDetails = org.OrganisationName,
+            //                  ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId
+            //              }).Distinct().ToList();
+
+            //    //filter distance
+
+
+            //    foreach (AvailableListingGeneralViewModel itemLS in list)
+            //    {
+            //        Offer offer = OfferHelpers.GetOfferForListingByUser(db, itemLS.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+            //        if (offer == null)
+            //        {
+            //            itemLS.OfferQty = 0.00M;
+            //        }
+            //        else
+            //        {
+            //            itemLS.OfferId = offer.OfferId;
+            //            itemLS.OfferQty = offer.CurrentOfferQuantity;
+            //        }
+            //    }
+            //}
+            ////----------------------------
+
             AvailableListingGeneralViewListModel model = new AvailableListingGeneralViewListModel()
             {
                 MaxDistance = maxDistanceFilter,
@@ -250,56 +327,41 @@ namespace Distributor.Helpers
 
         public static List<AvailableListingManageViewModel> GetAvailableListingManageViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, null, null, null, false, false);
-            List<AvailableListingManageViewModel> list = new List<AvailableListingManageViewModel>();
-
-            foreach (AvailableListing item in available)
-            {
-                // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
-                DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
-
-                AvailableListingManageViewModel listItem = new AvailableListingManageViewModel()
-                {
-                    ListingId = item.ListingId,
-                    ItemDescription = item.ItemDescription,
-                    ItemType = item.ItemType,
-                    QuantityOutstanding = item.QuantityOutstanding,
-                    UoM = item.UoM,
-                    AvailableTo = item.AvailableTo,
-                    ItemCondition = item.ItemCondition,
-                    ExpiryDate = expiryDate,
-                    DeliveryAvailable = item.DeliveryAvailable,
-                    ListingStatus = item.ListingStatus
-                };
-
-                list.Add(listItem);
-            }
+            List<AvailableListingManageViewModel> list = (from al in db.AvailableListings
+                                                            where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial))
+                                                            select new AvailableListingManageViewModel()
+                                                            {
+                                                                ListingId = al.ListingId,
+                                                                ItemDescription = al.ItemDescription,
+                                                                ItemType = al.ItemType,
+                                                                QuantityOutstanding = al.QuantityOutstanding,
+                                                                UoM = al.UoM,
+                                                                AvailableTo = al.AvailableTo,
+                                                                ItemCondition = al.ItemCondition,
+                                                                ExpiryDate = al.SellByDate ?? al.UseByDate,
+                                                                DeliveryAvailable = al.DeliveryAvailable,
+                                                                ListingStatus = al.ListingStatus
+                                                            }).Distinct().ToList();
 
             return list;
         }
 
         public static List<AvailableListingManageHistoryViewModel> GetAvailableListingManageHistoryViewModel(ApplicationDbContext db, Guid organisationId)
         {
-            List<AvailableListing> history = AvailableListingHelpers.GetAvailableListingForOrganisation(db, organisationId, null, null, null, false, true);
-            List<AvailableListingManageHistoryViewModel> list = new List<AvailableListingManageHistoryViewModel>();
-
-            foreach (AvailableListing item in history)
-            {
-                AvailableListingManageHistoryViewModel listItem = new AvailableListingManageHistoryViewModel()
-                {
-                    ListingId = item.ListingId,
-                    ItemDescription = item.ItemDescription,
-                    ItemType = item.ItemType,
-                    QuantityAvailable = item.QuantityAvailable,
-                    QuantityOutstanding = item.QuantityOutstanding,
-                    UoM = item.UoM,
-                    ItemCondition = item.ItemCondition,
-                    RecordChangeOn = item.RecordChangeOn,
-                    ListingStatus = item.ListingStatus
-                };
-
-                list.Add(listItem);
-            }
+            List<AvailableListingManageHistoryViewModel> list = (from al in db.AvailableListings
+                                                                where (al.ListingOriginatorOrganisationId == organisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Cancelled || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Complete || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Expired || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Closed))
+                                                                select new AvailableListingManageHistoryViewModel()
+                                                                {
+                                                                    ListingId = al.ListingId,
+                                                                    ItemDescription = al.ItemDescription,
+                                                                    ItemType = al.ItemType,
+                                                                    QuantityAvailable = al.QuantityAvailable,
+                                                                    QuantityOutstanding = al.QuantityOutstanding,
+                                                                    UoM = al.UoM,
+                                                                    ItemCondition = al.ItemCondition,
+                                                                    RecordChangeOn = al.RecordChangeOn,
+                                                                    ListingStatus = al.ListingStatus
+                                                                }).Distinct().ToList();
 
             return list;
         }

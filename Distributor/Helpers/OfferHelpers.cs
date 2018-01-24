@@ -127,37 +127,55 @@ namespace Distributor.Helpers
         public static List<OfferManageViewOffersModel> CreateActiveOffersCreatedByOrganisation(ApplicationDbContext db, Guid organisationId)
         {
             List<OfferManageViewOffersModel> list = (from o in db.Offers
-                                                           where (o.OfferOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
-                                                           select new OfferManageViewOffersModel()
-                                                           {
-                                                               OfferId = o.OfferId,
-                                                               ListingId = o.ListingId,
-                                                               ListingType = o.ListingType,
-                                                               OfferStatus = o.OfferStatus,
-                                                               CurrentOfferQuantity = o.CurrentOfferQuantity,
-                                                               PreviousOfferQuantity = o.PreviousOfferQuantity,
-                                                               CounterOfferQuantity = o.CounterOfferQuantity,
-                                                               Rejected = o.RejectedBy.HasValue
-                                                           }).ToList();
+                                                     where (o.OfferOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
+                                                     select new OfferManageViewOffersModel()
+                                                     {
+                                                         OfferId = o.OfferId,
+                                                         ListingId = o.ListingId,
+                                                         ListingType = o.ListingType,
+                                                         OfferStatus = o.OfferStatus,
+                                                         CurrentOfferQuantity = o.CurrentOfferQuantity,
+                                                         PreviousOfferQuantity = o.PreviousOfferQuantity,
+                                                         CounterOfferQuantity = o.CounterOfferQuantity,
+                                                         Rejected = o.RejectedBy.HasValue
+                                                     }).ToList();
 
-            return list;
+            return AddListingQuantityToOfferManageViewOffersModel(db, list);
         }
 
         public static List<OfferManageViewOffersModel> CreateActiveOffersReceivedByOrganisation(ApplicationDbContext db, Guid organisationId)
         {
             List<OfferManageViewOffersModel> list = (from o in db.Offers
-                                                           where (o.ListingOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
-                                                           select new OfferManageViewOffersModel()
-                                                           {
-                                                               OfferId = o.OfferId,
-                                                               ListingId = o.ListingId,
-                                                               ListingType = o.ListingType,
-                                                               OfferStatus = o.OfferStatus,
-                                                               CurrentOfferQuantity = o.CurrentOfferQuantity,
-                                                               PreviousOfferQuantity = o.PreviousOfferQuantity,
-                                                               CounterOfferQuantity = o.CounterOfferQuantity,
-                                                               Rejected = o.RejectedBy.HasValue
-                                                           }).ToList();
+                                                        where (o.ListingOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
+                                                        select new OfferManageViewOffersModel()
+                                                        {
+                                                            OfferId = o.OfferId,
+                                                            ListingId = o.ListingId,
+                                                            ListingType = o.ListingType,
+                                                            OfferStatus = o.OfferStatus,
+                                                            CurrentOfferQuantity = o.CurrentOfferQuantity,
+                                                            PreviousOfferQuantity = o.PreviousOfferQuantity,
+                                                            CounterOfferQuantity = o.CounterOfferQuantity,
+                                                            Rejected = o.RejectedBy.HasValue
+                                                        }).ToList();
+
+            return AddListingQuantityToOfferManageViewOffersModel(db, list);
+        }
+
+        public static List<OfferManageViewOffersModel> AddListingQuantityToOfferManageViewOffersModel(ApplicationDbContext db, List<OfferManageViewOffersModel> list)
+        {
+            foreach (OfferManageViewOffersModel item in list)
+            {
+                switch (item.ListingType)
+                {
+                    case ListingTypeEnum.Available:
+                        item.QuantityOutstanding = AvailableListingHelpers.GetAvailableListing(db, item.ListingId).QuantityOutstanding;
+                        break;
+                    case ListingTypeEnum.Requirement:
+                        item.QuantityOutstanding = RequiredListingHelpers.GetRequiredListing(db, item.ListingId).QuantityOutstanding;
+                        break;
+                }
+            }
 
             return list;
         }
