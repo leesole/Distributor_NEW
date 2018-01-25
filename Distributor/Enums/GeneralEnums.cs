@@ -100,5 +100,16 @@ namespace Distributor.Enums
             [Display(Name = "Private")]
             Private = 1
         }
+
+        public enum ListingQuantityChange
+        {
+            [Description("Subtract")]
+            [Display(Name = "Subtract")]
+            Subtract = 0,
+
+            [Description("Add")]
+            [Display(Name = "Add")]
+            Add = 1
+        }
     }
 }

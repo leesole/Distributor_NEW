@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.OfferEnums;
 using static Distributor.Enums.OrderEnums;
 
@@ -28,6 +29,17 @@ namespace Distributor.Helpers
                     break;
             }
 
+            //Update Listing values
+            switch (offer.ListingType)
+            {
+                case ListingTypeEnum.Available:
+                    AvailableListingHelpers.UpdateAvailableListingQuantities(db, offer.ListingId, ListingQuantityChange.Subtract, orderQty, user);
+                    break;
+                case ListingTypeEnum.Requirement:
+                    RequiredListingHelpers.UpdateRequiredListingQuantities(db, offer.ListingId, ListingQuantityChange.Subtract, orderQty, user);
+                    break;
+            }
+
             Order order = new Order()
             {
                 OrderId = Guid.NewGuid(),
@@ -45,6 +57,9 @@ namespace Distributor.Helpers
                 ListingOriginatorAppUserId = offer.ListingOriginatorAppUserId,
                 ListingOriginatorOrganisationId = offer.ListingOriginatorOrganisationId
             };
+
+            db.Orders.Add(order);
+            db.SaveChanges();
 
             return order;
         }

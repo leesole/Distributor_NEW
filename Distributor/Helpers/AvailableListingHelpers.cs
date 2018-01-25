@@ -162,6 +162,37 @@ namespace Distributor.Helpers
                     UpdateAvailableListingListingStatus(db, modelItem.ListingId, modelItem.ListingStatus, user);
         }
 
+        public static AvailableListing UpdateAvailableListingQuantities(ApplicationDbContext db, Guid listingId, ListingQuantityChange changeOfValue, decimal changeQty, IPrincipal user)
+        {
+            AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, listingId);
+
+            listing.RecordChange = RecordChangeEnum.RecordUpdated;
+            listing.RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user);
+            listing.RecordChangeOn = DateTime.Now;
+
+            if (changeOfValue == ListingQuantityChange.Subtract)
+            {
+                listing.QuantityFulfilled += changeQty;
+                listing.QuantityOutstanding -= changeQty;
+
+                if (listing.QuantityOutstanding == 0)
+                {
+                    listing.ListingStatus = ItemRequiredListingStatusEnum.Complete;
+                    listing.RecordChange = RecordChangeEnum.ListingStatusChange;
+                }
+            }
+            else
+            {
+                listing.QuantityFulfilled -= changeQty;
+                listing.QuantityOutstanding += changeQty;
+            }
+
+            db.Entry(listing).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return listing;
+        }
+
         #endregion
     }
 
