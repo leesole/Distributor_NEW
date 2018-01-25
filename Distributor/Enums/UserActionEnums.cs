@@ -11,12 +11,17 @@ namespace Distributor.Enums
     {
         public enum ActionTypeEnum
         {
-            [Description("Awaiting friend request")]
-            [Display(Name = "Awaiting friend request")]
-            AwaitFriendRequest = 0,
-            [Description("Awaiting group member acceptance")]
-            [Display(Name = "Awaiting group member acceptance")]
-            AwaitGroupMemberAcceptance = 1
+            [Description("New offer received")]
+            [Display(Name = "New offer received")]
+            NewOfferReceived = 0,
+
+            [Description("Counter offer received")]
+            [Display(Name = "Counter offer received")]
+            CounterOfferReceived = 1,
+
+            [Description("New order received")]
+            [Display(Name = "New order received")]
+            NewOrderReceived = 0,
         }
     }
 }

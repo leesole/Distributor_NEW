@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManageInfoController.cs" />
+    <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrganisationsController.cs" />
     <Compile Include="Controllers\UserTasksController.cs" />
     <Compile Include="Enums\BranchEnums.cs" />
@@ -228,8 +229,10 @@
     <Compile Include="Helpers\GeneralHelpers.cs" />
     <Compile Include="Helpers\GroupHelpers.cs" />
     <Compile Include="Helpers\HomeViewHelpers.cs" />
+    <Compile Include="Helpers\OrderHelpers.cs" />
     <Compile Include="Helpers\OrganisationHelpers.cs" />
     <Compile Include="Helpers\RequiredListingHelpers.cs" />
+    <Compile Include="Helpers\UserActionHelpers.cs" />
     <Compile Include="Helpers\UserTasksHelpers.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.Designer.cs">
@@ -335,6 +338,22 @@
     <Compile Include="Migrations\201801121452274_26th.Designer.cs">
       <DependentUpon>201801121452274_26th.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801251019118_27th.cs" />
+    <Compile Include="Migrations\201801251019118_27th.Designer.cs">
+      <DependentUpon>201801251019118_27th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801251026073_28th.cs" />
+    <Compile Include="Migrations\201801251026073_28th.Designer.cs">
+      <DependentUpon>201801251026073_28th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801251037039_29th.cs" />
+    <Compile Include="Migrations\201801251037039_29th.Designer.cs">
+      <DependentUpon>201801251037039_29th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201801251352391_30th.cs" />
+    <Compile Include="Migrations\201801251352391_30th.Designer.cs">
+      <DependentUpon>201801251352391_30th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -345,6 +364,7 @@
     <Compile Include="Models\Offer.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Organisation.cs" />
+    <Compile Include="Models\UserActionModels.cs" />
     <Compile Include="Models\UserTasksModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -631,6 +651,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\AvailableListing\" />
     <Folder Include="Views\Data\" />
+    <Folder Include="Views\Offer\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -713,6 +734,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201801121452274_26th.resx">
       <DependentUpon>201801121452274_26th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251019118_27th.resx">
+      <DependentUpon>201801251019118_27th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251026073_28th.resx">
+      <DependentUpon>201801251026073_28th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251037039_29th.resx">
+      <DependentUpon>201801251037039_29th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251352391_30th.resx">
+      <DependentUpon>201801251352391_30th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

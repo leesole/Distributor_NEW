@@ -24,7 +24,8 @@
                                 <th>Offer qty</th>
                                 <th>Previous qty</th>
                                 <th>Counter qty</th>
-                                <th style="width:25px"></th>
+                                <th>Previous counter</th>
+                                <th style="width:50px"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,13 +35,14 @@
                                 var qtyOutstandingId = "qtyOutstandingCreated" + i.ToString();
                                 
                                 <tr id=@offerId>
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferId);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingId);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingType);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferStatus);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity);
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferId)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingId)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingType)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferStatus)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].ListingType.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)</span></td>
@@ -59,13 +61,17 @@
                                     }
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)</td>
                                     @if (Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity > 0)
                                     {
                                         <td></td>
                                     }
                                     else
                                     {
-                                        <td><button type="submit" class="btn btn-xs btn-success btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-edit"></span></button></td>
+                                        <td class="btn-block">
+                                            <button type="submit" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            <button type="submit" class="btn btn-xs btn-danger rejectoffer" id=@offerId><span class="glyphicon glyphicon-remove"></span></button>
+                                        </td>
                                     }
                                 </tr>
                             }
@@ -95,6 +101,7 @@
                                 <th>Offer qty</th>
                                 <th>Previous qty</th>
                                 <th>Counter qty</th>
+                                <th>Previous counter</th>
                                 <th style="width:25px"></th>
                             </tr>
                         </thead>
@@ -105,13 +112,14 @@
                                 var qtyOutstandingId = "qtyOutstandingReceived" + i.ToString();
                                 
                                 <tr id=@offerId>
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferId);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingId);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingType);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferStatus);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity);
-                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity);
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferId)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingId)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingType)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferStatus)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].ListingType.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)</span></td>
@@ -126,12 +134,22 @@
                                             @Html.ValidationMessageFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity, "", new { @class = "text-danger" })
                                             @Html.ValidationMessage("", new { @class = "text-danger", @id = errorId })
                                         </td>
-                                        <td><button type="submit" class="btn btn-xs btn-success btn-block" id=@offerId onclick="removeGroup(id)"><span class="glyphicon glyphicon-edit"></span></button></td>
                                     }
                                     else
                                     {
                                         @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity);
                                         <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                    }
+                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)</td>
+                                    @if (Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity > 0)
+                                    {
+                                        <td class="btn-block">
+                                            <button type="submit" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            <button type="submit" class="btn btn-xs btn-danger rejectoffer" id=@offerId><span class="glyphicon glyphicon-remove"></span></button>
+                                        </td>
+                                    }
+                                    else
+                                    {
                                         <td></td>
                                     }
                                 </tr>
@@ -163,6 +181,7 @@
                     null,
                     null,
                     null,
+                    null,
                     { 'orderable': false }
                 ],
                 responsive: true
@@ -172,6 +191,7 @@
         $(document).ready(function () {
             $('#offersReceivedTable').dataTable({
                 'columns': [
+                    null,
                     null,
                     null,
                     null,
@@ -229,6 +249,46 @@
                 return false;  //don't submit'
             }
         }
+
+        $(function () {
+            //confirm the approve of tasks
+            $('.acceptoffer').click(function (e) {
+                trid = $(this).closest('tr').attr('id');
+                if (window.confirm("Are you sure?")) {
+                    var url = "/Offer/AcceptOffer";
+
+                    $.ajax({
+                        url: url,
+                        data: { offerId: trid },
+                        cache: false,
+                        type: "POST",
+                        success: function (result) {
+                            location.reload(true);
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            //confirm the approve of tasks
+            $('.rejectoffer').click(function (e) {
+                trid = $(this).closest('tr').attr('id');
+                if (window.confirm("Are you sure?")) {
+                    var url = "/Offer/RejectOffer";
+
+                    $.ajax({
+                        url: url,
+                        data: { offerId: trid },
+                        cache: false,
+                        type: "POST",
+                        success: function (result) {
+                            location.reload(true);
+                        }
+                    });
+                }
+            });
+        });
 
     </script>
 }

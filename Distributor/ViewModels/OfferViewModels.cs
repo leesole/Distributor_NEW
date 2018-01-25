@@ -38,6 +38,9 @@ namespace Distributor.ViewModels
         [Display(Name = "Counter offer quantity")]
         public decimal? CounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
 
+        [Display(Name = "Previous counter offer quantity")]
+        public decimal? PreviousCounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
+
         [Display(Name = "Rejected?")]
         public bool Rejected { get; set; }
     }

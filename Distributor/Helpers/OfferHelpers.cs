@@ -2,17 +2,25 @@
 using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.OfferEnums;
+using static Distributor.Enums.UserActionEnums;
+using static Distributor.Enums.UserTaskEnums;
 
 namespace Distributor.Helpers
 {
     public static class OfferHelpers
     {
         #region Get
+
+        public static Offer GetOffer(ApplicationDbContext db, Guid offerId)
+        {
+            return db.Offers.Find(offerId);
+        }
 
         public static Offer GetOfferForListingByUser(ApplicationDbContext db, Guid listingId, Guid appUserId, Guid organisationId, LevelEnum listingPrivacyLevel)
         {
@@ -39,8 +47,11 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static Offer CreateOffer(ApplicationDbContext db, Guid listingId, decimal? offerQty, ListingTypeEnum listingType, AppUser currentUser)
+        public static Offer CreateOffer(ApplicationDbContext db, Guid listingId, decimal? offerQty, ListingTypeEnum listingType, AppUser currentUser, IPrincipal user)
         {
+            if (currentUser == null)
+                currentUser = AppUserHelpers.GetAppUser(db, user);
+
             Guid listingOrigAppUserId = Guid.Empty;
             Guid listingOrigOrgId = Guid.Empty;
             DateTime listingOrigDateTime = DateTime.MinValue;
@@ -80,6 +91,10 @@ namespace Distributor.Helpers
             db.Offers.Add(offer);
             db.SaveChanges();
 
+            //Create Action
+            Organisation org = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
+            UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, currentUser.AppUserId, org.OrganisationId, user);
+
             return offer;
         }
 
@@ -96,10 +111,131 @@ namespace Distributor.Helpers
                     if (item.OfferQty > 0)
                         //only create offers if they don't already exist
                         if (OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentUser.OrganisationId, LevelEnum.Organisation) == null)
-                            createdOffers.Add(CreateOffer(db, item.ListingId, item.OfferQty, listingType, currentUser));
+                            createdOffers.Add(CreateOffer(db, item.ListingId, item.OfferQty, listingType, currentUser, user));
             }
 
             return createdOffers;
+        }
+
+        #endregion
+
+        #region Update
+
+        public static Offer UpdateOffer(ApplicationDbContext db, Guid offerid, OfferStatusEnum offerStatus,  decimal? currentOfferQuantity, decimal? counterOfferQuantity, IPrincipal user)
+        {
+            Offer offer = OfferHelpers.GetOffer(db, offerid);
+
+            switch (offerStatus)
+            {
+                case OfferStatusEnum.Reoffer: //update offer value and move counter value to previous
+                    if (currentOfferQuantity.HasValue)
+                    {
+                        offer.CurrentOfferQuantity = currentOfferQuantity.Value;
+                        offer.PreviousCounterOfferQuantity = offer.CounterOfferQuantity;
+                        offer.CounterOfferQuantity = null;
+                        offer.LastOfferOriginatorAppUserId = AppUserHelpers.GetAppUserIdFromUser(user);
+                        offer.LastOfferOriginatorDateTime = DateTime.Now;
+                        offer.OfferStatus = offerStatus;
+
+                        db.Entry(offer).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        //Create Action
+                        Organisation org = OrganisationHelpers.GetOrganisation(db, offer.CounterOfferOriginatorOrganisationId.Value);
+                        UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, AppUserHelpers.GetAppUserIdFromUser(user), org.OrganisationId, user);
+                    }
+                    break;
+                case OfferStatusEnum.Countered: //update counter value and move current offer to previous offer
+                    if (counterOfferQuantity.HasValue)
+                    {
+                        offer.CounterOfferQuantity = counterOfferQuantity;
+                        offer.PreviousOfferQuantity = offer.CurrentOfferQuantity;
+                        offer.CurrentOfferQuantity = 0.00M;
+                        if (!offer.CounterOfferOriginatorOrganisationId.HasValue)
+                        {
+                            AppUser appUser = AppUserHelpers.GetAppUser(db, AppUserHelpers.GetAppUserIdFromUser(user));
+                            offer.CounterOfferOriginatorAppUserId = appUser.AppUserId;
+                            offer.CounterOfferOriginatorDateTime = DateTime.Now;
+                            offer.CounterOfferOriginatorOrganisationId = appUser.OrganisationId;
+                        }
+                        else
+                        {
+                            offer.LastCounterOfferOriginatorAppUserId = AppUserHelpers.GetAppUserIdFromUser(user);
+                            offer.LastCounterOfferOriginatorDateTime = DateTime.Now;
+                        }
+                        offer.OfferStatus = offerStatus;
+
+                        db.Entry(offer).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                        //Create Action
+                        Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
+                        UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, AppUserHelpers.GetAppUserIdFromUser(user), org.OrganisationId, user);
+                    }
+                    break;
+            }
+
+            return offer;
+        }
+
+        public static void UpdateOffers(ApplicationDbContext db, List<OfferManageViewOffersModel> list, IPrincipal user)
+        {
+            //Update Offer value - remove counter
+            foreach (OfferManageViewOffersModel item in list)
+                if (item.CurrentOfferQuantity != null && item.CurrentOfferQuantity > 0)
+                    UpdateOffer(db, item.OfferId, OfferStatusEnum.Reoffer, item.CurrentOfferQuantity, null, user);
+        }
+
+        public static void UpdateCounterOffers(ApplicationDbContext db, List<OfferManageViewOffersModel> list, IPrincipal user)
+        {
+            //Update Counter Offer value, move current offer to previous
+            foreach (OfferManageViewOffersModel item in list)
+                if (item.CounterOfferQuantity != null && item.CounterOfferQuantity > 0)
+                    UpdateOffer(db, item.OfferId, OfferStatusEnum.Countered, null, item.CounterOfferQuantity, user);
+        }
+
+        public static Offer AcceptOffer(ApplicationDbContext db, Guid offerId, IPrincipal user)
+        {
+            Offer offer = db.Offers.Find(offerId);
+            AppUser appUser = AppUserHelpers.GetAppUser(db, user);
+
+            Order order = OrderHelpers.CreateOrder(db, offer, user);
+
+            offer.OfferStatus = OfferStatusEnum.Accepted;
+            offer.OrderId = order.OrderId;
+            offer.OrderOriginatorAppUserId = appUser.AppUserId;
+            offer.OrderOriginatorOrganisationId = appUser.OrganisationId;
+            offer.OrderOriginatorDateTime = DateTime.Now;
+
+            db.Entry(offer).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //set any related actions to Closed
+            UserActionHelpers.RemoveUserActionsForOffer(db, offerId, user);
+
+            //Create Action to show order ready
+            Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
+            UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
+
+            return offer;
+        }
+
+        public static Offer RejectOffer(ApplicationDbContext db, Guid offerId, IPrincipal user)
+        {
+            Offer offer = db.Offers.Find(offerId);
+            AppUser appUser = AppUserHelpers.GetAppUser(db, user);
+
+            offer.OfferStatus = OfferStatusEnum.Rejected;
+            offer.RejectedBy = appUser.AppUserId;
+            offer.RejectedOn = DateTime.Now;
+
+            db.Entry(offer).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //set any related actions to Closed
+            UserActionHelpers.RemoveUserActionsForOffer(db, offerId, user);
+
+            return offer;
         }
 
         #endregion
@@ -137,6 +273,7 @@ namespace Distributor.Helpers
                                                          CurrentOfferQuantity = o.CurrentOfferQuantity,
                                                          PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                          CounterOfferQuantity = o.CounterOfferQuantity,
+                                                         PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
                                                          Rejected = o.RejectedBy.HasValue
                                                      }).ToList();
 
@@ -156,6 +293,7 @@ namespace Distributor.Helpers
                                                             CurrentOfferQuantity = o.CurrentOfferQuantity,
                                                             PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                             CounterOfferQuantity = o.CounterOfferQuantity,
+                                                            PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
                                                             Rejected = o.RejectedBy.HasValue
                                                         }).ToList();
 

@@ -37,6 +37,7 @@ namespace Distributor.Models
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupMember> GroupMembers { get; set; }
         public DbSet<UserTask> UserTasks { get; set; }
+        public DbSet<UserAction> UserActions { get; set; }
 
         public DbSet<AvailableListing> AvailableListings { get; set; }
         public DbSet<RequiredListing> RequiredListings { get; set; }

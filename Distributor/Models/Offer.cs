@@ -30,6 +30,9 @@ namespace Distributor.Models
         [Display(Name = "Counter offer quantity")]
         public decimal? CounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
 
+        [Display(Name = "Previous counter offer quantity")]
+        public decimal? PreviousCounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
+
         public Guid? RejectedBy { get; set; }
         public DateTime? RejectedOn { get; set; }
 
@@ -37,13 +40,17 @@ namespace Distributor.Models
         public Guid OfferOriginatorAppUserId { get; set; }
         public Guid OfferOriginatorOrganisationId { get; set; }
         public DateTime OfferOriginatorDateTime { get; set; }
+        public Guid? LastOfferOriginatorAppUserId { get; set; }
+        public DateTime? LastOfferOriginatorDateTime { get; set; }
 
         public Guid? ListingOriginatorAppUserId { get; set; }
         public Guid? ListingOriginatorOrganisationId { get; set; }
         public DateTime? ListingOriginatorDateTime { get; set; }
 
+        public Guid? CounterOfferOriginatorAppUserId { get; set; }
+        public Guid? CounterOfferOriginatorOrganisationId { get; set; }
+        public DateTime? CounterOfferOriginatorDateTime { get; set; }
         public Guid? LastCounterOfferOriginatorAppUserId { get; set; }
-        public Guid? LastCounterOfferOriginatorOrganisationId { get; set; }
         public DateTime? LastCounterOfferOriginatorDateTime { get; set; }
 
         public Guid? OrderId { get; set; }  //if this offer is accepted then an order is made and this is the reference to that order.

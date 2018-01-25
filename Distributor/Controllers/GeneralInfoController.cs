@@ -77,7 +77,7 @@ namespace Distributor.Controllers
             if (ModelState.IsValid)
             {
                 if (Request.Form["saveofferbutton"] != null)
-                    OfferHelpers.CreateOffer(db, model.ListingId, model.OfferQty, ListingTypeEnum.Available, AppUserHelpers.GetAppUser(db, User));
+                    OfferHelpers.CreateOffer(db, model.ListingId, model.OfferQty, ListingTypeEnum.Available, null, User);
 
                 if (Request.Form["savebutton"] != null)
                     AvailableListingHelpers.UpdateAvailableListing(db, model, User);

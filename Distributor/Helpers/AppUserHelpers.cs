@@ -219,7 +219,7 @@ namespace Distributor.Helpers
 
             //create Tasks for changes in status to On-Hold
             if (status == EntityStatusEnum.OnHold)
-                UserTasksHelpers.CreateUserTask(db, TaskTypeEnum.UserOnHold, "New user on hold, awaiting administrator activation", updatedAppUser.AppUserId, updatedAppUser.LoginEmail, updatedByUser);
+                UserTasksHelpers.CreateUserTask(db, TaskTypeEnum.UserOnHold, "New user on hold, awaiting administrator activation", updatedAppUser.AppUserId, updatedAppUser.LoginEmail, updatedAppUser.OrganisationId, updatedByUser);
 
             return updatedAppUser;
         }

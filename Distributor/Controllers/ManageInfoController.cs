@@ -233,13 +233,11 @@ namespace Distributor.Controllers
             {
                 if (Request.Form["saveofferbutton"] != null)
                     //Update offers
-                    //OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
-                    ;
+                    OfferHelpers.UpdateOffers(db, model.OfferManageViewOffersCreated, User);
 
                 if (Request.Form["savecounterofferbutton"] != null)
-                    //Update offers
-                    //OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
-                    ;
+                    //Update counter offers
+                    OfferHelpers.UpdateCounterOffers(db, model.OfferManageViewOffersReceived, User);
 
                 return RedirectToAction("Offers", "ManageInfo");
             }

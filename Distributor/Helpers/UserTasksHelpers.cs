@@ -48,27 +48,17 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static UserTask CreateUserTask(TaskTypeEnum taskType, string taskDescription, Guid referenceKey, string referenceEmail, IPrincipal user)
+        public static UserTask CreateUserTask(TaskTypeEnum taskType, string taskDescription, Guid referenceKey, string referenceEmail, Guid referenceOrganisation, IPrincipal user)
         {
 
             ApplicationDbContext db = new ApplicationDbContext();
-            UserTask userTask = CreateUserTask(db, taskType, taskDescription, referenceKey, referenceEmail, user);
+            UserTask userTask = CreateUserTask(db, taskType, taskDescription, referenceKey, referenceEmail, referenceOrganisation, user);
             db.Dispose();
             return userTask;
         }
 
-        public static UserTask CreateUserTask(ApplicationDbContext db, TaskTypeEnum taskType, string taskDescription, Guid referenceKey, string referenceEmail, IPrincipal user)
+        public static UserTask CreateUserTask(ApplicationDbContext db, TaskTypeEnum taskType, string taskDescription, Guid referenceKey, string referenceEmail, Guid referenceOrganisationId, IPrincipal user)
         {
-            Guid? orgId = null;
-
-            //Get the correct OrgId for the task
-            switch (taskType)
-            {
-                case TaskTypeEnum.UserOnHold:
-                    orgId = AppUserHelpers.GetAppUser(db, referenceKey).OrganisationId;
-                    break;
-            }
-
             UserTask userTask = new UserTask()
             {
                 UserTaskId = Guid.NewGuid(),
@@ -76,7 +66,7 @@ namespace Distributor.Helpers
                 TaskDescription = taskDescription,
                 ReferenceKey = referenceKey,
                 ReferenceEmail = referenceEmail,
-                OrganisationId = orgId ?? Guid.Empty,
+                OrganisationId = referenceOrganisationId,
                 EntityStatus = EntityStatusEnum.Active,
                 RecordChange = RecordChangeEnum.NewRecord,
                 RecordChangeBy = AppUserHelpers.GetAppUserIdFromUser(user),
