@@ -10,7 +10,9 @@ namespace Distributor.ViewModels
 {
     public class OfferManageViewModel
     {
+        public bool EditableEntriesCreated { get; set; }
         public List<OfferManageViewOffersModel> OfferManageViewOffersCreated { get; set; }
+        public bool EditableEntriesReceived { get; set; }
         public List<OfferManageViewOffersModel> OfferManageViewOffersReceived { get; set; }
     }
 
@@ -30,7 +32,7 @@ namespace Distributor.ViewModels
         public decimal QuantityOutstanding { get; set; }
 
         [Display(Name = "Offer quantity")]
-        public decimal CurrentOfferQuantity { get; set; }  //set to 0 if rejected or returned
+        public decimal? CurrentOfferQuantity { get; set; }  //set to 0 if rejected or returned
 
         [Display(Name = "Previous offer quantity")]
         public decimal? PreviousOfferQuantity { get; set; } //set this Current offer at time of currentofferqty entry so we have something to refer to if returned
@@ -43,5 +45,7 @@ namespace Distributor.ViewModels
 
         [Display(Name = "Rejected?")]
         public bool Rejected { get; set; }
+
+        public bool EditableQuantity { get; set; }  //set to true if this is a value that can be changed in the 'offer' screen - allows identification later to validate or not the offer
     }
 }

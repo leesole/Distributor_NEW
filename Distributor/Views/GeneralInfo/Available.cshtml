@@ -67,6 +67,7 @@ else
 
     @Html.HiddenFor(model => model.MaxDistance)
     @Html.HiddenFor(model => model.MaxAge)
+    @Html.HiddenFor(model => model.EditableFields)
 
     <div class="row">
         <div class="col-md-12">
@@ -134,10 +135,13 @@ else
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer clearfix">
-                    <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" ><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
-                    <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Available", "GeneralInfo")?maxDistance=' + document.getElementById('MaxDistance').value + '&maxAge=' + document.getElementById('MaxAge').value"><span class="fa fa-undo"></span> Reset</button></div>
-                </div>
+                @if (Model.EditableFields)
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-success btn-lg btn-block" ><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Available", "GeneralInfo")?maxDistance=' + document.getElementById('MaxDistance').value + '&maxAge=' + document.getElementById('MaxAge').value"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
             </div>
         </div>
     </div>

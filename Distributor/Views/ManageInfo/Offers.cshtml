@@ -10,6 +10,8 @@
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "offerManageInfoForm", onsubmit = "return Validate();" }))
 {
+    @Html.HiddenFor(model => model.EditableEntriesCreated)
+    @Html.HiddenFor(model => model.EditableEntriesReceived)
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-green">
@@ -43,6 +45,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].EditableQuantity)
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].ListingType.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)</span></td>
@@ -55,9 +58,11 @@
                                     {
                                         var fieldId = "offerQty" + i.ToString();
                                         var errorId = "errorofferQty" + i.ToString();
-                                        <td>@Html.EditorFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100% !important; min-width::100px", id = fieldId, onfocus = "javascipt:ClearErrors(id);" } })</td>
-                                        @Html.ValidationMessageFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, "", new { @class = "text-danger" })
-                                        @Html.ValidationMessage("", new { @class = "text-danger", @id = errorId })
+                                        <td>
+                                            @Html.EditorFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100% !important; min-width::100px", id = fieldId, onfocus = "javascipt:ClearErrors(id);" } })
+                                            @Html.ValidationMessageFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessage("", new { @class = "text-danger", @id = errorId })
+                                        </td>
                                     }
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)</td>
@@ -69,7 +74,17 @@
                                     else
                                     {
                                         <td class="btn-block">
-                                            <button type="button" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            @{
+                                                decimal currOfferQty = 0.00M;
+                                                if (Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity.HasValue)
+                                                {
+                                                    currOfferQty = Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity.Value;
+                                                }
+                                            }
+                                            @if (Model.OfferManageViewOffersCreated[i].QuantityOutstanding >= currOfferQty)
+                                            {
+                                                <button type="button" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            }
                                             <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@offerId><span class="glyphicon glyphicon-remove"></span></button>
                                         </td>
                                     }
@@ -79,10 +94,13 @@
                     </table>
                     <!-- /.table-responsive -->
                 </div>
-                <div class="panel-footer clearfix">
-                    <div class="col-sm-6"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
-                    <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
-                </div>
+                @if (Model.EditableEntriesCreated)
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-6"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -120,6 +138,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].EditableQuantity)
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].ListingType.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)</span></td>
@@ -144,7 +163,17 @@
                                     @if (Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity > 0)
                                     {
                                         <td class="btn-block">
-                                            <button type="button" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            @{
+                                                decimal currOfferQty = 0.00M;
+                                                if (Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity.HasValue)
+                                                {
+                                                    currOfferQty = Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity.Value;
+                                                }
+                                            }
+                                            @if (Model.OfferManageViewOffersReceived[i].QuantityOutstanding >= currOfferQty)
+                                            {
+                                                <button type="button" class="btn btn-xs btn-success acceptoffer" id=@offerId><span class="glyphicon glyphicon-ok"></span></button>
+                                            }
                                             <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@offerId><span class="glyphicon glyphicon-remove"></span></button>
                                         </td>
                                     }
@@ -158,15 +187,17 @@
                     </table>
                     <!-- /.table-responsive -->
                 </div>
-                <div class="panel-footer clearfix">
-                    <div class="col-sm-6"><button type="submit" name="savecounterofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
-                    <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
-                </div>
+                @if (Model.EditableEntriesReceived)
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-6"><button type="submit" name="savecounterofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
             </div>
         </div>
     </div>
 }
-
 
 @section Scripts {
     <script type="text/javascript">

@@ -346,6 +346,7 @@ namespace Distributor.Helpers
             {
                 MaxDistance = maxDistanceFilter,
                 MaxAge = maxAgeFilter,
+                EditableFields = list.Any(x => x.OfferId == null),  //only set if there are no offers in the list
                 Listing = list
             };
 

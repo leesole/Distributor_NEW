@@ -286,6 +286,8 @@ namespace Distributor.ViewModels
         [Display(Name = "Max distance")]
         public int? MaxDistance { get; set; }
 
+        public bool EditableFields { get; set; }
+
         public List<AvailableListingGeneralViewModel> Listing { get; set; }
     }
 

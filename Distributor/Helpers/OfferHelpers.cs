@@ -182,7 +182,7 @@ namespace Distributor.Helpers
         {
             //Update Offer value - remove counter
             foreach (OfferManageViewOffersModel item in list)
-                if (item.CurrentOfferQuantity != null && item.CurrentOfferQuantity > 0)
+                if (item.CurrentOfferQuantity != null && item.CurrentOfferQuantity > 0 && item.EditableQuantity)
                     UpdateOffer(db, item.OfferId, OfferStatusEnum.Reoffer, item.CurrentOfferQuantity, null, user);
         }
 
@@ -190,7 +190,7 @@ namespace Distributor.Helpers
         {
             //Update Counter Offer value, move current offer to previous
             foreach (OfferManageViewOffersModel item in list)
-                if (item.CounterOfferQuantity != null && item.CounterOfferQuantity > 0)
+                if (item.CounterOfferQuantity != null && item.CounterOfferQuantity > 0 && item.EditableQuantity)
                     UpdateOffer(db, item.OfferId, OfferStatusEnum.Countered, null, item.CounterOfferQuantity, user);
         }
 
@@ -253,6 +253,11 @@ namespace Distributor.Helpers
                 OfferManageViewOffersReceived = CreateActiveOffersReceivedByOrganisation(db, organisationId)
             };
 
+            //these flags are set to true if any single entry in the list has an editable quantity (ie. the user can enter a value).
+            //If these flags are false then we use these to remove the uneccesary footer parts to the table that allows submission and reset of offers
+            model.EditableEntriesCreated = model.OfferManageViewOffersCreated.Any(x => x.EditableQuantity);
+            model.EditableEntriesReceived = model.OfferManageViewOffersReceived.Any(x => x.EditableQuantity);
+
             return model;
         }
 
@@ -274,7 +279,8 @@ namespace Distributor.Helpers
                                                          PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                          CounterOfferQuantity = o.CounterOfferQuantity,
                                                          PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
-                                                         Rejected = o.RejectedBy.HasValue
+                                                         Rejected = o.RejectedBy.HasValue,
+                                                         EditableQuantity = o.CurrentOfferQuantity == 0
                                                      }).ToList();
 
             return AddListingQuantityToOfferManageViewOffersModel(db, list);
@@ -294,7 +300,8 @@ namespace Distributor.Helpers
                                                             PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                             CounterOfferQuantity = o.CounterOfferQuantity,
                                                             PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
-                                                            Rejected = o.RejectedBy.HasValue
+                                                            Rejected = o.RejectedBy.HasValue,
+                                                            EditableQuantity = o.CurrentOfferQuantity > 0
                                                         }).ToList();
 
             return AddListingQuantityToOfferManageViewOffersModel(db, list);

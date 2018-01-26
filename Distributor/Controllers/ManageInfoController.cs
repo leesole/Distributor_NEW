@@ -228,6 +228,7 @@ namespace Distributor.Controllers
 
         [HttpPost]
         public ActionResult Offers(OfferManageViewModel model)
+
         {
             if (ModelState.IsValid)
             {
