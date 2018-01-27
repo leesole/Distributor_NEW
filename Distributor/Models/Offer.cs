@@ -21,6 +21,9 @@ namespace Distributor.Models
         [Display(Name = "Offer status")]
         public OfferStatusEnum OfferStatus { get; set; }
 
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
+
         [Display(Name = "Offer quantity")]
         public decimal CurrentOfferQuantity { get; set; }  //set to 0 if rejected or returned
 

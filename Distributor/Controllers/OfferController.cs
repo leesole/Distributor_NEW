@@ -1,8 +1,10 @@
 ﻿using Distributor.Helpers;
 using Distributor.Models;
+using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,6 +14,20 @@ namespace Distributor.Controllers
     public class OfferController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public ActionResult Display(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            OfferViewModel model = OfferViewHelpers.GetOfferViewModel(db, id.Value);
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+            return View(model);
+        }
 
         #region data manipulation
 

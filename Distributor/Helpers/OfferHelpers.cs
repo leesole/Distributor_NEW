@@ -55,6 +55,7 @@ namespace Distributor.Helpers
             Guid listingOrigAppUserId = Guid.Empty;
             Guid listingOrigOrgId = Guid.Empty;
             DateTime listingOrigDateTime = DateTime.MinValue;
+            string itemDescription = "";
 
             //Get originator information for the correct listing
             if (listingType == ListingTypeEnum.Available)
@@ -63,6 +64,7 @@ namespace Distributor.Helpers
                 listingOrigAppUserId = availableListing.ListingOriginatorAppUserId;
                 listingOrigOrgId = availableListing.ListingOriginatorOrganisationId;
                 listingOrigDateTime = availableListing.ListingOriginatorDateTime;
+                itemDescription = availableListing.ItemDescription;
             }
             else
             {
@@ -70,6 +72,7 @@ namespace Distributor.Helpers
                 listingOrigAppUserId = requiredListing.ListingOriginatorAppUserId;
                 listingOrigOrgId = requiredListing.ListingOriginatorOrganisationId;
                 listingOrigDateTime = requiredListing.ListingOriginatorDateTime;
+                itemDescription = requiredListing.ItemDescription;
             }
 
             //create offer
@@ -79,6 +82,7 @@ namespace Distributor.Helpers
                 ListingId = listingId,
                 ListingType = listingType,
                 OfferStatus = OfferStatusEnum.New,
+                ItemDescription = itemDescription,
                 CurrentOfferQuantity = offerQty.Value,
                 OfferOriginatorAppUserId = currentUser.AppUserId,
                 OfferOriginatorOrganisationId = currentUser.OrganisationId,
@@ -261,6 +265,45 @@ namespace Distributor.Helpers
             return model;
         }
 
+        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, Guid offerId)
+        {
+            OfferViewModel model = (from o in db.Offers
+                                    where o.OfferId == offerId
+                                    select new OfferViewModel()
+                                    {
+                                        OfferId = o.OfferId,
+                                        ListingId = o.ListingId,
+                                        ListingType = o.ListingType,
+                                        OfferStatus = o.OfferStatus,
+                                        ItemDescription = o.ItemDescription,
+                                        CurrentOfferQuantity = o.CurrentOfferQuantity,
+                                        PreviousOfferQuantity = o.PreviousOfferQuantity,
+                                        CounterOfferQuantity = o.CounterOfferQuantity,
+                                        PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
+                                        RejectedBy = o.RejectedBy,
+                                        RejectedOn = o.RejectedOn,
+                                        OfferOriginatorAppUserId = o.OfferOriginatorAppUserId,
+                                        OfferOriginatorOrganisationId = o.OfferOriginatorOrganisationId,
+                                        OfferOriginatorDateTime = o.OfferOriginatorDateTime,
+                                        LastOfferOriginatorAppUserId = o.LastOfferOriginatorAppUserId,
+                                        LastOfferOriginatorDateTime = o.LastOfferOriginatorDateTime,
+                                        ListingOriginatorAppUserId = o.ListingOriginatorAppUserId,
+                                        ListingOriginatorOrganisationId = o.ListingOriginatorOrganisationId,
+                                        ListingOriginatorDateTime = o.ListingOriginatorDateTime,
+                                        CounterOfferOriginatorAppUserId = o.CounterOfferOriginatorAppUserId,
+                                        CounterOfferOriginatorOrganisationId = o.CounterOfferOriginatorOrganisationId,
+                                        CounterOfferOriginatorDateTime = o.CounterOfferOriginatorDateTime,
+                                        LastCounterOfferOriginatorAppUserId = o.LastCounterOfferOriginatorAppUserId,
+                                        LastCounterOfferOriginatorDateTime = o.LastCounterOfferOriginatorDateTime,
+                                        OrderId = o.OrderId,
+                                        OrderOriginatorAppUserId = o.OrderOriginatorAppUserId,
+                                        OrderOriginatorOrganisationId = o.OrderOriginatorOrganisationId,
+                                        OrderOriginatorDateTime = o.OrderOriginatorDateTime
+                                    }).FirstOrDefault();
+
+            return model;
+        }
+
         #endregion
 
         #region Create
@@ -275,6 +318,7 @@ namespace Distributor.Helpers
                                                          ListingId = o.ListingId,
                                                          ListingType = o.ListingType,
                                                          OfferStatus = o.OfferStatus,
+                                                         ItemDescription = o.ItemDescription,
                                                          CurrentOfferQuantity = o.CurrentOfferQuantity,
                                                          PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                          CounterOfferQuantity = o.CounterOfferQuantity,
@@ -296,6 +340,7 @@ namespace Distributor.Helpers
                                                             ListingId = o.ListingId,
                                                             ListingType = o.ListingType,
                                                             OfferStatus = o.OfferStatus,
+                                                            ItemDescription = o.ItemDescription,
                                                             CurrentOfferQuantity = o.CurrentOfferQuantity,
                                                             PreviousOfferQuantity = o.PreviousOfferQuantity,
                                                             CounterOfferQuantity = o.CounterOfferQuantity,

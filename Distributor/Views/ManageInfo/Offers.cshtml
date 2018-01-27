@@ -22,6 +22,7 @@
                             <tr class="primary">
                                 <th>Type</th>
                                 <th>Status</th>
+                                <th>Item</th>
                                 <th>Outstanding</th>
                                 <th>Offer qty</th>
                                 <th>Previous qty</th>
@@ -41,18 +42,20 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingType)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferStatus)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].EditableQuantity)
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].ListingType.DisplayName()</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].OfferStatus.DisplayName()</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)</span></td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].ListingType.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].OfferStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].ItemDescription)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)</span></td>
                                     @if (Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity > 0)
                                     {
                                         @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity);
-                                        <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                        <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
                                     }
                                     else
                                     {
@@ -64,9 +67,9 @@
                                             @Html.ValidationMessage("", new { @class = "text-danger", @id = errorId })
                                         </td>
                                     }
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].CounterOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)</td>
                                     @if (Model.OfferManageViewOffersCreated[i].CurrentOfferQuantity > 0)
                                     {
                                         <td></td>
@@ -115,6 +118,7 @@
                             <tr class="primary">
                                 <th>Type</th>
                                 <th>Status</th>
+                                <th>Item</th>
                                 <th>Outstanding</th>
                                 <th>Offer qty</th>
                                 <th>Previous qty</th>
@@ -134,16 +138,18 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingType)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferStatus)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].EditableQuantity)
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].ListingType.DisplayName()</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].OfferStatus.DisplayName()</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)</span></td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)</td>
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].ListingType.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].OfferStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].ItemDescription)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)</span></td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousOfferQuantity)</td>
                                     @if (Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity > 0)
                                     {
                                         var fieldId = "counterOfferQty" + i.ToString();
@@ -157,9 +163,9 @@
                                     else
                                     {
                                         @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity);
-                                        <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                        <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
                                     }
-                                    <td onclick="location.href='@Url.Action("Edit", "Offers", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)</td>
                                     @if (Model.OfferManageViewOffersReceived[i].CurrentOfferQuantity > 0)
                                     {
                                         <td class="btn-block">
@@ -213,6 +219,7 @@
                     null,
                     null,
                     null,
+                    null,
                     { 'orderable': false }
                 ],
                 responsive: true
@@ -222,6 +229,7 @@
         $(document).ready(function () {
             $('#offersReceivedTable').dataTable({
                 'columns': [
+                    null,
                     null,
                     null,
                     null,
