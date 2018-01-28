@@ -217,6 +217,10 @@ namespace Distributor.Helpers
             //set any related actions to Closed
             UserActionHelpers.RemoveUserActionsForOffer(db, offerId, user);
 
+            //set any related current offers to closed if there is no stock left (currentOfferQuantity = 0)
+            if (offer.CurrentOfferQuantity == 0)
+                OfferHelpers.CloseOffersRelatedToListing(db, offer.ListingId, user);
+
             //Create Action to show order ready
             Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
             UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
@@ -242,6 +246,28 @@ namespace Distributor.Helpers
             return offer;
         }
 
+        public static void CloseOffersRelatedToListing(ApplicationDbContext db, Guid listingId, IPrincipal user)
+        {
+            List<Offer> list = (from o in db.Offers
+                                where o.ListingId == listingId && (o.OfferStatus == OfferStatusEnum.New || o.OfferStatus == OfferStatusEnum.Countered || o.OfferStatus == OfferStatusEnum.Reoffer)
+                                select o).Distinct().ToList();
+
+            foreach (Offer offer in list)
+                UpdateStatus(db, offer.OfferId, OfferStatusEnum.ClosedNoStock, user);
+        }
+
+        public static Offer UpdateStatus(ApplicationDbContext db, Guid offerId, OfferStatusEnum newStatus, IPrincipal user)
+        {
+            Offer offer = OfferHelpers.GetOffer(db, offerId);
+
+            offer.OfferStatus = newStatus;
+
+            db.Entry(offer).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return offer;
+        }
+        
         #endregion
     }
 
@@ -311,11 +337,13 @@ namespace Distributor.Helpers
         public static List<OfferManageViewOffersModel> CreateActiveOffersCreatedByOrganisation(ApplicationDbContext db, Guid organisationId)
         {
             List<OfferManageViewOffersModel> list = (from o in db.Offers
-                                                     where (o.OfferOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
+                                                     join org in db.Organisations on o.ListingOriginatorOrganisationId equals org.OrganisationId
+                                                     where (o.OfferOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected && o.OfferStatus != OfferStatusEnum.ClosedNoStock)
                                                      select new OfferManageViewOffersModel()
                                                      {
                                                          OfferId = o.OfferId,
                                                          ListingId = o.ListingId,
+                                                         ListingOrganisation = org.OrganisationName,
                                                          ListingType = o.ListingType,
                                                          OfferStatus = o.OfferStatus,
                                                          ItemDescription = o.ItemDescription,
@@ -333,11 +361,13 @@ namespace Distributor.Helpers
         public static List<OfferManageViewOffersModel> CreateActiveOffersReceivedByOrganisation(ApplicationDbContext db, Guid organisationId)
         {
             List<OfferManageViewOffersModel> list = (from o in db.Offers
-                                                        where (o.ListingOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected)
+                                                     join org in db.Organisations on o.OfferOriginatorOrganisationId equals org.OrganisationId
+                                                     where (o.ListingOriginatorOrganisationId == organisationId && o.OfferStatus != OfferStatusEnum.Accepted && o.OfferStatus != OfferStatusEnum.Rejected && o.OfferStatus != OfferStatusEnum.ClosedNoStock)
                                                         select new OfferManageViewOffersModel()
                                                         {
                                                             OfferId = o.OfferId,
                                                             ListingId = o.ListingId,
+                                                            ListingOrganisation = org.OrganisationName,
                                                             ListingType = o.ListingType,
                                                             OfferStatus = o.OfferStatus,
                                                             ItemDescription = o.ItemDescription,
@@ -366,6 +396,58 @@ namespace Distributor.Helpers
                         break;
                 }
             }
+
+            return list;
+        }
+
+        public static List<OfferManageViewOffersModel> CreateOffersCreatedHistoryManageViewModel(ApplicationDbContext db, Guid organisationId)
+        {
+            List<OfferManageViewOffersModel> list = (from o in db.Offers
+                                                     join org in db.Organisations on o.ListingOriginatorOrganisationId equals org.OrganisationId
+                                                     where (o.OfferOriginatorOrganisationId == organisationId && (o.OfferStatus == OfferStatusEnum.Accepted || o.OfferStatus == OfferStatusEnum.Rejected || o.OfferStatus == OfferStatusEnum.ClosedNoStock))
+                                                     select new OfferManageViewOffersModel()
+                                                     {
+                                                         OfferId = o.OfferId,
+                                                         ListingId = o.ListingId,
+                                                         ListingOrganisation = org.OrganisationName,
+                                                         ListingType = o.ListingType,
+                                                         OfferStatus = o.OfferStatus,
+                                                         ItemDescription = o.ItemDescription,
+                                                         CurrentOfferQuantity = o.CurrentOfferQuantity,
+                                                         PreviousOfferQuantity = o.PreviousOfferQuantity,
+                                                         CounterOfferQuantity = o.CounterOfferQuantity,
+                                                         PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
+                                                         Rejected = o.RejectedBy.HasValue,
+                                                         EditableQuantity = false,
+                                                         OrderId = o.OrderId,
+                                                         OrderCreated = o.OrderId.HasValue
+                                                     }).ToList();
+
+            return list;
+        }
+
+        public static List<OfferManageViewOffersModel> CreateOffersReceivedHistoryManageViewModel(ApplicationDbContext db, Guid organisationId)
+        {
+            List<OfferManageViewOffersModel> list = (from o in db.Offers
+                                                     join org in db.Organisations on o.OfferOriginatorOrganisationId equals org.OrganisationId
+                                                     where (o.ListingOriginatorOrganisationId == organisationId && (o.OfferStatus == OfferStatusEnum.Accepted || o.OfferStatus == OfferStatusEnum.Rejected || o.OfferStatus == OfferStatusEnum.ClosedNoStock))
+                                                     select new OfferManageViewOffersModel()
+                                                     {
+                                                         OfferId = o.OfferId,
+                                                         ListingId = o.ListingId,
+                                                         ListingOrganisation = org.OrganisationName,
+                                                         ListingType = o.ListingType,
+                                                         OfferStatus = o.OfferStatus,
+                                                         ItemDescription = o.ItemDescription,
+                                                         CurrentOfferQuantity = o.CurrentOfferQuantity,
+                                                         PreviousOfferQuantity = o.PreviousOfferQuantity,
+                                                         CounterOfferQuantity = o.CounterOfferQuantity,
+                                                         PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
+                                                         Rejected = o.RejectedBy.HasValue,
+                                                         EditableQuantity = false,
+                                                         OrderId = o.OrderId,
+                                                         OrderCreated = o.OrderId.HasValue
+                                                     }).ToList();
 
             return list;
         }

@@ -25,6 +25,9 @@ namespace Distributor.ViewModels
         [Display(Name = "Listing type")]
         public ListingTypeEnum ListingType { get; set; }
 
+        [Display(Name = "Listing organisation")]
+        public string ListingOrganisation { get; set; }
+
         [Display(Name = "Offer status")]
         public OfferStatusEnum OfferStatus { get; set; }
 
@@ -47,7 +50,12 @@ namespace Distributor.ViewModels
         public decimal? PreviousCounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
 
         [Display(Name = "Rejected?")]
-        public bool Rejected { get; set; }
+        public bool Rejected { get; set; }  //used in the history list view
+
+        [Display(Name = "Order created?")]
+        public bool OrderCreated { get; set; }  //set to true if an order was created from this offer (used for History screens)
+
+        public Guid? OrderId { get; set; }
 
         public bool EditableQuantity { get; set; }  //set to true if this is a value that can be changed in the 'offer' screen - allows identification later to validate or not the offer
     }

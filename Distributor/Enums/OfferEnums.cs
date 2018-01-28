@@ -29,7 +29,11 @@ namespace Distributor.Enums
 
             [Description("Re-offer")]
             [Display(Name = "Re-offer")]
-            Reoffer = 4
+            Reoffer = 4,
+
+            [Description("Closed - no stock")]
+            [Display(Name = "Closed - no stock")]
+            ClosedNoStock = 5
         }
     }
 }

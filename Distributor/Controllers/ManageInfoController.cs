@@ -246,6 +246,26 @@ namespace Distributor.Controllers
             return View(model);
         }
 
+        public ActionResult OffersHistory(string type)
+        {
+            List<OfferManageViewOffersModel> model;
+
+            if (type == "created")
+            {
+                model = OfferViewHelpers.CreateOffersCreatedHistoryManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+                ViewBag.Type = "Created";
+                ViewBag.TypeTableDescription = "made";
+            }
+            else
+            {
+                model = OfferViewHelpers.CreateOffersReceivedHistoryManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+                ViewBag.Type = "Received";
+                ViewBag.TypeTableDescription = "received";
+            }
+
+            return View(model);
+        }
+
         #endregion
 
         protected override void Dispose(bool disposing)

@@ -21,6 +21,7 @@
                         <thead>
                             <tr class="primary">
                                 <th>Type</th>
+                                <th>Organisation</th>
                                 <th>Status</th>
                                 <th>Item</th>
                                 <th>Outstanding</th>
@@ -41,6 +42,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingType)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingOrganisation)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].OfferStatus)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)
@@ -49,6 +51,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].PreviousCounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].EditableQuantity)
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].ListingType.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingOrganisation)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersCreated[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersCreated[i].QuantityOutstanding)</span></td>
@@ -100,8 +103,15 @@
                 @if (Model.EditableEntriesCreated)
                 {
                     <div class="panel-footer clearfix">
-                        <div class="col-sm-6"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
-                        <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                        <div class="col-sm-4"><a class="btn btn-default btn-lg btn-block" href='@Url.Action("OffersHistory", "ManageInfo", new { type = "created" })'><span class="fa fa-history"></span> History</a></div>
+                        <div class="col-sm-4"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-4"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
+                else
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-12"><a class="btn btn-default btn-lg btn-block" href='@Url.Action("OffersHistory", "ManageInfo", new { type = "created" })'><span class="fa fa-history"></span> History</a></div>
                     </div>
                 }
             </div>
@@ -117,6 +127,7 @@
                         <thead>
                             <tr class="primary">
                                 <th>Type</th>
+                                <th>Organisation</th>
                                 <th>Status</th>
                                 <th>Item</th>
                                 <th>Outstanding</th>
@@ -137,6 +148,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingId)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingType)
+                                    @Html.HiddenFor(modelItem => Model.OfferManageViewOffersCreated[i].ListingOrganisation)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].OfferStatus)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)
@@ -145,6 +157,7 @@
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].PreviousCounterOfferQuantity)
                                     @Html.HiddenFor(modelItem => Model.OfferManageViewOffersReceived[i].EditableQuantity)
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].ListingType.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].ListingOrganisation)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model.OfferManageViewOffersReceived[i].OfferStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'"><span id=@qtyOutstandingId>@Html.DisplayFor(modelItem => Model.OfferManageViewOffersReceived[i].QuantityOutstanding)</span></td>
@@ -196,8 +209,15 @@
                 @if (Model.EditableEntriesReceived)
                 {
                     <div class="panel-footer clearfix">
-                        <div class="col-sm-6"><button type="submit" name="savecounterofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
-                        <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                        <div class="col-sm-4"><a class="btn btn-default btn-lg btn-block" href='@Url.Action("OffersHistory", "ManageInfo", new { type = "received" })'><span class="fa fa-history"></span> History</a></div>
+                        <div class="col-sm-4"><button type="submit" name="savecounterofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-4"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Offers", "ManageInfo")'"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
+                else
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-12"><a class="btn btn-default btn-lg btn-block" href='@Url.Action("OffersHistory", "ManageInfo", new { type = "received" })'><span class="fa fa-history"></span> History</a></div>
                     </div>
                 }
             </div>
@@ -220,6 +240,7 @@
                     null,
                     null,
                     null,
+                    null,
                     { 'orderable': false }
                 ],
                 responsive: true
@@ -229,6 +250,7 @@
         $(document).ready(function () {
             $('#offersReceivedTable').dataTable({
                 'columns': [
+                    null,
                     null,
                     null,
                     null,

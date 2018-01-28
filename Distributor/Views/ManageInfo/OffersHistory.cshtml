@@ -1,0 +1,84 @@
+﻿@using Distributor.Helpers
+@model IList<Distributor.ViewModels.OfferManageViewOffersModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Manage Listings <small>Offers @ViewBag.Type - History</small></h1>
+        <ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Offers", "Offers", "ManageInfo")
+            </li>
+            <li class="active">History (@ViewBag.Type)</li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">Your historical current offers @ViewBag.TypeTableDescription</div>
+            <div class="panel-body">
+                <table style="width:100%;" class="table table-striped table-bordered table-hover" id="offersHistoryTable">
+                    <thead>
+                        <tr class="primary">
+                            <th>Type</th>
+                            <th>Organisation</th>
+                            <th>Status</th>
+                            <th>Item</th>
+                            <th>Offer qty</th>
+                            <th>Previous qty</th>
+                            <th>Counter qty</th>
+                            <th>Previous counter</th>
+                            <th>Order?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var offerId = @Model[i].OfferId;
+                            var orderId = @Model[i].OrderId;
+
+                            <tr id=@offerId>
+                                @Html.HiddenFor(modelItem => Model[i].OfferId)
+                                @Html.HiddenFor(modelItem => Model[i].ListingId)
+                                @Html.HiddenFor(modelItem => Model[i].ListingType)
+                                @Html.HiddenFor(modelItem => Model[i].ListingOrganisation)
+                                @Html.HiddenFor(modelItem => Model[i].OfferStatus)
+                                @Html.HiddenFor(modelItem => Model[i].ItemDescription)
+                                @Html.HiddenFor(modelItem => Model[i].CurrentOfferQuantity)
+                                @Html.HiddenFor(modelItem => Model[i].PreviousOfferQuantity)
+                                @Html.HiddenFor(modelItem => Model[i].CounterOfferQuantity)
+                                @Html.HiddenFor(modelItem => Model[i].PreviousCounterOfferQuantity)
+                                @Html.HiddenFor(modelItem => Model[i].OrderCreated)
+                                @Html.HiddenFor(modelItem => Model[i].OrderId)
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model[i].ListingType.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].ListingOrganisation)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model[i].OfferStatus.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].PreviousOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].CounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].PreviousCounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId })'">@Html.DisplayFor(modelItem => Model[i].OrderCreated)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        //Render tables
+        $(document).ready(function () {
+            $('#offersHistoryTable').dataTable({
+                responsive: true
+            });
+        });
+
+    </script>
+}

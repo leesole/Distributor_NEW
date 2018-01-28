@@ -650,6 +650,7 @@
     <Content Include="Views\GeneralInfo\DisplayAvailable.cshtml" />
     <Content Include="Views\GeneralInfo\Available.cshtml" />
     <Content Include="Views\ManageInfo\Offers.cshtml" />
+    <Content Include="Views\ManageInfo\OffersHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
