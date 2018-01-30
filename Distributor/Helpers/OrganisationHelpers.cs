@@ -91,6 +91,11 @@ namespace Distributor.Helpers
             return organisation;
         }
 
+        public static string GetOrganisationName(ApplicationDbContext db, Guid organisationId)
+        {
+            return db.Organisations.Find(organisationId).OrganisationName;
+        }
+
         #endregion
 
         #region Update

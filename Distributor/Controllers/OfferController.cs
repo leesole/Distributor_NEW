@@ -15,13 +15,13 @@ namespace Distributor.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Display(Guid? id)
+        public ActionResult Display(Guid? id, bool displayOnly, string type)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OfferViewModel model = OfferViewHelpers.GetOfferViewModel(db, id.Value);
+            OfferViewModel model = OfferViewHelpers.GetOfferViewModel(db, id.Value, displayOnly, type);
             if (model == null)
             {
                 return HttpNotFound();

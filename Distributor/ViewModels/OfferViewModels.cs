@@ -62,6 +62,10 @@ namespace Distributor.ViewModels
 
     public class OfferViewModel
     {
+        public bool DisplayOnly { get; set; }
+
+        public string Type { get; set; }
+
         public Guid OfferId { get; set; }
 
         public Guid ListingId { get; set; }
@@ -75,6 +79,9 @@ namespace Distributor.ViewModels
         [Display(Name = "Description")]
         public string ItemDescription { get; set; }
 
+        [Display(Name = "Quantity outstanding")]
+        public decimal QuantityOutstanding { get; set; }
+
         [Display(Name = "Offer quantity")]
         public decimal CurrentOfferQuantity { get; set; }  //set to 0 if rejected or returned
 
@@ -87,29 +94,29 @@ namespace Distributor.ViewModels
         [Display(Name = "Previous counter offer quantity")]
         public decimal? PreviousCounterOfferQuantity { get; set; }  //if 'returned' status with a new offer, value is here
 
-        public Guid? RejectedBy { get; set; }
+        public string RejectedBy { get; set; }
         public DateTime? RejectedOn { get; set; }
 
         //references to the offer originator
-        public Guid OfferOriginatorAppUserId { get; set; }
-        public Guid OfferOriginatorOrganisationId { get; set; }
+        public string OfferOriginatorAppUser { get; set; }
+        public string OfferOriginatorOrganisation { get; set; }
         public DateTime OfferOriginatorDateTime { get; set; }
-        public Guid? LastOfferOriginatorAppUserId { get; set; }
+        public string LastOfferOriginatorAppUser { get; set; }
         public DateTime? LastOfferOriginatorDateTime { get; set; }
 
-        public Guid? ListingOriginatorAppUserId { get; set; }
-        public Guid? ListingOriginatorOrganisationId { get; set; }
+        public string ListingOriginatorAppUser { get; set; }
+        public string ListingOriginatorOrganisation { get; set; }
         public DateTime? ListingOriginatorDateTime { get; set; }
 
-        public Guid? CounterOfferOriginatorAppUserId { get; set; }
-        public Guid? CounterOfferOriginatorOrganisationId { get; set; }
+        public string CounterOfferOriginatorAppUser { get; set; }
+        public string CounterOfferOriginatorOrganisation { get; set; }
         public DateTime? CounterOfferOriginatorDateTime { get; set; }
-        public Guid? LastCounterOfferOriginatorAppUserId { get; set; }
+        public string LastCounterOfferOriginatorAppUser { get; set; }
         public DateTime? LastCounterOfferOriginatorDateTime { get; set; }
 
         public Guid? OrderId { get; set; }  //if this offer is accepted then an order is made and this is the reference to that order.
-        public Guid? OrderOriginatorAppUserId { get; set; }
-        public Guid? OrderOriginatorOrganisationId { get; set; }
+        public string OrderOriginatorAppUser { get; set; }
+        public string OrderOriginatorOrganisation { get; set; }
         public DateTime? OrderOriginatorDateTime { get; set; }
     }
 }

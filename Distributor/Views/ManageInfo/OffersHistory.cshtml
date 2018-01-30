@@ -51,15 +51,15 @@
                                 @Html.HiddenFor(modelItem => Model[i].PreviousCounterOfferQuantity)
                                 @Html.HiddenFor(modelItem => Model[i].OrderCreated)
                                 @Html.HiddenFor(modelItem => Model[i].OrderId)
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model[i].ListingType.DisplayName()</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].ListingOrganisation)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Model[i].OfferStatus.DisplayName()</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].PreviousOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].CounterOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId })'">@Html.DisplayFor(modelItem => Model[i].PreviousCounterOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId })'">@Html.DisplayFor(modelItem => Model[i].OrderCreated)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Model[i].ListingType.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].ListingOrganisation)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Model[i].OfferStatus.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].PreviousOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].CounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].PreviousCounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].OrderCreated)</td>
                             </tr>
                         }
                     </tbody>

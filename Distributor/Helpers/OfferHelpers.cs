@@ -291,41 +291,67 @@ namespace Distributor.Helpers
             return model;
         }
 
-        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, Guid offerId)
+        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, Guid offerId, bool displayOnly, string type)
         {
-            OfferViewModel model = (from o in db.Offers
-                                    where o.OfferId == offerId
-                                    select new OfferViewModel()
-                                    {
-                                        OfferId = o.OfferId,
-                                        ListingId = o.ListingId,
-                                        ListingType = o.ListingType,
-                                        OfferStatus = o.OfferStatus,
-                                        ItemDescription = o.ItemDescription,
-                                        CurrentOfferQuantity = o.CurrentOfferQuantity,
-                                        PreviousOfferQuantity = o.PreviousOfferQuantity,
-                                        CounterOfferQuantity = o.CounterOfferQuantity,
-                                        PreviousCounterOfferQuantity = o.PreviousCounterOfferQuantity,
-                                        RejectedBy = o.RejectedBy,
-                                        RejectedOn = o.RejectedOn,
-                                        OfferOriginatorAppUserId = o.OfferOriginatorAppUserId,
-                                        OfferOriginatorOrganisationId = o.OfferOriginatorOrganisationId,
-                                        OfferOriginatorDateTime = o.OfferOriginatorDateTime,
-                                        LastOfferOriginatorAppUserId = o.LastOfferOriginatorAppUserId,
-                                        LastOfferOriginatorDateTime = o.LastOfferOriginatorDateTime,
-                                        ListingOriginatorAppUserId = o.ListingOriginatorAppUserId,
-                                        ListingOriginatorOrganisationId = o.ListingOriginatorOrganisationId,
-                                        ListingOriginatorDateTime = o.ListingOriginatorDateTime,
-                                        CounterOfferOriginatorAppUserId = o.CounterOfferOriginatorAppUserId,
-                                        CounterOfferOriginatorOrganisationId = o.CounterOfferOriginatorOrganisationId,
-                                        CounterOfferOriginatorDateTime = o.CounterOfferOriginatorDateTime,
-                                        LastCounterOfferOriginatorAppUserId = o.LastCounterOfferOriginatorAppUserId,
-                                        LastCounterOfferOriginatorDateTime = o.LastCounterOfferOriginatorDateTime,
-                                        OrderId = o.OrderId,
-                                        OrderOriginatorAppUserId = o.OrderOriginatorAppUserId,
-                                        OrderOriginatorOrganisationId = o.OrderOriginatorOrganisationId,
-                                        OrderOriginatorDateTime = o.OrderOriginatorDateTime
-                                    }).FirstOrDefault();
+            Offer offer = OfferHelpers.GetOffer(db, offerId);
+
+            OfferViewModel model = new OfferViewModel()
+            {
+                DisplayOnly = displayOnly,
+                Type = type,
+                OfferId = offer.OfferId,
+                ListingId = offer.ListingId,
+                ListingType = offer.ListingType,
+                OfferStatus = offer.OfferStatus,
+                ItemDescription = offer.ItemDescription,
+                QuantityOutstanding = OfferViewHelpers.GetListingQuantityForListingIdListingType(db, offer.ListingId, offer.ListingType),
+                CurrentOfferQuantity = offer.CurrentOfferQuantity,
+                PreviousOfferQuantity = offer.PreviousOfferQuantity,
+                CounterOfferQuantity = offer.CounterOfferQuantity,
+                PreviousCounterOfferQuantity = offer.PreviousCounterOfferQuantity,
+                OfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OfferOriginatorAppUserId),
+                OfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OfferOriginatorOrganisationId),
+                OfferOriginatorDateTime = offer.OfferOriginatorDateTime
+            };
+
+            if (offer.RejectedBy.HasValue)
+            {
+                model.RejectedBy = AppUserHelpers.GetAppUserName(db, offer.RejectedBy.Value);
+                model.RejectedOn = offer.RejectedOn;
+            }
+
+            if (offer.LastOfferOriginatorAppUserId.HasValue)
+            {
+                model.LastOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastOfferOriginatorAppUserId.Value);
+                model.LastOfferOriginatorDateTime = offer.LastOfferOriginatorDateTime;
+            }
+
+            if (offer.ListingOriginatorAppUserId.HasValue)
+            {
+                model.ListingOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.ListingOriginatorAppUserId.Value);
+                model.ListingOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.ListingOriginatorOrganisationId.Value);
+                model.ListingOriginatorDateTime = offer.ListingOriginatorDateTime;
+            }
+
+            if (offer.CounterOfferOriginatorAppUserId.HasValue)
+            {
+                model.CounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.CounterOfferOriginatorAppUserId.Value);
+                model.CounterOfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.CounterOfferOriginatorOrganisationId.Value);
+                model.CounterOfferOriginatorDateTime = offer.CounterOfferOriginatorDateTime;
+            }
+
+            if (offer.LastCounterOfferOriginatorAppUserId.HasValue)
+            {
+                model.LastCounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastCounterOfferOriginatorAppUserId.Value);
+                model.LastCounterOfferOriginatorDateTime = offer.LastCounterOfferOriginatorDateTime;
+            }
+
+            if (offer.OrderId.HasValue)
+            {
+                model.OrderOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OrderOriginatorAppUserId.Value);
+                model.OrderOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OrderOriginatorOrganisationId.Value);
+                model.OrderOriginatorDateTime = offer.OrderOriginatorDateTime;
+            }
 
             return model;
         }
@@ -385,19 +411,26 @@ namespace Distributor.Helpers
         public static List<OfferManageViewOffersModel> AddListingQuantityToOfferManageViewOffersModel(ApplicationDbContext db, List<OfferManageViewOffersModel> list)
         {
             foreach (OfferManageViewOffersModel item in list)
-            {
-                switch (item.ListingType)
-                {
-                    case ListingTypeEnum.Available:
-                        item.QuantityOutstanding = AvailableListingHelpers.GetAvailableListing(db, item.ListingId).QuantityOutstanding;
-                        break;
-                    case ListingTypeEnum.Requirement:
-                        item.QuantityOutstanding = RequiredListingHelpers.GetRequiredListing(db, item.ListingId).QuantityOutstanding;
-                        break;
-                }
-            }
+                item.QuantityOutstanding = GetListingQuantityForListingIdListingType(db, item.ListingId, item.ListingType);
 
             return list;
+        }
+
+        public static decimal GetListingQuantityForListingIdListingType(ApplicationDbContext db, Guid listingId, ListingTypeEnum listingType)
+        {
+            decimal quantityOutstanding = 0.00M;
+
+            switch (listingType)
+            {
+                case ListingTypeEnum.Available:
+                    quantityOutstanding = AvailableListingHelpers.GetAvailableListing(db, listingId).QuantityOutstanding;
+                    break;
+                case ListingTypeEnum.Requirement:
+                    quantityOutstanding = RequiredListingHelpers.GetRequiredListing(db, listingId).QuantityOutstanding;
+                    break;
+            }
+
+            return quantityOutstanding;
         }
 
         public static List<OfferManageViewOffersModel> CreateOffersCreatedHistoryManageViewModel(ApplicationDbContext db, Guid organisationId)

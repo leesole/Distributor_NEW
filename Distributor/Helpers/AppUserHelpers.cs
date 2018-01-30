@@ -88,6 +88,13 @@ namespace Distributor.Helpers
             return users;
         }
 
+        public static string GetAppUserName(ApplicationDbContext db, Guid appUserId)
+        {
+            AppUser appUser = db.AppUsers.Find(appUserId);
+
+            return appUser.FirstName + " " + appUser.LastName;
+        }
+
         #endregion
 
         #region Create
