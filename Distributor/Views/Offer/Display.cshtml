@@ -16,214 +16,224 @@
             <div class="panel panel-green">
                 <div class="panel-heading">Offer details</div>
                 <div class="panel-body">
-                    <div class="col-md-7">
-                        <div class="form-horizontal">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.OfferId)
-                            @Html.HiddenFor(model => model.ListingId)
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.OfferStatus, htmlAttributes: new { @class = "text-right col-md-5" })
-                                <div class="col-md-7">@Model.OfferStatus.DisplayName()</div>
-                            </div>
-
-                            @if (Model.RejectedOn.HasValue)
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.RejectedBy, htmlAttributes: new { @class = "text-right col-md-6" })
-                                    <div class="col-md-6">
-                                        @Html.DisplayFor(model => model.RejectedBy, new { htmlAttributes = new { @class = "form-control" } })
-                                    </div>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.OfferId)
+                                @Html.HiddenFor(model => model.ListingId)
 
                                 <div class="form-group">
-                                    @Html.LabelFor(model => model.RejectedOn, htmlAttributes: new { @class = "text-right col-md-6" })
-                                    <div class="col-md-6">
-                                        @Html.DisplayFor(model => model.RejectedOn, new { htmlAttributes = new { @class = "form-control" } })
-                                    </div>
+                                    @Html.LabelFor(model => model.OfferStatus, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.OfferStatus.DisplayName()</div>
                                 </div>
-                            }
 
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ListingType, htmlAttributes: new { @class = "text-right col-md-5" })
-                                <div class="col-md-7">@Model.ListingType.DisplayName()</div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "text-right col-md-5" })
-                                <div class="col-md-7">@Html.DisplayFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</div>
-                            </div>
-
-                            @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity == 0)
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
-                                    <div class="col-md-7">
-                                        @Html.EditorFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.CurrentOfferQuantity, "", new { @class = "text-danger" })
-                                        @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorofferQty" })
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-                            }
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.PreviousOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                <div class="col-md-7">@Html.DisplayFor(model => model.PreviousOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                            </div>
-
-                            @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity > 0)
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
-                                    <div class="col-md-7">
-                                        @Html.EditorFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
-                                        @Html.ValidationMessageFor(model => model.CounterOfferQuantity, "", new { @class = "text-danger" })
-                                        @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorcounterOfferQty" })
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-                            }   
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.PreviousCounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                <div class="col-md-7">@Html.DisplayFor(model => model.PreviousCounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Listing owner details</div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
+                                @if (Model.RejectedOn.HasValue)
+                                {
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.ListingOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                        @Html.LabelFor(model => model.RejectedBy, htmlAttributes: new { @class = "text-right col-md-6" })
                                         <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.ListingOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.DisplayFor(model => model.RejectedBy, new { htmlAttributes = new { @class = "form-control" } })
                                         </div>
                                     </div>
+
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.ListingOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
+                                        @Html.LabelFor(model => model.RejectedOn, htmlAttributes: new { @class = "text-right col-md-6" })
                                         <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.ListingOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.DisplayFor(model => model.RejectedOn, new { htmlAttributes = new { @class = "form-control" } })
                                         </div>
                                     </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ListingType, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.ListingType.DisplayName()</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity == 0)
+                                {
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.ListingOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.ListingOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CurrentOfferQuantity, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorofferQty" })
                                         </div>
                                     </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PreviousOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.PreviousOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity > 0)
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
+                                        <div class="col-md-7">
+                                            @Html.EditorFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CounterOfferQuantity, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorcounterOfferQty" })
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
+                                }
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.PreviousCounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.PreviousCounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Offer owner details</div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-5">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Listing owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ListingOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.ListingOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OfferOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ListingOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.ListingOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LastOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.LastOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LastOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.LastOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ListingOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.ListingOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Counter offer owner details</div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CounterOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.CounterOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Offer owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CounterOfferOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.CounterOfferOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OfferOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.CounterOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.CounterOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LastCounterOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.LastCounterOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LastOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.LastOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.LastCounterOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.LastCounterOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LastOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.LastOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Order owner details</div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    @Html.HiddenFor(model => model.OrderId)
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OrderOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Counter offer owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CounterOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.CounterOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CounterOfferOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.CounterOfferOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.CounterOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.CounterOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LastCounterOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.LastCounterOfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.LastCounterOfferOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.LastCounterOfferOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OrderOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Order owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        @Html.HiddenFor(model => model.OrderId)
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OrderOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
-                                        <div class="col-md-6">
-                                            @Html.DisplayFor(model => model.OrderOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OrderOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOriginatorDateTime, htmlAttributes: new { @class = "text-right col-md-6" })
+                                            <div class="col-md-6">
+                                                @Html.DisplayFor(model => model.OrderOriginatorDateTime, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
