@@ -291,13 +291,21 @@ namespace Distributor.Helpers
             return model;
         }
 
-        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, Guid offerId, bool displayOnly, string type)
+        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, HttpRequestBase request, Guid offerId, string breadcrumb, string callingActionDisplayName, bool displayOnly, string type, bool? recalled, string controllerValue, string actionValue)
         {
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, breadcrumb);
+
+            if (!recalled.HasValue || recalled.Value != true)
+                GeneralHelpers.GetCallingDetailsFromRequest(request, controllerValue, actionValue, out controllerValue, out actionValue);
+
             Offer offer = OfferHelpers.GetOffer(db, offerId);
 
             OfferViewModel model = new OfferViewModel()
             {
                 DisplayOnly = displayOnly,
+                Breadcrumb = breadcrumb,
+                BreadcrumbDictionary = breadcrumbDictionary,
                 Type = type,
                 OfferId = offer.OfferId,
                 ListingId = offer.ListingId,
@@ -311,8 +319,17 @@ namespace Distributor.Helpers
                 PreviousCounterOfferQuantity = offer.PreviousCounterOfferQuantity,
                 OfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OfferOriginatorAppUserId),
                 OfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OfferOriginatorOrganisationId),
-                OfferOriginatorDateTime = offer.OfferOriginatorDateTime
+                OfferOriginatorDateTime = offer.OfferOriginatorDateTime,
+                CallingAction = actionValue,
+                CallingActionDisplayName = callingActionDisplayName,
+                CallingController = controllerValue,
+                BreadcrumbTrail = breadcrumbDictionary
             };
+
+            if (type == "created")
+                model.EditableQuantity = offer.CurrentOfferQuantity == 0;
+            else if (type == "received")
+                model.EditableQuantity = offer.CurrentOfferQuantity > 0;
 
             if (offer.RejectedBy.HasValue)
             {

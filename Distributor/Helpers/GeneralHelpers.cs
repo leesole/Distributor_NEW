@@ -27,6 +27,8 @@ namespace Distributor.Helpers
                 string[] callingUrlSegments = request.UrlReferrer.Segments.Select(x => x.TrimEnd('/')).ToArray();
                 controller = callingUrlSegments[callingUrlSegments.Count() - 2];
                 action = callingUrlSegments[callingUrlSegments.Count() - 1];
+                if (request.UrlReferrer.Query.Length > 0)
+                    action += request.UrlReferrer.Query;
             }
             catch { }
         }

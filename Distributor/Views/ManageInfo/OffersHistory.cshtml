@@ -1,6 +1,12 @@
 ﻿@using Distributor.Helpers
 @model IList<Distributor.ViewModels.OfferManageViewOffersModel>
 
+@{
+    //set up the breadcrumb trail so that this can be passed to the details screen for building it's own breadcrumb as the detail screen is called from multiple places
+    string breadcrumb = "Offers,Offers,ManageInfo";
+    string callingActionDisplayName = "History (" + ViewBag.Type + ")";
+}
+
 <div class="row">
     <div class="col-md-12">
         <h1 class="page-header">Manage Listings <small>Offers @ViewBag.Type - History</small></h1>
@@ -51,15 +57,15 @@
                                 @Html.HiddenFor(modelItem => Model[i].PreviousCounterOfferQuantity)
                                 @Html.HiddenFor(modelItem => Model[i].OrderCreated)
                                 @Html.HiddenFor(modelItem => Model[i].OrderId)
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Model[i].ListingType.DisplayName()</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].ListingOrganisation)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Model[i].OfferStatus.DisplayName()</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].PreviousOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].CounterOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].PreviousCounterOfferQuantity)</td>
-                                <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, displayOnly = true })'">@Html.DisplayFor(modelItem => Model[i].OrderCreated)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Model[i].ListingType.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].ListingOrganisation)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Model[i].OfferStatus.DisplayName()</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].ItemDescription)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", style = "width:100px" } })</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].PreviousOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].CounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Offer", new { id = offerId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].PreviousCounterOfferQuantity)</td>
+                                <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = true, type = "received", recalled = false, controllerValue = "ManageInfo", actionValue = "OffersHistory" })'">@Html.DisplayFor(modelItem => Model[i].OrderCreated)</td>
                             </tr>
                         }
                     </tbody>
