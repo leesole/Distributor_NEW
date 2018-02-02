@@ -47,7 +47,7 @@
     </div>
 </div>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "dislayOfferForm", onsubmit = "return Validate();" }))
 {
     @Html.AntiForgeryToken()
 
@@ -61,10 +61,25 @@
                             <div class="form-horizontal">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                 @Html.HiddenFor(model => model.DisplayOnly)
+                                @Html.HiddenFor(model => model.Breadcrumb)
+                                @Html.HiddenFor(model => model.BreadcrumbDictionary)
+                                @Html.HiddenFor(model => model.CallingController)
+                                @Html.HiddenFor(model => model.CallingAction)
+                                @Html.HiddenFor(model => model.CallingActionDisplayName)
+                                @Html.HiddenFor(model => model.BreadcrumbTrail)
                                 @Html.HiddenFor(model => model.Type)
                                 @Html.HiddenFor(model => model.EditableQuantity)
                                 @Html.HiddenFor(model => model.OfferId)
                                 @Html.HiddenFor(model => model.ListingId)
+                                @Html.HiddenFor(model => model.RejectedBy)
+                                @Html.HiddenFor(model => model.RejectedOn)
+                                @Html.HiddenFor(model => model.YourOrganisationId)
+                                @Html.HiddenFor(model => model.OfferOriginatorOrganisationId)
+                                @Html.HiddenFor(model => model.CounterOfferOriginatorOrganisationId)
+                                @Html.HiddenFor(model => model.ItemDescription)
+                                @Html.HiddenFor(model => model.QuantityOutstanding)
+
+                                <div id="editableQuantity" style="display:none">@Html.HiddenFor(model => model.EditableQuantity)</div>
 
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.OfferStatus, htmlAttributes: new { @class = "text-right col-md-5" })
@@ -98,12 +113,17 @@
                                     <div class="col-md-7">@Html.DisplayFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
-                                @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity == 0)
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.QuantityOutstanding, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7" id="quantityOutstandingText">@Html.DisplayFor(model => model.QuantityOutstanding, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity == 0)
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
                                         <div class="col-md-7">
-                                            @Html.EditorFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control", onfocus = "javascipt:ClearErrors(this.id);" } })
                                             @Html.ValidationMessageFor(model => model.CurrentOfferQuantity, "", new { @class = "text-danger" })
                                             @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorofferQty" })
                                         </div>
@@ -111,23 +131,36 @@
                                 }
                                 else
                                 {
+                                    @Html.HiddenFor(model => model.CurrentOfferQuantity)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-5" id="currentOfferQuantityText">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-2" id=@Model.OfferId>
+                                            <div class="col-sm-6" id=@Model.OfferId>
+                                                @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity)
+                                                {
+                                                    <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
+                                                }
+                                            </div>
+                                            <div class="col-sm-6" id=@Model.OfferId>
+                                                <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
 
+                                @Html.HiddenFor(model => model.PreviousOfferQuantity)
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.PreviousOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
                                     <div class="col-md-7">@Html.DisplayFor(model => model.PreviousOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
-                                @if (Model.DisplayOnly == false && Model.CurrentOfferQuantity > 0)
+                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity > 0)
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
                                         <div class="col-md-7">
-                                            @Html.EditorFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.EditorFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control", onfocus = "javascipt:ClearErrors(this.id);" } })
                                             @Html.ValidationMessageFor(model => model.CounterOfferQuantity, "", new { @class = "text-danger" })
                                             @Html.ValidationMessage("", new { @class = "text-danger", @id = "errorcounterOfferQty" })
                                         </div>
@@ -135,12 +168,25 @@
                                 }
                                 else
                                 {
+                                    @Html.HiddenFor(model => model.CounterOfferQuantity)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-5" id="counterOfferQuantityText">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-2" id=@Model.OfferId>
+                                            <div class="col-sm-6" id=@Model.OfferId>
+                                                @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity)
+                                                {
+                                                    <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
+                                                }
+                                            </div>
+                                            <div class="col-sm-6" id=@Model.OfferId>
+                                                <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
+                                            </div>
+                                        </div>
                                     </div>
                                 }
 
+                                @Html.HiddenFor(model => model.PreviousCounterOfferQuantity)
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.PreviousCounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
                                     <div class="col-md-7">@Html.DisplayFor(model => model.PreviousCounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
@@ -152,6 +198,9 @@
                                 <div class="panel-heading">Listing owner details</div>
                                 <div class="panel-body">
                                     <div class="form-horizontal">
+                                        @Html.HiddenFor(model => model.ListingOriginatorAppUser)
+                                        @Html.HiddenFor(model => model.ListingOriginatorOrganisation)
+                                        @Html.HiddenFor(model => model.ListingOriginatorDateTime)
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.ListingOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
                                             <div class="col-md-8">
@@ -179,7 +228,7 @@
                 @if (Model.EditableQuantity)
                 {
                     <div class="panel-footer clearfix">
-                        <div class="col-sm-6"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offers</button></div>
+                        <div class="col-sm-6"><button type="submit" name="saveofferbutton" class="btn btn-success btn-lg btn-block"><span class="glyphicon glyphicon-edit"></span> Submit Offer</button></div>
                         <div class="col-sm-6"><button type="button" name="resetbutton" class="btn btn-danger btn-lg btn-block" onclick="location.href='@Url.Action("Display", "Offer", new { id = Model.OfferId, breadcrumb = Model.Breadcrumb, callingActionDisplayName = Model.CallingActionDisplayName, displayOnly = Model.DisplayOnly, type = Model.Type, recalled = true, controllerValue = Model.CallingController, actionValue = Model.CallingAction })'"><span class="fa fa-undo"></span> Reset</button></div>
                     </div>
                 }
@@ -191,6 +240,11 @@
                         <div class="panel-heading">Offer owner details</div>
                         <div class="panel-body">
                             <div class="form-horizontal">
+                                @Html.HiddenFor(model => model.OfferOriginatorAppUser)
+                                @Html.HiddenFor(model => model.OfferOriginatorOrganisation)
+                                @Html.HiddenFor(model => model.OfferOriginatorDateTime)
+                                @Html.HiddenFor(model => model.LastOfferOriginatorAppUser)
+                                @Html.HiddenFor(model => model.LastOfferOriginatorDateTime)
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.OfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
                                     <div class="col-md-8">
@@ -233,6 +287,11 @@
                             <div class="panel-heading">Counter offer owner details</div>
                             <div class="panel-body">
                                 <div class="form-horizontal">
+                                    @Html.HiddenFor(model => model.CounterOfferOriginatorAppUser)
+                                    @Html.HiddenFor(model => model.CounterOfferOriginatorOrganisation)
+                                    @Html.HiddenFor(model => model.CounterOfferOriginatorDateTime)
+                                    @Html.HiddenFor(model => model.LastCounterOfferOriginatorAppUser)
+                                    @Html.HiddenFor(model => model.LastCounterOfferOriginatorDateTime)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CounterOfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
                                         <div class="col-md-8">
@@ -276,6 +335,9 @@
                             <div class="panel-body">
                                 <div class="form-horizontal">
                                     @Html.HiddenFor(model => model.OrderId)
+                                    @Html.HiddenFor(model => model.OrderOriginatorAppUser)
+                                    @Html.HiddenFor(model => model.OrderOriginatorOrganisation)
+                                    @Html.HiddenFor(model => model.OrderOriginatorDateTime)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.OrderOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
                                         <div class="col-md-8">
@@ -302,4 +364,97 @@
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function ClearErrors(id) {
+            $("#error" + id).text("");
+        }
+
+        function Validate() {
+            //validate the offers are not greater than the value available
+            var errors = false;
+
+            try {
+                var editableQty = $("#EditableQuantity").val();
+                if (editableQty) {
+
+                    var qtyOut = $("#quantityOutstandingText").text();
+
+                    if ($("#CurrentOfferQuantity").is(":visible")) {
+                        var qty = $("#CurrentOfferQuantity").val();
+
+                        if (qty != undefined) {
+                            if (parseFloat(qty) > parseFloat(qtyOut)) {
+                                errors = true;
+                                $("#errorofferQty").text("Value exceeds available");
+                            }
+                        }
+                    }
+
+                    if ($("#CounterOfferQuantity").is(":visible")) {
+                        var qty = $("#CounterOfferQuantity").val();
+
+                        if (qty != undefined) {
+                            if (parseFloat(qty) > parseFloat(qtyOut)) {
+                                errors = true;
+                                $("#errorcounterOfferQty").text("Value exceeds available");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (err) { } //maybe cannot find the fields as fields only named on those with input, so just step out with no error
+
+            if (errors) {
+                return false;
+            }
+            else if (!window.confirm("Save offers?")) {
+                return false;  //don't submit'
+            }
+        }
+
+        $(function () {
+            //confirm the approve of tasks
+            $('.acceptoffer').click(function (e) {
+                trid = $(this).closest('div').attr('id');
+
+                if (window.confirm("Are you sure?")) {
+                    var url = "/Offer/AcceptOffer";
+
+                    $.ajax({
+                        url: url,
+                        data: { offerId: trid },
+                        cache: false,
+                        type: "POST",
+                        success: function (result) {
+                            location.reload(true);
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            //confirm the approve of tasks
+            $('.rejectoffer').click(function (e) {
+                trid = $(this).closest('div').attr('id');
+
+                if (window.confirm("Are you sure?")) {
+                    var url = "/Offer/RejectOffer";
+
+                    $.ajax({
+                        url: url,
+                        data: { offerId: trid },
+                        cache: false,
+                        type: "POST",
+                        success: function (result) {
+                            location.reload(true);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

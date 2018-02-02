@@ -291,8 +291,9 @@ namespace Distributor.Helpers
             return model;
         }
 
-        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, HttpRequestBase request, Guid offerId, string breadcrumb, string callingActionDisplayName, bool displayOnly, string type, bool? recalled, string controllerValue, string actionValue)
+        public static OfferViewModel GetOfferViewModel(ApplicationDbContext db, HttpRequestBase request, Guid offerId, string breadcrumb, string callingActionDisplayName, bool displayOnly, string type, bool? recalled, string controllerValue, string actionValue, IPrincipal user)
         {
+            AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
             Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
             breadcrumbDictionary.Add(0, breadcrumb);
 
@@ -320,16 +321,23 @@ namespace Distributor.Helpers
                 OfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OfferOriginatorAppUserId),
                 OfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OfferOriginatorOrganisationId),
                 OfferOriginatorDateTime = offer.OfferOriginatorDateTime,
+                YourOrganisationId = currentUser.OrganisationId,
+                OfferOriginatorOrganisationId = offer.OfferOriginatorOrganisationId,
                 CallingAction = actionValue,
                 CallingActionDisplayName = callingActionDisplayName,
                 CallingController = controllerValue,
                 BreadcrumbTrail = breadcrumbDictionary
             };
 
-            if (type == "created")
-                model.EditableQuantity = offer.CurrentOfferQuantity == 0;
-            else if (type == "received")
-                model.EditableQuantity = offer.CurrentOfferQuantity > 0;
+            if (displayOnly)
+                model.EditableQuantity = false;
+            else
+            {
+                if (type == "created")
+                    model.EditableQuantity = offer.CurrentOfferQuantity == 0;
+                else if (type == "received")
+                    model.EditableQuantity = offer.CurrentOfferQuantity > 0;
+            }
 
             if (offer.RejectedBy.HasValue)
             {
@@ -355,6 +363,7 @@ namespace Distributor.Helpers
                 model.CounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.CounterOfferOriginatorAppUserId.Value);
                 model.CounterOfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.CounterOfferOriginatorOrganisationId.Value);
                 model.CounterOfferOriginatorDateTime = offer.CounterOfferOriginatorDateTime;
+                model.CounterOfferOriginatorOrganisationId = offer.CounterOfferOriginatorOrganisationId;
             }
 
             if (offer.LastCounterOfferOriginatorAppUserId.HasValue)

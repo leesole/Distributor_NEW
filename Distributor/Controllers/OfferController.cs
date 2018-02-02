@@ -21,11 +21,29 @@ namespace Distributor.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            OfferViewModel model = OfferViewHelpers.GetOfferViewModel(db, Request, id.Value, breadcrumb, callingActionDisplayName, displayOnly, type, recalled, controllerValue, actionValue);
+            OfferViewModel model = OfferViewHelpers.GetOfferViewModel(db, Request, id.Value, breadcrumb, callingActionDisplayName, displayOnly, type, recalled, controllerValue, actionValue, User);
             if (model == null)
             {
                 return HttpNotFound();
             }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Display([Bind(Include = "DisplayOnly,Breadcrumb,BreadcrumbDictionary,Type,EditableQuantity,OfferId,ListingId,ListingType,OfferStatus,ItemDescription,QuantityOutstanding,CurrentOfferQuantity,PreviousOfferQuantity,CounterOfferQuantity,PreviousCounterOfferQuantity,RejectedBy,RejectedOn,YourOrganisationId,OfferOriginatorOrganisationId,CounterOfferOriginatorOrganisationId,OfferOriginatorAppUser,OfferOriginatorOrganisation,OfferOriginatorDateTime,LastOfferOriginatorAppUser,LastOfferOriginatorDateTime,ListingOriginatorAppUser,ListingOriginatorOrganisation,ListingOriginatorDateTime,CounterOfferOriginatorAppUser,CounterOfferOriginatorOrganisation,CounterOfferOriginatorDateTime,LastCounterOfferOriginatorAppUser,LastCounterOfferOriginatorDateTime,OrderId,OrderOriginatorAppUser,OrderOriginatorOrganisation,OrderOriginatorDateTime")] OfferViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Display", "Offer", new { id = model.OfferId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, type = model.Type, recalled = true, controllerValue = model.CallingController, actionValue = model.CallingAction });
+            }
+
+            if (ModelState.IsValid)
+            {
+                //LSLSLS - update the offer QUANTITY
+                //AvailableListingHelpers.UpdateAvailableListing(db, model, User);
+                //return RedirectToAction(model.CallingAction, model.CallingController);
+            }
+
             return View(model);
         }
 

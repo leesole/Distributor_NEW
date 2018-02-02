@@ -105,6 +105,10 @@ namespace Distributor.ViewModels
         [Display(Name = "Rejected on")]
         public DateTime? RejectedOn { get; set; }
 
+        public Guid YourOrganisationId { get; set; }
+        public Guid OfferOriginatorOrganisationId { get; set; }
+        public Guid? CounterOfferOriginatorOrganisationId { get; set; }
+
         //references to the offer originator
         [Display(Name = "User")]
         public string OfferOriginatorAppUser { get; set; }
