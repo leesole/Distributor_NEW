@@ -118,7 +118,7 @@
                                     <div class="col-md-7" id="quantityOutstandingText">@Html.DisplayFor(model => model.QuantityOutstanding, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
-                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity == 0)
+                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity == 0 && Model.Type == "created")
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
@@ -134,18 +134,26 @@
                                     @Html.HiddenFor(model => model.CurrentOfferQuantity)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CurrentOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-5" id="currentOfferQuantityText">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                        <div class="col-md-2" id=@Model.OfferId>
-                                            <div class="col-sm-6" id=@Model.OfferId>
-                                                @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity)
-                                                {
-                                                    <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
-                                                }
+                                        @if (Model.Type == "received")
+                                        {
+                                            <div class="col-md-5" id="currentOfferQuantityText">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-2" id=@Model.OfferId>
+                                                <div class="col-sm-6" id=@Model.OfferId>
+                                                    @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity && Model.EditableQuantity)
+                                                    {
+                                                        <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
+                                                    }
+                                                </div>
+                                                <div class="col-sm-6" id=@Model.OfferId>
+                                                    <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6" id=@Model.OfferId>
-                                                <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-7" id="currentOfferQuantityText">@Html.DisplayFor(model => model.CurrentOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        }
+                                        
                                     </div>
                                 }
 
@@ -155,7 +163,7 @@
                                     <div class="col-md-7">@Html.DisplayFor(model => model.PreviousOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
-                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity > 0)
+                                @if (Model.DisplayOnly == false && Model.EditableQuantity == true && Model.CurrentOfferQuantity > 0 && Model.Type == "received")
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "control-label col-md-5" })
@@ -171,18 +179,25 @@
                                     @Html.HiddenFor(model => model.CounterOfferQuantity)
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CounterOfferQuantity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-5" id="counterOfferQuantityText">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                        <div class="col-md-2" id=@Model.OfferId>
-                                            <div class="col-sm-6" id=@Model.OfferId>
-                                                @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity)
-                                                {
-                                                    <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
-                                                }
+                                        @if (Model.Type == "created")
+                                        {
+                                            <div class="col-md-5" id="counterOfferQuantityText">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-2" id=@Model.OfferId>
+                                                <div class="col-sm-6" id=@Model.OfferId>
+                                                    @if (Model.QuantityOutstanding >= Model.CurrentOfferQuantity && Model.EditableQuantity)
+                                                    {
+                                                        <button type="button" class="btn btn-xs btn-success acceptoffer" id=@Model.OfferId><span class="glyphicon glyphicon-ok"></span></button>
+                                                    }
+                                                </div>
+                                                <div class="col-sm-6" id=@Model.OfferId>
+                                                    <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6" id=@Model.OfferId>
-                                                <button type="button" class="btn btn-xs btn-danger rejectoffer" id=@Model.OfferId><span class="glyphicon glyphicon-remove"></span></button>
-                                            </div>
-                                        </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-7" id="counterOfferQuantityText">@Html.DisplayFor(model => model.CounterOfferQuantity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        }
                                     </div>
                                 }
 

@@ -182,6 +182,21 @@ namespace Distributor.Helpers
             return offer;
         }
 
+        public static Offer UpdateOffer(ApplicationDbContext db, OfferViewModel model, IPrincipal user)
+        {
+            Offer offer = new Offer();
+
+            if (model.Type == "created")
+                if (model.CurrentOfferQuantity > 0 && model.EditableQuantity)
+                    offer = UpdateOffer(db, model.OfferId, OfferStatusEnum.Reoffer, model.CurrentOfferQuantity, null, user);
+
+            if (model.Type == "received")
+                if (model.CounterOfferQuantity > 0 && model.EditableQuantity)
+                    offer = UpdateOffer(db, model.OfferId, OfferStatusEnum.Countered, null, model.CounterOfferQuantity, user);
+
+            return offer;
+        }
+
         public static void UpdateOffers(ApplicationDbContext db, List<OfferManageViewOffersModel> list, IPrincipal user)
         {
             //Update Offer value - remove counter
