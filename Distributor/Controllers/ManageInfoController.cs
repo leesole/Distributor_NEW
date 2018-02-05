@@ -228,7 +228,6 @@ namespace Distributor.Controllers
 
         [HttpPost]
         public ActionResult Offers(OfferManageViewModel model)
-
         {
             if (ModelState.IsValid)
             {
@@ -261,6 +260,35 @@ namespace Distributor.Controllers
                 model = OfferViewHelpers.CreateOffersReceivedHistoryManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
                 ViewBag.Type = "Received";
                 ViewBag.TypeTableDescription = "received";
+            }
+
+            return View(model);
+        }
+
+        #endregion
+
+        #region Order
+
+        public ActionResult Orders()
+        {
+            OrderManageViewModel model = OrderViewHelpers.GetOrderManageViewModel(db, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Orders(OrderManageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //if (Request.Form["saveofferbutton"] != null)
+                //    //Update offers
+                //    OfferHelpers.UpdateOffers(db, model.OfferManageViewOffersCreated, User);
+
+                //if (Request.Form["savecounterofferbutton"] != null)
+                //    //Update counter offers
+                //    OfferHelpers.UpdateCounterOffers(db, model.OfferManageViewOffersReceived, User);
+
+                return RedirectToAction("Orders", "ManageInfo");
             }
 
             return View(model);

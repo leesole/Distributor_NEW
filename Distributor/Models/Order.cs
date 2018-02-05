@@ -20,7 +20,10 @@ namespace Distributor.Models
         public decimal OrderQuanity { get; set; }
 
         [Display(Name = "Order status")]
-        public OrderStatusEnum OrderStatus { get; set; }
+        public OrderInStatusEnum OrderInStatus { get; set; }
+
+        [Display(Name = "Order status")]
+        public OrderOutStatusEnum OrderOutStatus { get; set; }
 
         [Display(Name = "Order date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

@@ -9,7 +9,23 @@ namespace Distributor.Enums
 {
     public static class OrderEnums
     {
-        public enum OrderStatusEnum
+        public enum OrderInStatusEnum
+        {
+            [Description("New order")]
+            [Display(Name = "New order")]
+            New = 0,
+            [Description("Collected")]
+            [Display(Name = "Collected")]
+            Collected = 1,
+            [Description("Received")]
+            [Display(Name = "Received")]
+            Received = 2,
+            [Description("Closed")]
+            [Display(Name = "Closed")]
+            Closed = 3
+        }
+
+        public enum OrderOutStatusEnum
         {
             [Description("New order")]
             [Display(Name = "New order")]
@@ -20,15 +36,9 @@ namespace Distributor.Enums
             [Description("Delivered")]
             [Display(Name = "Delivered")]
             Delivered = 2,
-            [Description("Collected")]
-            [Display(Name = "Collected")]
-            Collected = 3,
-            [Description("Received")]
-            [Display(Name = "Received")]
-            Received = 4,
             [Description("Closed")]
             [Display(Name = "Closed")]
-            Closed = 5
+            Closed = 3
         }
     }
 }

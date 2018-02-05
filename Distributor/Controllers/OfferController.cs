@@ -56,6 +56,10 @@ namespace Distributor.Controllers
                 return RedirectToAction(model.CallingAction, model.CallingController);
             }
 
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, model.Breadcrumb);
+            model.BreadcrumbDictionary = breadcrumbDictionary;
+            model.BreadcrumbTrail = breadcrumbDictionary;
             return View(model);
         }
 

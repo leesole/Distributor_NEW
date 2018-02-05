@@ -1,4 +1,5 @@
 ﻿using Distributor.Models;
+using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,8 @@ namespace Distributor.Helpers
                 OrderId = Guid.NewGuid(),
                 ListingType = offer.ListingType,
                 OrderQuanity = orderQty,
-                OrderStatus = OrderStatusEnum.New,
+                OrderInStatus = OrderInStatusEnum.New,
+                OrderOutStatus = OrderOutStatusEnum.New,
                 OrderCreationDateTime = DateTime.Now,
                 OrderOriginatorAppUserId = appUser.AppUserId,
                 OrderOriginatorOrganisationId = appUser.OrganisationId,
@@ -63,5 +65,71 @@ namespace Distributor.Helpers
 
             return order;
         }
+    }
+
+    public static class OrderViewHelpers
+    {
+        #region Get
+
+        public static OrderManageViewModel GetOrderManageViewModel(ApplicationDbContext db, Guid organisationId)
+        {
+            OrderManageViewModel model = new OrderManageViewModel()
+            {
+                OrdersInViewModel = CreateOrdersInViewModel(db, organisationId),
+                OrdersOutViewModel = CreateOrdersOutViewModel(db, organisationId)
+            };
+
+            return model;
+        }
+
+        #endregion
+
+        #region Create
+
+        public static List<OrderInViewModel> CreateOrdersInViewModel(ApplicationDbContext db, Guid organisationId)
+        {
+            List<OrderInViewModel> list = (from o in db.Orders
+                                           where ((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) || 
+                                                  (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId))
+                                           select new OrderInViewModel()
+                                           {
+                                               OrderId = o.OrderId,
+                                               OrderQuanity = o.OrderQuanity,
+                                               OrderInStatus = o.OrderInStatus,
+                                               OrderCreationDateTime = o.OrderCreationDateTime,
+                                               OrderCollectedDateTime = o.OrderCollectedDateTime,
+                                               OrderCollected = o.OrderCollectedDateTime.HasValue,
+                                               OrderReceivedDateTime = o.OrderReceivedDateTime,
+                                               OrderReceived = o.OrderReceivedDateTime.HasValue,
+                                               OrderClosedDateTime = o.OrderClosedDateTime,
+                                               OrderClosed = o.OrderClosedDateTime.HasValue
+                                           }).ToList();
+
+            return list;
+        }
+
+        public static List<OrderOutViewModel> CreateOrdersOutViewModel(ApplicationDbContext db, Guid organisationId)
+        {
+            List<OrderOutViewModel> list = (from o in db.Orders
+                                           where ((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
+                                                  (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId))
+                                           select new OrderOutViewModel()
+                                           {
+                                               OrderId = o.OrderId,
+                                               OrderQuanity = o.OrderQuanity,
+                                               OrderOutStatus = o.OrderOutStatus,
+                                               OrderCreationDateTime = o.OrderCreationDateTime,
+                                               OrderDistributionDateTime = o.OrderDistributionDateTime,
+                                               OrderDistributed = o.OrderDistributionDateTime.HasValue,
+                                               OrderDeliveredDateTime = o.OrderDeliveredDateTime,
+                                               OrderDelivered = o.OrderDeliveredDateTime.HasValue,
+                                               OrderClosedDateTime = o.OrderClosedDateTime,
+                                               OrderClosed = o.OrderClosedDateTime.HasValue
+                                           }).ToList();
+
+            return list;
+        }
+
+        #endregion
     }
 }
