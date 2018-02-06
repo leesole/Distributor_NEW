@@ -2,6 +2,7 @@
 using Distributor.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
@@ -13,6 +14,17 @@ namespace Distributor.Helpers
 {
     public static class OrderHelpers
     {
+        #region Get
+
+        public static Order GetOrder(ApplicationDbContext db, Guid orderId)
+        {
+            return db.Orders.Find(orderId);
+        }
+
+        #endregion
+        
+        #region Create
+
         public static Order CreateOrder(ApplicationDbContext db, Offer offer, IPrincipal user)
         {
             AppUser appUser = AppUserHelpers.GetAppUser(db, user);
@@ -65,6 +77,82 @@ namespace Distributor.Helpers
 
             return order;
         }
+
+        #endregion
+
+        #region Update
+
+        public static void UpdateOrders(ApplicationDbContext db, OrderManageViewModel model, IPrincipal user)
+        {
+            //Update Orders In
+            if (model.OrdersInViewModel != null)
+                foreach (OrderInViewModel item in model.OrdersInViewModel)
+                    UpdateOrderDates(db, item, null, user);
+
+            //Update Orders Out
+            if (model.OrdersOutViewModel != null)
+                foreach (OrderOutViewModel item in model.OrdersOutViewModel)
+                    UpdateOrderDates(db, null, item, user);
+        }
+
+        public static void UpdateOrderDates(ApplicationDbContext db, OrderInViewModel orderIn, OrderOutViewModel orderOut, IPrincipal user)
+        {
+            Guid currentAppUserId = AppUserHelpers.GetAppUserIdFromUser(user);
+
+            if (orderIn != null)
+            {
+                Order order = GetOrder(db, orderIn.OrderId);
+                if (orderIn.OrderCollected)
+                {
+                    order.OrderCollectedBy = currentAppUserId;
+                    order.OrderCollectedDateTime = DateTime.Now;
+                    order.OrderInStatus = OrderInStatusEnum.Collected;
+                }
+                if (orderIn.OrderReceived)
+                {
+                    order.OrderReceivedBy = currentAppUserId;
+                    order.OrderReceivedDateTime = DateTime.Now;
+                    order.OrderInStatus = OrderInStatusEnum.Received;
+                }
+                if (orderIn.OrderClosed)
+                {
+                    order.OrderClosedBy = currentAppUserId;
+                    order.OrderClosedDateTime = DateTime.Now;
+                    order.OrderInStatus = OrderInStatusEnum.Closed;
+                }
+
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            if (orderOut != null)
+            {
+                Order order = GetOrder(db, orderOut.OrderId);
+                if (orderOut.OrderDistributed)
+                {
+                    order.OrderDistributedBy = currentAppUserId;
+                    order.OrderDistributionDateTime = DateTime.Now;
+                    order.OrderOutStatus = OrderOutStatusEnum.Despatched;
+                }
+                if (orderOut.OrderDelivered)
+                {
+                    order.OrderDeliveredBy = currentAppUserId;
+                    order.OrderDeliveredDateTime = DateTime.Now;
+                    order.OrderOutStatus = OrderOutStatusEnum.Delivered;
+                }
+                if (orderOut.OrderClosed)
+                {
+                    order.OrderClosedBy = currentAppUserId;
+                    order.OrderClosedDateTime = DateTime.Now;
+                    order.OrderOutStatus = OrderOutStatusEnum.Closed;
+                }
+
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        #endregion
     }
 
     public static class OrderViewHelpers

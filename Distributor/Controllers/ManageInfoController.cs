@@ -280,16 +280,18 @@ namespace Distributor.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (Request.Form["saveofferbutton"] != null)
-                //    //Update offers
-                //    OfferHelpers.UpdateOffers(db, model.OfferManageViewOffersCreated, User);
-
-                //if (Request.Form["savecounterofferbutton"] != null)
-                //    //Update counter offers
-                //    OfferHelpers.UpdateCounterOffers(db, model.OfferManageViewOffersReceived, User);
+                if (Request.Form["saveinbutton"] != null || Request.Form["saveoutbutton"] != null)
+                    //Update orders
+                    OrderHelpers.UpdateOrders(db, model, User);
 
                 return RedirectToAction("Orders", "ManageInfo");
             }
+
+            if (model.OrdersInViewModel == null)
+                model.OrdersInViewModel = new List<OrderInViewModel>();
+
+            if (model.OrdersOutViewModel == null)
+                model.OrdersOutViewModel = new List<OrderOutViewModel>();
 
             return View(model);
         }
