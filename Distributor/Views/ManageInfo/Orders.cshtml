@@ -53,7 +53,7 @@
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderCreationDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderCollectedDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderReceivedDateTime)
-                                    @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderClosedDateTime)
+                                    @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderInClosedDateTime)
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersInViewModel[i].OrderInStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderCreationDateTime)</td>
@@ -63,7 +63,10 @@
                                     }
                                     else
                                     {
-                                        <td align="center">@Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderCollected, new { id = orderInCollectedId, onchange = "setDate(this)" })</td>
+                                        <td align="center">
+                                            @Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderCollected, new { id = orderInCollectedId, onchange = "setDate(this)" })
+                                            @Html.ValidationMessageFor(model => model.OrdersInViewModel[i].OrderCollected, "", new { @class = "text-danger" })
+                                    </td>
                                     }
                                     <td id=@orderInCollectedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderCollectedDateTime)</td>
                                     @if (Model.OrdersInViewModel[i].OrderReceivedDateTime.HasValue)
@@ -72,18 +75,24 @@
                                     }
                                     else
                                     {
-                                        <td align="center">@Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderReceived, new { id = orderInReceivedId, onchange = "setDate(this)" })</td>
+                                        <td align="center">
+                                            @Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderReceived, new { id = orderInReceivedId, onchange = "setDate(this)" })
+                                            @Html.ValidationMessageFor(model => model.OrdersInViewModel[i].OrderReceived, "", new { @class = "text-danger" })
+                                        </td>
                                     }
                                     <td id=@orderInReceivedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderReceivedDateTime)</td>
-                                    @if (Model.OrdersInViewModel[i].OrderClosedDateTime.HasValue)
+                                    @if (Model.OrdersInViewModel[i].OrderInClosedDateTime.HasValue)
                                     {
-                                        <td align="center" onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderClosed)</td>
+                                        <td align="center" onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderInClosed)</td>
                                     }
                                     else
                                     {
-                                        <td align="center">@Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderClosed, new { id = orderInClosedId, onchange = "setDate(this)" })</td>
+                                        <td align="center">
+                                            @Html.CheckBoxFor(model => model.OrdersInViewModel[i].OrderInClosed, new { id = orderInClosedId, onchange = "setDate(this)" })
+                                            @Html.ValidationMessageFor(model => model.OrdersInViewModel[i].OrderInClosed, "", new { @class = "text-danger" })
+                                        </td>
                                     }
-                                    <td id=@orderInClosedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderClosedDateTime)</td>
+                                    <td id=@orderInClosedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderInClosedDateTime)</td>
                                 </tr>
                             }
                         </tbody>
@@ -142,7 +151,7 @@
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderCreationDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderDistributionDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderDeliveredDateTime)
-                                    @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderClosedDateTime)
+                                    @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderOutClosedDateTime)
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersOutViewModel[i].OrderOutStatus.DisplayName()</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderCreationDateTime)</td>
@@ -170,18 +179,18 @@
                                         </td>
                                     }
                                     <td id=@orderOutDeliveredDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderDeliveredDateTime)</td>
-                                    @if (Model.OrdersOutViewModel[i].OrderClosedDateTime.HasValue)
+                                    @if (Model.OrdersOutViewModel[i].OrderOutClosedDateTime.HasValue)
                                     {
-                                        <td align="center" onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderClosed)</td>
+                                        <td align="center" onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderOutClosed)</td>
                                     }
                                     else
                                     {
                                         <td align="center">
-                                            @Html.CheckBoxFor(model => model.OrdersOutViewModel[i].OrderClosed, new { id = orderOutClosedId, onchange = "setDate(this)" })
-                                            @Html.ValidationMessageFor(model => model.OrdersOutViewModel[i].OrderClosed, "", new { @class = "text-danger" })
+                                            @Html.CheckBoxFor(model => model.OrdersOutViewModel[i].OrderOutClosed, new { id = orderOutClosedId, onchange = "setDate(this)" })
+                                            @Html.ValidationMessageFor(model => model.OrdersOutViewModel[i].OrderOutClosed, "", new { @class = "text-danger" })
                                         </td>
                                     }
-                                    <td id=@orderOutClosedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderClosedDateTime)</td>
+                                    <td id=@orderOutClosedDateId onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderOutClosedDateTime)</td>
                                 </tr>
                             }
                         </tbody>

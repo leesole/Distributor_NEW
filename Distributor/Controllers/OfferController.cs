@@ -32,7 +32,6 @@ namespace Distributor.Controllers
         [HttpPost]
         public ActionResult Display([Bind(Include = "DisplayOnly,Breadcrumb,Type,EditableQuantity,OfferId,ListingId,ListingType,OfferStatus,ItemDescription,QuantityOutstanding,CurrentOfferQuantity,PreviousOfferQuantity,CounterOfferQuantity,PreviousCounterOfferQuantity,RejectedBy,RejectedOn,YourOrganisationId,OfferOriginatorOrganisationId,CounterOfferOriginatorOrganisationId,OfferOriginatorAppUser,OfferOriginatorOrganisation,OfferOriginatorDateTime,LastOfferOriginatorAppUser,LastOfferOriginatorDateTime,ListingOriginatorAppUser,ListingOriginatorOrganisation,ListingOriginatorDateTime,CounterOfferOriginatorAppUser,CounterOfferOriginatorOrganisation,CounterOfferOriginatorDateTime,LastCounterOfferOriginatorAppUser,LastCounterOfferOriginatorDateTime,OrderId,OrderOriginatorAppUser,OrderOriginatorOrganisation,OrderOriginatorDateTime,CallingController,CallingAction,CallingActionDisplayName")] OfferViewModel model)
         {
-            //LSLSLS - the model is missing lots of info.....CHECK!
             if (Request.Form["resetbutton"] != null)
             {
                 return RedirectToAction("Display", "Offer", new { id = model.OfferId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, type = model.Type, recalled = true, controllerValue = model.CallingController, actionValue = model.CallingAction });

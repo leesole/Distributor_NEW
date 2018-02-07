@@ -91,8 +91,11 @@ namespace Distributor.Helpers
             return organisation;
         }
 
-        public static string GetOrganisationName(ApplicationDbContext db, Guid organisationId)
+        public static string GetOrganisationName(ApplicationDbContext db, Guid? organisationId)
         {
+            if (!organisationId.HasValue)
+                return "";
+
             return db.Organisations.Find(organisationId).OrganisationName;
         }
 

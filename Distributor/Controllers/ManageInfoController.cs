@@ -287,6 +287,7 @@ namespace Distributor.Controllers
                 return RedirectToAction("Orders", "ManageInfo");
             }
 
+            //rebuild the blank models as these have no entries anyway
             if (model.OrdersInViewModel == null)
                 model.OrdersInViewModel = new List<OrderInViewModel>();
 

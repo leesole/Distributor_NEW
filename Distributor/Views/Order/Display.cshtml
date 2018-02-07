@@ -1,0 +1,188 @@
+﻿@using Distributor.Helpers
+@model Distributor.ViewModels.OrderViewModel
+
+@{
+    //build breadcrumb from previous view
+    List<string[]> breadcrumbs = new List<string[]>();
+
+    foreach (KeyValuePair<int, string> pair in Model.BreadcrumbTrail)
+    {
+        if (pair.Value != null)
+        {
+            string[] breadcrumb = pair.Value.Split(',');
+            breadcrumbs.Add(breadcrumb);
+        }
+    }
+
+    //add breadcrumb to this view of the last view
+    string[] breadcrumbLast = new string[] { Model.CallingActionDisplayName, Model.CallingAction, Model.CallingController };
+    breadcrumbs.Add(breadcrumbLast);
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="page-header">Manage Listings <small>Offer - Details</small></h1>
+        <ol class="breadcrumb">
+            @for (var i = 0; i < breadcrumbs.Count; i++)
+            {
+                //remove filter to put into Action Link
+                int index = breadcrumbs[i][1].IndexOf("type");
+
+                if (index != -1)
+                {
+                    string action = @"" + breadcrumbs[i][1].Substring(index + 5) + "";
+                    <li>
+                        @Html.ActionLink(breadcrumbs[i][0], breadcrumbs[i][1].Substring(0, index - 1), breadcrumbs[i][2], new { type = action }, null)
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        @Html.ActionLink(breadcrumbs[i][0], breadcrumbs[i][1], breadcrumbs[i][2])
+                    </li>
+                }
+            }
+            <li class="active">Details</li>
+        </ol>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-green">
+                <div class="panel-heading">Order details</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-horizontal">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                @Html.HiddenFor(model => model.DisplayOnly)
+                                @Html.HiddenFor(model => model.Breadcrumb)
+                                @Html.HiddenFor(model => model.BreadcrumbDictionary)
+                                @Html.HiddenFor(model => model.CallingController)
+                                @Html.HiddenFor(model => model.CallingAction)
+                                @Html.HiddenFor(model => model.CallingActionDisplayName)
+                                @Html.HiddenFor(model => model.BreadcrumbTrail)
+                                @Html.HiddenFor(model => model.Type)
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.Type</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ListingType, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.ListingType.DisplayName()</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.ItemType.DisplayName()</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UoM, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.UoM, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderQuanity, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderQuanity, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderCreationDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderCreationDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderInStatus, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.OrderInStatus.DisplayName()</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderCollectedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderCollectedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderReceivedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderReceivedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderInClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderInClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderOutStatus, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Model.OrderOutStatus.DisplayName()</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderDistributionDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributionDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderDistributedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderDeliveredDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderDeliveredBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderOutClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.OrderOutClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

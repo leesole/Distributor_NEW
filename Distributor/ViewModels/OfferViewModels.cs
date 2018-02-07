@@ -103,6 +103,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Rejected by")]
         public string RejectedBy { get; set; }
         [Display(Name = "Rejected on")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? RejectedOn { get; set; }
 
         public Guid YourOrganisationId { get; set; }
@@ -115,10 +116,12 @@ namespace Distributor.ViewModels
         [Display(Name = "Organisation")]
         public string OfferOriginatorOrganisation { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime OfferOriginatorDateTime { get; set; }
         [Display(Name = "User")]
         public string LastOfferOriginatorAppUser { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? LastOfferOriginatorDateTime { get; set; }
 
         [Display(Name = "User")]
@@ -126,6 +129,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Organisation")]
         public string ListingOriginatorOrganisation { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ListingOriginatorDateTime { get; set; }
 
         [Display(Name = "User")]
@@ -133,10 +137,12 @@ namespace Distributor.ViewModels
         [Display(Name = "Organisation")]
         public string CounterOfferOriginatorOrganisation { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? CounterOfferOriginatorDateTime { get; set; }
         [Display(Name = "User")]
         public string LastCounterOfferOriginatorAppUser { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? LastCounterOfferOriginatorDateTime { get; set; }
 
         public Guid? OrderId { get; set; }  //if this offer is accepted then an order is made and this is the reference to that order.
@@ -145,6 +151,7 @@ namespace Distributor.ViewModels
         [Display(Name = "Organisation")]
         public string OrderOriginatorOrganisation { get; set; }
         [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderOriginatorDateTime { get; set; }
     }
 }

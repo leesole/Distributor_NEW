@@ -52,8 +52,13 @@ namespace Distributor.Models
 
         [Display(Name = "Closed date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? OrderClosedDateTime { get; set; }
-        public Guid? OrderClosedBy { get; set; }
+        public DateTime? OrderInClosedDateTime { get; set; }
+        public Guid? OrderInClosedBy { get; set; }
+
+        [Display(Name = "Closed date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? OrderOutClosedDateTime { get; set; }
+        public Guid? OrderOutClosedBy { get; set; }
 
         public Guid? OrderOriginatorAppUserId { get; set; }
         public Guid? OrderOriginatorOrganisationId { get; set; }

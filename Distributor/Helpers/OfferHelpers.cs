@@ -338,6 +338,22 @@ namespace Distributor.Helpers
                 OfferOriginatorDateTime = offer.OfferOriginatorDateTime,
                 YourOrganisationId = currentUser.OrganisationId,
                 OfferOriginatorOrganisationId = offer.OfferOriginatorOrganisationId,
+                RejectedBy = AppUserHelpers.GetAppUserName(db, offer.RejectedBy),
+                RejectedOn = offer.RejectedOn,
+                LastOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastOfferOriginatorAppUserId),
+                LastOfferOriginatorDateTime = offer.LastOfferOriginatorDateTime,
+                ListingOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.ListingOriginatorAppUserId),
+                ListingOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.ListingOriginatorOrganisationId),
+                ListingOriginatorDateTime = offer.ListingOriginatorDateTime,
+                CounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.CounterOfferOriginatorAppUserId),
+                CounterOfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.CounterOfferOriginatorOrganisationId),
+                CounterOfferOriginatorDateTime = offer.CounterOfferOriginatorDateTime,
+                CounterOfferOriginatorOrganisationId = offer.CounterOfferOriginatorOrganisationId,
+                LastCounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastCounterOfferOriginatorAppUserId),
+                LastCounterOfferOriginatorDateTime = offer.LastCounterOfferOriginatorDateTime,
+                OrderOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OrderOriginatorAppUserId),
+                OrderOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OrderOriginatorOrganisationId),
+                OrderOriginatorDateTime = offer.OrderOriginatorDateTime,
                 CallingAction = actionValue,
                 CallingActionDisplayName = callingActionDisplayName,
                 CallingController = controllerValue,
@@ -352,46 +368,6 @@ namespace Distributor.Helpers
                     model.EditableQuantity = offer.CurrentOfferQuantity == 0;
                 else if (type == "received")
                     model.EditableQuantity = offer.CurrentOfferQuantity > 0;
-            }
-
-            if (offer.RejectedBy.HasValue)
-            {
-                model.RejectedBy = AppUserHelpers.GetAppUserName(db, offer.RejectedBy.Value);
-                model.RejectedOn = offer.RejectedOn;
-            }
-
-            if (offer.LastOfferOriginatorAppUserId.HasValue)
-            {
-                model.LastOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastOfferOriginatorAppUserId.Value);
-                model.LastOfferOriginatorDateTime = offer.LastOfferOriginatorDateTime;
-            }
-
-            if (offer.ListingOriginatorAppUserId.HasValue)
-            {
-                model.ListingOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.ListingOriginatorAppUserId.Value);
-                model.ListingOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.ListingOriginatorOrganisationId.Value);
-                model.ListingOriginatorDateTime = offer.ListingOriginatorDateTime;
-            }
-
-            if (offer.CounterOfferOriginatorAppUserId.HasValue)
-            {
-                model.CounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.CounterOfferOriginatorAppUserId.Value);
-                model.CounterOfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.CounterOfferOriginatorOrganisationId.Value);
-                model.CounterOfferOriginatorDateTime = offer.CounterOfferOriginatorDateTime;
-                model.CounterOfferOriginatorOrganisationId = offer.CounterOfferOriginatorOrganisationId;
-            }
-
-            if (offer.LastCounterOfferOriginatorAppUserId.HasValue)
-            {
-                model.LastCounterOfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.LastCounterOfferOriginatorAppUserId.Value);
-                model.LastCounterOfferOriginatorDateTime = offer.LastCounterOfferOriginatorDateTime;
-            }
-
-            if (offer.OrderId.HasValue)
-            {
-                model.OrderOriginatorAppUser = AppUserHelpers.GetAppUserName(db, offer.OrderOriginatorAppUserId.Value);
-                model.OrderOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, offer.OrderOriginatorOrganisationId.Value);
-                model.OrderOriginatorDateTime = offer.OrderOriginatorDateTime;
             }
 
             return model;

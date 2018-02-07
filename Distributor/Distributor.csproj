@@ -204,6 +204,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManageInfoController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrganisationsController.cs" />
     <Compile Include="Controllers\UserTasksController.cs" />
     <Compile Include="Enums\BranchEnums.cs" />
@@ -361,6 +362,10 @@
     <Compile Include="Migrations\201802051107293_32nd.cs" />
     <Compile Include="Migrations\201802051107293_32nd.Designer.cs">
       <DependentUpon>201802051107293_32nd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802071458594_33rd.cs" />
+    <Compile Include="Migrations\201802071458594_33rd.Designer.cs">
+      <DependentUpon>201802071458594_33rd.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -659,6 +664,7 @@
     <Content Include="Views\Offer\Display.cshtml" />
     <Content Include="Views\ManageInfo\Orders.cshtml" />
     <Content Include="Views\ManageInfo\OrdersHistory.cshtml" />
+    <Content Include="Views\Order\Display.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -764,6 +770,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802051107293_32nd.resx">
       <DependentUpon>201802051107293_32nd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802071458594_33rd.resx">
+      <DependentUpon>201802071458594_33rd.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

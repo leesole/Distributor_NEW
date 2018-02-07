@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using static Distributor.Enums.GeneralEnums;
+using static Distributor.Enums.ItemEnums;
 using static Distributor.Enums.OfferEnums;
 using static Distributor.Enums.OrderEnums;
 
@@ -114,10 +115,10 @@ namespace Distributor.Helpers
                     order.OrderReceivedDateTime = DateTime.Now;
                     order.OrderInStatus = OrderInStatusEnum.Received;
                 }
-                if (orderIn.OrderClosed)
+                if (orderIn.OrderInClosed)
                 {
-                    order.OrderClosedBy = currentAppUserId;
-                    order.OrderClosedDateTime = DateTime.Now;
+                    order.OrderInClosedBy = currentAppUserId;
+                    order.OrderInClosedDateTime = DateTime.Now;
                     order.OrderInStatus = OrderInStatusEnum.Closed;
                 }
 
@@ -140,10 +141,10 @@ namespace Distributor.Helpers
                     order.OrderDeliveredDateTime = DateTime.Now;
                     order.OrderOutStatus = OrderOutStatusEnum.Delivered;
                 }
-                if (orderOut.OrderClosed)
+                if (orderOut.OrderOutClosed)
                 {
-                    order.OrderClosedBy = currentAppUserId;
-                    order.OrderClosedDateTime = DateTime.Now;
+                    order.OrderOutClosedBy = currentAppUserId;
+                    order.OrderOutClosedDateTime = DateTime.Now;
                     order.OrderOutStatus = OrderOutStatusEnum.Closed;
                 }
 
@@ -182,6 +183,82 @@ namespace Distributor.Helpers
             return model;
         }
 
+        public static OrderViewModel GetOfferViewModel(ApplicationDbContext db, HttpRequestBase request, Guid orderId, string breadcrumb, string callingActionDisplayName, bool displayOnly, string type, bool? recalled, string controllerValue, string actionValue, IPrincipal user)
+        {
+            AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
+            
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, breadcrumb);
+
+            if (!recalled.HasValue || recalled.Value != true)
+                GeneralHelpers.GetCallingDetailsFromRequest(request, controllerValue, actionValue, out controllerValue, out actionValue);
+
+            Order order = OrderHelpers.GetOrder(db, orderId);
+
+            string itemDescription = "";
+            ItemTypeEnum itemType = ItemTypeEnum.Canned;
+            string uoM = "";
+
+            if (order.ListingType == ListingTypeEnum.Available)
+            {
+                AvailableListing listing = AvailableListingHelpers.GetAvailableListing(db, order.ListingId.Value);
+                itemDescription = listing.ItemDescription;
+                itemType = listing.ItemType;
+                uoM = listing.UoM;
+            }
+            else
+            {
+                RequiredListing listing = RequiredListingHelpers.GetRequiredListing(db, order.ListingId.Value);
+                itemDescription = listing.ItemDescription;
+                itemType = listing.ItemType;
+                uoM = listing.UoM;
+            }
+
+            OrderViewModel model = new OrderViewModel()
+            {
+                DisplayOnly = displayOnly,
+                Breadcrumb = breadcrumb,
+                BreadcrumbDictionary = breadcrumbDictionary,
+                Type = type,
+                OrderId = order.OrderId,
+                ListingType = order.ListingType,
+                ItemDescription = itemDescription,
+                ItemType = itemType,
+                UoM = uoM,
+                OrderQuanity = order.OrderQuanity,
+                OrderInStatus = order.OrderInStatus,
+                OrderOutStatus = order.OrderOutStatus,
+                OrderCreationDateTime = order.OrderCreationDateTime,
+                OrderDistributionDateTime = order.OrderDistributionDateTime,
+                OrderDistributedBy = AppUserHelpers.GetAppUserName(db, order.OrderDistributedBy),
+                OrderDeliveredDateTime = order.OrderDeliveredDateTime,
+                OrderDeliveredBy = AppUserHelpers.GetAppUserName(db, order.OrderDeliveredBy),
+                OrderCollectedDateTime = order.OrderCollectedDateTime,
+                OrderCollectedBy = AppUserHelpers.GetAppUserName(db, order.OrderCollectedBy),
+                OrderReceivedDateTime = order.OrderReceivedDateTime,
+                OrderReceivedBy = AppUserHelpers.GetAppUserName(db, order.OrderReceivedBy),
+                OrderInClosedDateTime = order.OrderInClosedDateTime,
+                OrderInClosedBy = AppUserHelpers.GetAppUserName(db, order.OrderInClosedBy),
+                OrderOutClosedDateTime = order.OrderOutClosedDateTime,
+                OrderOutClosedBy = AppUserHelpers.GetAppUserName(db, order.OrderOutClosedBy),
+                OrderOriginatorAppUser = AppUserHelpers.GetAppUserName(db, order.OrderOriginatorAppUserId),
+                OrderOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, order.OrderOriginatorOrganisationId),
+                OrderOriginatorDateTime = order.OrderOriginatorDateTime,
+                OfferId = order.OfferId,
+                OfferOriginatorAppUser = AppUserHelpers.GetAppUserName(db, order.OfferOriginatorAppUserId),
+                OfferOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, order.OfferOriginatorOrganisationId),
+                ListingId = order.ListingId,
+                ListingOriginatorAppUser = AppUserHelpers.GetAppUserName(db, order.ListingOriginatorAppUserId),
+                ListingOriginatorOrganisation = OrganisationHelpers.GetOrganisationName(db, order.ListingOriginatorOrganisationId),
+                CallingAction = actionValue,
+                CallingActionDisplayName = callingActionDisplayName,
+                CallingController = controllerValue,
+                BreadcrumbTrail = breadcrumbDictionary
+            };
+
+            return model;
+        }
+
         #endregion
 
         #region Create
@@ -205,8 +282,8 @@ namespace Distributor.Helpers
                             OrderCollected = o.OrderCollectedDateTime.HasValue,
                             OrderReceivedDateTime = o.OrderReceivedDateTime,
                             OrderReceived = o.OrderReceivedDateTime.HasValue,
-                            OrderClosedDateTime = o.OrderClosedDateTime,
-                            OrderClosed = o.OrderClosedDateTime.HasValue
+                            OrderInClosedDateTime = o.OrderInClosedDateTime,
+                            OrderInClosed = o.OrderInClosedDateTime.HasValue
                         }).ToList();
             else
                 list = (from o in db.Orders
@@ -223,8 +300,8 @@ namespace Distributor.Helpers
                             OrderCollected = o.OrderCollectedDateTime.HasValue,
                             OrderReceivedDateTime = o.OrderReceivedDateTime,
                             OrderReceived = o.OrderReceivedDateTime.HasValue,
-                            OrderClosedDateTime = o.OrderClosedDateTime,
-                            OrderClosed = o.OrderClosedDateTime.HasValue
+                            OrderInClosedDateTime = o.OrderInClosedDateTime,
+                            OrderInClosed = o.OrderInClosedDateTime.HasValue
                         }).ToList();
 
             return list;
@@ -249,8 +326,8 @@ namespace Distributor.Helpers
                             OrderDistributed = o.OrderDistributionDateTime.HasValue,
                             OrderDeliveredDateTime = o.OrderDeliveredDateTime,
                             OrderDelivered = o.OrderDeliveredDateTime.HasValue,
-                            OrderClosedDateTime = o.OrderClosedDateTime,
-                            OrderClosed = o.OrderClosedDateTime.HasValue
+                            OrderOutClosedDateTime = o.OrderOutClosedDateTime,
+                            OrderOutClosed = o.OrderOutClosedDateTime.HasValue
                         }).ToList();
             else
                 list = (from o in db.Orders
@@ -267,8 +344,8 @@ namespace Distributor.Helpers
                             OrderDistributed = o.OrderDistributionDateTime.HasValue,
                             OrderDeliveredDateTime = o.OrderDeliveredDateTime,
                             OrderDelivered = o.OrderDeliveredDateTime.HasValue,
-                            OrderClosedDateTime = o.OrderClosedDateTime,
-                            OrderClosed = o.OrderClosedDateTime.HasValue
+                            OrderOutClosedDateTime = o.OrderOutClosedDateTime,
+                            OrderOutClosed = o.OrderOutClosedDateTime.HasValue
                         }).ToList();
 
             return list;
