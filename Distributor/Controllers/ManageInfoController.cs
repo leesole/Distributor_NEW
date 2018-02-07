@@ -296,6 +296,19 @@ namespace Distributor.Controllers
             return View(model);
         }
 
+        public ActionResult OrdersHistory(string type)
+        {
+            OrderManageViewModel model = OrderViewHelpers.GetOrderManageViewModelHistory(db, type, AppUserHelpers.GetOrganisationIdFromUser(db, User));
+
+            if (type == "in")
+                ViewBag.Type = "Orders In";
+
+            if (type == "out")
+                ViewBag.Type = "Orders Out";
+
+            return View(model);
+        }
+
         #endregion
 
         protected override void Dispose(bool disposing)

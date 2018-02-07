@@ -163,9 +163,21 @@ namespace Distributor.Helpers
         {
             OrderManageViewModel model = new OrderManageViewModel()
             {
-                OrdersInViewModel = CreateOrdersInViewModel(db, organisationId),
-                OrdersOutViewModel = CreateOrdersOutViewModel(db, organisationId)
+                OrdersInViewModel = CreateOrdersInViewModel(db, organisationId, false),
+                OrdersOutViewModel = CreateOrdersOutViewModel(db, organisationId, false)
             };
+
+            return model;
+        }
+
+        public static OrderManageViewModel GetOrderManageViewModelHistory(ApplicationDbContext db, string type, Guid organisationId)
+        {
+            OrderManageViewModel model = new OrderManageViewModel();
+
+            if (type == "in")
+                model.OrdersInViewModel = CreateOrdersInViewModel(db, organisationId, true);
+            if (type == "out")
+                model.OrdersOutViewModel = CreateOrdersOutViewModel(db, organisationId, true);
 
             return model;
         }
@@ -174,46 +186,90 @@ namespace Distributor.Helpers
 
         #region Create
 
-        public static List<OrderInViewModel> CreateOrdersInViewModel(ApplicationDbContext db, Guid organisationId)
+        public static List<OrderInViewModel> CreateOrdersInViewModel(ApplicationDbContext db, Guid organisationId, bool history)
         {
-            List<OrderInViewModel> list = (from o in db.Orders
-                                           where ((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) || 
-                                                  (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId))
-                                           select new OrderInViewModel()
-                                           {
-                                               OrderId = o.OrderId,
-                                               OrderQuanity = o.OrderQuanity,
-                                               OrderInStatus = o.OrderInStatus,
-                                               OrderCreationDateTime = o.OrderCreationDateTime,
-                                               OrderCollectedDateTime = o.OrderCollectedDateTime,
-                                               OrderCollected = o.OrderCollectedDateTime.HasValue,
-                                               OrderReceivedDateTime = o.OrderReceivedDateTime,
-                                               OrderReceived = o.OrderReceivedDateTime.HasValue,
-                                               OrderClosedDateTime = o.OrderClosedDateTime,
-                                               OrderClosed = o.OrderClosedDateTime.HasValue
-                                           }).ToList();
+            List<OrderInViewModel> list;
+
+            if (history)
+                list = (from o in db.Orders
+                        where (((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) ||
+                                (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId)) &&
+                                o.OrderInStatus == OrderInStatusEnum.Closed)
+                        select new OrderInViewModel()
+                        {
+                            OrderId = o.OrderId,
+                            OrderQuanity = o.OrderQuanity,
+                            OrderInStatus = o.OrderInStatus,
+                            OrderCreationDateTime = o.OrderCreationDateTime,
+                            OrderCollectedDateTime = o.OrderCollectedDateTime,
+                            OrderCollected = o.OrderCollectedDateTime.HasValue,
+                            OrderReceivedDateTime = o.OrderReceivedDateTime,
+                            OrderReceived = o.OrderReceivedDateTime.HasValue,
+                            OrderClosedDateTime = o.OrderClosedDateTime,
+                            OrderClosed = o.OrderClosedDateTime.HasValue
+                        }).ToList();
+            else
+                list = (from o in db.Orders
+                        where (((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) || 
+                                (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId)) &&
+                                o.OrderInStatus != OrderInStatusEnum.Closed)
+                        select new OrderInViewModel()
+                        {
+                            OrderId = o.OrderId,
+                            OrderQuanity = o.OrderQuanity,
+                            OrderInStatus = o.OrderInStatus,
+                            OrderCreationDateTime = o.OrderCreationDateTime,
+                            OrderCollectedDateTime = o.OrderCollectedDateTime,
+                            OrderCollected = o.OrderCollectedDateTime.HasValue,
+                            OrderReceivedDateTime = o.OrderReceivedDateTime,
+                            OrderReceived = o.OrderReceivedDateTime.HasValue,
+                            OrderClosedDateTime = o.OrderClosedDateTime,
+                            OrderClosed = o.OrderClosedDateTime.HasValue
+                        }).ToList();
 
             return list;
         }
 
-        public static List<OrderOutViewModel> CreateOrdersOutViewModel(ApplicationDbContext db, Guid organisationId)
+        public static List<OrderOutViewModel> CreateOrdersOutViewModel(ApplicationDbContext db, Guid organisationId, bool history)
         {
-            List<OrderOutViewModel> list = (from o in db.Orders
-                                           where ((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
-                                                  (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId))
-                                           select new OrderOutViewModel()
-                                           {
-                                               OrderId = o.OrderId,
-                                               OrderQuanity = o.OrderQuanity,
-                                               OrderOutStatus = o.OrderOutStatus,
-                                               OrderCreationDateTime = o.OrderCreationDateTime,
-                                               OrderDistributionDateTime = o.OrderDistributionDateTime,
-                                               OrderDistributed = o.OrderDistributionDateTime.HasValue,
-                                               OrderDeliveredDateTime = o.OrderDeliveredDateTime,
-                                               OrderDelivered = o.OrderDeliveredDateTime.HasValue,
-                                               OrderClosedDateTime = o.OrderClosedDateTime,
-                                               OrderClosed = o.OrderClosedDateTime.HasValue
-                                           }).ToList();
+            List<OrderOutViewModel> list;
+
+            if (history)
+                list = (from o in db.Orders
+                        where (((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
+                                (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId)) &&
+                                o.OrderOutStatus == OrderOutStatusEnum.Closed)
+                        select new OrderOutViewModel()
+                        {
+                            OrderId = o.OrderId,
+                            OrderQuanity = o.OrderQuanity,
+                            OrderOutStatus = o.OrderOutStatus,
+                            OrderCreationDateTime = o.OrderCreationDateTime,
+                            OrderDistributionDateTime = o.OrderDistributionDateTime,
+                            OrderDistributed = o.OrderDistributionDateTime.HasValue,
+                            OrderDeliveredDateTime = o.OrderDeliveredDateTime,
+                            OrderDelivered = o.OrderDeliveredDateTime.HasValue,
+                            OrderClosedDateTime = o.OrderClosedDateTime,
+                            OrderClosed = o.OrderClosedDateTime.HasValue
+                        }).ToList();
+            else
+                list = (from o in db.Orders
+                        where (((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
+                                (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId)) &&
+                                o.OrderOutStatus != OrderOutStatusEnum.Closed)
+                        select new OrderOutViewModel()
+                        {
+                            OrderId = o.OrderId,
+                            OrderQuanity = o.OrderQuanity,
+                            OrderOutStatus = o.OrderOutStatus,
+                            OrderCreationDateTime = o.OrderCreationDateTime,
+                            OrderDistributionDateTime = o.OrderDistributionDateTime,
+                            OrderDistributed = o.OrderDistributionDateTime.HasValue,
+                            OrderDeliveredDateTime = o.OrderDeliveredDateTime,
+                            OrderDelivered = o.OrderDeliveredDateTime.HasValue,
+                            OrderClosedDateTime = o.OrderClosedDateTime,
+                            OrderClosed = o.OrderClosedDateTime.HasValue
+                        }).ToList();
 
             return list;
         }

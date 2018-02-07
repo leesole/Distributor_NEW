@@ -658,6 +658,7 @@
     <Content Include="Views\ManageInfo\OffersHistory.cshtml" />
     <Content Include="Views\Offer\Display.cshtml" />
     <Content Include="Views\ManageInfo\Orders.cshtml" />
+    <Content Include="Views\ManageInfo\OrdersHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
