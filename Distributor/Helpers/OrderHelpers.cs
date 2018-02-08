@@ -83,39 +83,52 @@ namespace Distributor.Helpers
 
         #region Update
 
+        public static Order UpdateOrder(ApplicationDbContext db, OrderViewModel model, IPrincipal user)
+        {
+            Order order = null;
+            //Only update order if a flag is set to Y
+            if (model.Type == "in" && (model.OrderCollected || model.OrderReceived || model.OrderInClosed))
+                order = UpdateOrderDates(db, model.Type, model.OrderId, model.OrderCollected, model.OrderReceived, model.OrderInClosed, false, false, false, user);
+
+            if (model.Type == "out" && (model.OrderDistributed || model.OrderDelivered || model.OrderOutClosed))
+                order = UpdateOrderDates(db, model.Type, model.OrderId, false, false, false, model.OrderDistributed, model.OrderDelivered, model.OrderOutClosed, user);
+
+            return order;
+        }
+
         public static void UpdateOrders(ApplicationDbContext db, OrderManageViewModel model, IPrincipal user)
         {
             //Update Orders In
             if (model.OrdersInViewModel != null)
                 foreach (OrderInViewModel item in model.OrdersInViewModel)
-                    UpdateOrderDates(db, item, null, user);
+                    UpdateOrderDates(db, "in", item.OrderId, item.OrderCollected, item.OrderReceived, item.OrderInClosed, false, false, false, user);
 
             //Update Orders Out
             if (model.OrdersOutViewModel != null)
                 foreach (OrderOutViewModel item in model.OrdersOutViewModel)
-                    UpdateOrderDates(db, null, item, user);
+                    UpdateOrderDates(db, "out", item.OrderId, false, false, false, item.OrderDistributed, item.OrderDelivered, item.OrderOutClosed, user);
         }
 
-        public static void UpdateOrderDates(ApplicationDbContext db, OrderInViewModel orderIn, OrderOutViewModel orderOut, IPrincipal user)
+        public static Order UpdateOrderDates(ApplicationDbContext db, string type, Guid orderId, bool orderCollected, bool orderReceived, bool orderInClosed, bool orderDistributed, bool orderDelivered, bool orderOutClosed, IPrincipal user)
         {
+            Order order = OrderHelpers.GetOrder(db, orderId);
             Guid currentAppUserId = AppUserHelpers.GetAppUserIdFromUser(user);
 
-            if (orderIn != null)
+            if (type == "in")
             {
-                Order order = GetOrder(db, orderIn.OrderId);
-                if (orderIn.OrderCollected)
+                if (orderCollected)
                 {
                     order.OrderCollectedBy = currentAppUserId;
                     order.OrderCollectedDateTime = DateTime.Now;
                     order.OrderInStatus = OrderInStatusEnum.Collected;
                 }
-                if (orderIn.OrderReceived)
+                if (orderReceived)
                 {
                     order.OrderReceivedBy = currentAppUserId;
                     order.OrderReceivedDateTime = DateTime.Now;
                     order.OrderInStatus = OrderInStatusEnum.Received;
                 }
-                if (orderIn.OrderInClosed)
+                if (orderInClosed)
                 {
                     order.OrderInClosedBy = currentAppUserId;
                     order.OrderInClosedDateTime = DateTime.Now;
@@ -126,22 +139,21 @@ namespace Distributor.Helpers
                 db.SaveChanges();
             }
 
-            if (orderOut != null)
+            if (type == "out")
             {
-                Order order = GetOrder(db, orderOut.OrderId);
-                if (orderOut.OrderDistributed)
+                if (orderDistributed)
                 {
                     order.OrderDistributedBy = currentAppUserId;
                     order.OrderDistributionDateTime = DateTime.Now;
                     order.OrderOutStatus = OrderOutStatusEnum.Despatched;
                 }
-                if (orderOut.OrderDelivered)
+                if (orderDelivered)
                 {
                     order.OrderDeliveredBy = currentAppUserId;
                     order.OrderDeliveredDateTime = DateTime.Now;
                     order.OrderOutStatus = OrderOutStatusEnum.Delivered;
                 }
-                if (orderOut.OrderOutClosed)
+                if (orderOutClosed)
                 {
                     order.OrderOutClosedBy = currentAppUserId;
                     order.OrderOutClosedDateTime = DateTime.Now;
@@ -151,6 +163,8 @@ namespace Distributor.Helpers
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
             }
+
+            return order;
         }
 
         #endregion

@@ -28,5 +28,29 @@ namespace Distributor.Controllers
             }
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult Display([Bind(Include = "DisplayOnly,Breadcrumb,Type,OrderId,OrderDistributionDateTime,OrderDistributed,OrderDistributedBy,OrderDeliveredDateTime,OrderDelivered,OrderDeliveredBy,OrderCollectedDateTime,OrderCollected,OrderCollectedBy,OrderReceivedDateTime,OrderReceived,OrderReceivedBy,OrderInClosedDateTime,OrderInClosed,OrderInClosedBy,OrderOutClosedDateTime,OrderOutClosed,OrderOutClosedBy,CallingController,CallingAction,CallingActionDisplayName")] OrderViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("Display", "Order", new { id = model.OrderId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, type = model.Type, recalled = true, controllerValue = model.CallingController, actionValue = model.CallingAction });
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["savebutton"] != null)
+                    //Update order
+                    OrderHelpers.UpdateOrder(db, model, User);
+
+                return RedirectToAction(model.CallingAction, model.CallingController);
+            }
+
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, model.Breadcrumb);
+            model.BreadcrumbDictionary = breadcrumbDictionary;
+            model.BreadcrumbTrail = breadcrumbDictionary;
+            return View(model);
+        }
     }
 }

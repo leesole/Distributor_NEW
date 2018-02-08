@@ -115,48 +115,73 @@ namespace Distributor.ViewModels
         [Display(Name = "Distribution date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderDistributionDateTime { get; set; }
+        [Display(Name = "Distributed")]
+        public bool OrderDistributed { get; set; }
+        [Display(Name = "Distributed by")]
         public string OrderDistributedBy { get; set; }
 
         [Display(Name = "Delivered date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderDeliveredDateTime { get; set; }
+        [Display(Name = "Delivered")]
+        public bool OrderDelivered { get; set; }
+        [Display(Name = "Delivered by")]
         public string OrderDeliveredBy { get; set; }
 
 
         [Display(Name = "Collection date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderCollectedDateTime { get; set; }
+        [Display(Name = "Collected")]
+        public bool OrderCollected { get; set; }
+        [Display(Name = "Collected by")]
         public string OrderCollectedBy { get; set; }
 
         [Display(Name = "Received date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderReceivedDateTime { get; set; }
+        [Display(Name = "Received")]
+        public bool OrderReceived { get; set; }
+        [Display(Name = "Received by")]
         public string OrderReceivedBy { get; set; }
 
         [Display(Name = "Closed date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderInClosedDateTime { get; set; }
+        [Display(Name = "Closed")]
+        public bool OrderInClosed { get; set; }
+        [Display(Name = "Closed by")]
         public string OrderInClosedBy { get; set; }
 
         [Display(Name = "Closed date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? OrderOutClosedDateTime { get; set; }
+        [Display(Name = "Closed")]
+        public bool OrderOutClosed { get; set; }
+        [Display(Name = "Closed by")]
         public string OrderOutClosedBy { get; set; }
 
+        [Display(Name = "Order by")]
         public string OrderOriginatorAppUser { get; set; }
+        [Display(Name = "Oganisation")]
         public string OrderOriginatorOrganisation { get; set; }
+        [Display(Name = "Order date")]
         public DateTime? OrderOriginatorDateTime { get; set; }
 
 
         //Reference keys
         //references to the offer originator
         public Guid? OfferId { get; set; }
+        [Display(Name = "Offer by")]
         public string OfferOriginatorAppUser { get; set; }
+        [Display(Name = "Organisation")]
         public string OfferOriginatorOrganisation { get; set; }
 
         //references to the listing originator
         public Guid? ListingId { get; set; }
+        [Display(Name = "Listing by")]
         public string ListingOriginatorAppUser { get; set; }
+        [Display(Name = "Organisation")]
         public string ListingOriginatorOrganisation { get; set; }
     }
 }

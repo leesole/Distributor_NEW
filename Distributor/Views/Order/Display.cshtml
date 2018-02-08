@@ -51,138 +51,342 @@
 {
     @Html.AntiForgeryToken()
 
+    @Html.HiddenFor(model => model.DisplayOnly)
+    @Html.HiddenFor(model => model.Breadcrumb)
+    @Html.HiddenFor(model => model.BreadcrumbDictionary)
+    @Html.HiddenFor(model => model.CallingController)
+    @Html.HiddenFor(model => model.CallingAction)
+    @Html.HiddenFor(model => model.CallingActionDisplayName)
+    @Html.HiddenFor(model => model.BreadcrumbTrail)
+    @Html.HiddenFor(model => model.Type)
+    @Html.HiddenFor(model => model.OrderId)
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-green">
-                <div class="panel-heading">Order details</div>
+                <div class="panel-heading">Order details - @Model.Type</div>
                 <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">@Model.ListingType.DisplayName()</div>
+                                <div class="panel-body">
+                                    <div class="col-md-7">
+                                        <table style="width:100%;" class="table table-striped table-bordered table-hover" id="listingTable">
+                                            <thead>
+                                                <tr class="primary">
+                                                    <th>Description</th>
+                                                    <th>Type</th>
+                                                    <th>Qty</th>
+                                                    <th>UoM</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id=@Model.ListingId>
+                                                    <td>@Html.DisplayFor(model => model.ItemDescription)</td>
+                                                    <td>@Model.ItemType.DisplayName()</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderQuanity)</td>
+                                                    <td>@Html.DisplayFor(model => model.UoM)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-horizontal">
+                                            @Html.HiddenFor(model => model.ListingOriginatorAppUser)
+                                            @Html.HiddenFor(model => model.ListingOriginatorOrganisation)
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ListingOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.DisplayFor(model => model.ListingOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                @Html.LabelFor(model => model.ListingOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-4" })
+                                                <div class="col-md-8">
+                                                    @Html.DisplayFor(model => model.ListingOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-7">
                             <div class="form-horizontal">
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                                @Html.HiddenFor(model => model.DisplayOnly)
-                                @Html.HiddenFor(model => model.Breadcrumb)
-                                @Html.HiddenFor(model => model.BreadcrumbDictionary)
-                                @Html.HiddenFor(model => model.CallingController)
-                                @Html.HiddenFor(model => model.CallingAction)
-                                @Html.HiddenFor(model => model.CallingActionDisplayName)
-                                @Html.HiddenFor(model => model.BreadcrumbTrail)
-                                @Html.HiddenFor(model => model.Type)
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.Type</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.ListingType, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.ListingType.DisplayName()</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.ItemDescription, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.ItemType.DisplayName()</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.UoM, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.UoM, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderQuanity, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderQuanity, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
 
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.OrderCreationDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
                                     <div class="col-md-7">@Html.DisplayFor(model => model.OrderCreationDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
                                 </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderInStatus, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.OrderInStatus.DisplayName()</div>
-                                </div>
+                                @if (Model.Type == "in")
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderInStatus, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Model.OrderInStatus.DisplayName()</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderCollectedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderCollectedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
+                                    
+                                    if (!Model.DisplayOnly && !Model.OrderCollectedDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderCollected, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderCollected, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderCollectedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderCollectedBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderReceivedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderReceivedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    if (!Model.DisplayOnly && !Model.OrderReceivedDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderReceived, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderReceived, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderReceivedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderReceivedBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderInClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderInClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    if (!Model.DisplayOnly && !Model.OrderInClosedDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderInClosed, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderInClosed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderInClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                }
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderInClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                @if (Model.Type == "out")
+                                {
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderOutStatus, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Model.OrderOutStatus.DisplayName()</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderOutStatus, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Model.OrderOutStatus.DisplayName()</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderDistributionDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributionDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderDistributionDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributionDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    if (!Model.DisplayOnly && !Model.OrderDistributionDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderDistributed, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDistributed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderDistributedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderDistributedBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderDeliveredDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderDeliveredDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    if (!Model.DisplayOnly && !Model.OrderDeliveredDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderDelivered, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDelivered, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderDeliveredBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderDeliveredBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderOutClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
 
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderOutClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
-                                <div class="form-group">
-                                    @Html.LabelFor(model => model.OrderOutClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
-                                    <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
-                                </div>
-
+                                    if (!Model.DisplayOnly && !Model.OrderOutClosedDateTime.HasValue)
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOutClosed, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderOutClosed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOutClosedBy, htmlAttributes: new { @class = "text-right col-md-5" })
+                                            <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                         <div class="col-md-5">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Order owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        @Html.HiddenFor(model => model.OrderOriginatorAppUser)
+                                        @Html.HiddenFor(model => model.OrderOriginatorOrganisation)
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DisplayFor(model => model.OrderOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OrderOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DisplayFor(model => model.OrderOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="panel panel-default">
+                                <div class="panel-heading">Offer owner details</div>
+                                <div class="panel-body">
+                                    <div class="form-horizontal">
+                                        @Html.HiddenFor(model => model.OfferOriginatorAppUser)
+                                        @Html.HiddenFor(model => model.OfferOriginatorOrganisation)
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferOriginatorAppUser, htmlAttributes: new { @class = "text-right col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DisplayFor(model => model.OfferOriginatorAppUser, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.OfferOriginatorOrganisation, htmlAttributes: new { @class = "text-right col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.DisplayFor(model => model.OfferOriginatorOrganisation, new { htmlAttributes = new { @class = "form-control" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel panel-default">
+                                @if (Model.Type == "in")
+                                {
+                                    <div class="panel-heading">Order out status</div>
+                                    <div class="panel-body">
+                                        <table style="width:100%;" class="table table-striped table-bordered table-hover" id="orderTable">
+                                            <thead>
+                                                <tr class="primary">
+                                                    <th>Status</th>
+                                                    <th colspan="2">Distributed</th>
+                                                    <th colspan="2">Delivered</th>
+                                                    <th colspan="2">Closed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id=@Model.ListingId>
+                                                    <td>@Model.OrderOutStatus.DisplayName()</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderDistributionDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderDistributedBy)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderDeliveredDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderDeliveredBy)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderOutClosedDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderOutClosedBy)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                                @if (Model.Type == "out")
+                                {
+                                    <div class="panel-heading">Order in status</div>
+                                    <div class="panel-body">
+                                        <table style="width:100%;" class="table table-striped table-bordered table-hover" id="orderTable">
+                                            <thead>
+                                                <tr class="primary">
+                                                    <th>Status</th>
+                                                    <th colspan="2">Collected</th>
+                                                    <th colspan="2">Received</th>
+                                                    <th colspan="2">Closed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id=@Model.ListingId>
+                                                    <td>@Model.OrderInStatus.DisplayName()</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderCollectedDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderCollectedBy)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderReceivedDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderReceivedBy)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderInClosedDateTime)</td>
+                                                    <td>@Html.DisplayFor(model => model.OrderInClosedBy)</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
+                @if (!Model.DisplayOnly)
+                {
+                    <div class="panel-footer clearfix">
+                        <div class="col-sm-6"><button type="submit" name="savebutton" class="btn btn-primary btn-lg btn-block"><span class="glyphicon glyphicon-save"></span> Save</button></div>
+                        <div class="col-sm-6"><button type="submit" name="resetbutton" class="btn btn-danger btn-lg btn-block"><span class="fa fa-undo"></span> Reset</button></div>
+                    </div>
+                }
             </div>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        //Render tables
+        //$(document).ready(function () {
+        //    $('#listingTable').dataTable({
+        //        responsive: true
+        //    });
+        //});
+    </script>
 }
