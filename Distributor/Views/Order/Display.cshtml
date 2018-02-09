@@ -127,19 +127,14 @@
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.OrderInStatus, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Model.OrderInStatus.DisplayName()</div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderCollectedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderCollectedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-7"><b>@Model.OrderInStatus.DisplayName()</b></div>
                                     </div>
                                     
                                     if (!Model.DisplayOnly && !Model.OrderCollectedDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderCollected, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderCollected, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderCollected, new { onchange = "setDate(this)" })</div>
                                         </div>
                                     }
                                     else
@@ -151,15 +146,15 @@
                                     }
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderReceivedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderReceivedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        @Html.LabelFor(model => model.OrderCollectedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderCollectedDateTime">@Html.DisplayFor(model => model.OrderCollectedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
                                     </div>
 
                                     if (!Model.DisplayOnly && !Model.OrderReceivedDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderReceived, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderReceived, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderReceived, new { onchange = "setDate(this)" })</div>
                                         </div>
                                     }
                                     else
@@ -171,15 +166,15 @@
                                     }
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderInClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        @Html.LabelFor(model => model.OrderReceivedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderReceivedDateTime">@Html.DisplayFor(model => model.OrderReceivedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
                                     </div>
 
                                     if (!Model.DisplayOnly && !Model.OrderInClosedDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderInClosed, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderInClosed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderInClosed, new { onchange = "setDate(this)" })</div>
                                         </div>
                                     }
                                     else
@@ -189,25 +184,25 @@
                                             <div class="col-md-7">@Html.DisplayFor(model => model.OrderInClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
                                         </div>
                                     }
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderInClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderInClosedDateTime">@Html.DisplayFor(model => model.OrderInClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
                                 }
 
                                 @if (Model.Type == "out")
                                 {
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.OrderOutStatus, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Model.OrderOutStatus.DisplayName()</div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderDistributionDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderDistributionDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        <div class="col-md-7"><b>@Model.OrderOutStatus.DisplayName()</b></div>
                                     </div>
 
                                     if (!Model.DisplayOnly && !Model.OrderDistributionDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderDistributed, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDistributed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDistributed, new { onchange = "setDate(this)"})</div>
                                         </div>
                                     }
                                     else
@@ -219,15 +214,15 @@
                                     }
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderDeliveredDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderDeliveredDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        @Html.LabelFor(model => model.OrderDistributionDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderDistributionDateTime">@Html.DisplayFor(model => model.OrderDistributionDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
                                     </div>
 
                                     if (!Model.DisplayOnly && !Model.OrderDeliveredDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderDelivered, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDelivered, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderDelivered, new { onchange = "setDate(this)" })</div>
                                         </div>
                                     }
                                     else
@@ -239,15 +234,15 @@
                                     }
 
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.OrderOutClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
-                                        <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                        @Html.LabelFor(model => model.OrderDeliveredDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderDeliveredDateTime">@Html.DisplayFor(model => model.OrderDeliveredDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
                                     </div>
 
                                     if (!Model.DisplayOnly && !Model.OrderOutClosedDateTime.HasValue)
                                     {
                                         <div class="form-group">
                                             @Html.LabelFor(model => model.OrderOutClosed, htmlAttributes: new { @class = "text-right col-md-5" })
-                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderOutClosed, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                            <div class="col-md-7">@Html.CheckBoxFor(model => model.OrderOutClosed, new { onchange = "setDate(this)" })</div>
                                         </div>
                                     }
                                     else
@@ -257,6 +252,11 @@
                                             <div class="col-md-7">@Html.DisplayFor(model => model.OrderOutClosedBy, new { htmlAttributes = new { @class = "form-control" } })</div>
                                         </div>
                                     }
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderOutClosedDateTime, htmlAttributes: new { @class = "text-right col-md-5" })
+                                        <div class="col-md-7" id="OrderOutClosedDateTime">@Html.DisplayFor(model => model.OrderOutClosedDateTime, new { htmlAttributes = new { @class = "form-control" } })</div>
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -382,11 +382,25 @@
 @section Scripts {
     <script type="text/javascript">
 
-        //Render tables
-        //$(document).ready(function () {
-        //    $('#listingTable').dataTable({
-        //        responsive: true
-        //    });
-        //});
+        function setDate(item) {
+            if (item.checked) {
+                var date = new Date();
+
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+
+                if (month < 10) month = "0" + month;
+                if (day < 10) day = "0" + day;
+
+                var today = day + "-" + month + "-" + year;
+
+                document.getElementById(item.id + "DateTime").innerHTML = today;
+                document.getElementById(item.id + "DateTime").value = today;
+            }
+            else {
+                document.getElementById(item.id + "DateTime").innerHTML = "";
+            }
+        }
     </script>
 }
