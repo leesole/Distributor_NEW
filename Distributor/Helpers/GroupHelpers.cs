@@ -174,7 +174,6 @@ namespace Distributor.Helpers
         //Get all groupmembers IDs from all groups that have given organisation - do not list given organisation
         public static List<Guid> GetGroupsMembersOrgGuidsForGroupsFromOrg(ApplicationDbContext db, Guid organisationId)
         {
-            //LSLSLS
             //Having issues with the group member set up - members not right.
             List<Guid> groupId = (from g in db.Groups
                                   join gm in db.GroupMembers on g.GroupId equals gm.GroupId

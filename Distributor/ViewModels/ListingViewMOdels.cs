@@ -82,7 +82,7 @@ namespace Distributor.ViewModels
         public ItemRequiredListingStatusEnum ListingStatus { get; set; }
 
         [Display(Name = "Listing location")]
-        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
 
 
         [Display(Name = "Change")]
@@ -453,7 +453,7 @@ namespace Distributor.ViewModels
         public ItemRequiredListingStatusEnum ListingStatus { get; set; }
 
         [Display(Name = "Listing location")]
-        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens  //LSLSLS Need to update this if changed by Admin
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
 
 
         [Display(Name = "Change")]
