@@ -5,27 +5,27 @@ using System.Linq;
 using System.Web;
 using static Distributor.Enums.EntityEnums;
 using static Distributor.Enums.GeneralEnums;
-using static Distributor.Enums.UserActionEnums;
+using static Distributor.Enums.UserNotificationEnums;
 
 namespace Distributor.Models
 {
-    public class UserAction
+    public class Notification
     {
         [Key]
-        public Guid UserActionId { get; set; }
+        public Guid NotificationId { get; set; }
 
         [Required]
-        [Display(Name = "Action type")]
-        public ActionTypeEnum ActionType { get; set; }
+        [Display(Name = "Notification type")]
+        public NotificationTypeEnum NotificationType { get; set; }
 
         [Display(Name = "Description")]
-        public string ActionDescription { get; set; }
+        public string NotificationDescription { get; set; }
 
         public Guid ReferenceKey { get; set; }  //this is used to hold the key of the reference file - i.e. OfferId for offers etc
 
-        public Guid? AppUserId { get; set; }  //the AppUserId that this action is for (if any)
+        public Guid? AppUserId { get; set; }  //the AppUserId that this Notification is for (if any)
 
-        public Guid OrganisationId { get; set; }  //the Organisation that this action is for
+        public Guid OrganisationId { get; set; }  //the Organisation that this Notification is for
 
         [Display(Name = "Status")]
         public EntityStatusEnum EntityStatus { get; set; }

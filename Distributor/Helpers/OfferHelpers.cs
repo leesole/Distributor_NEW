@@ -8,7 +8,7 @@ using System.Security.Principal;
 using System.Web;
 using static Distributor.Enums.GeneralEnums;
 using static Distributor.Enums.OfferEnums;
-using static Distributor.Enums.UserActionEnums;
+using static Distributor.Enums.UserNotificationEnums;
 using static Distributor.Enums.UserTaskEnums;
 
 namespace Distributor.Helpers
@@ -97,7 +97,7 @@ namespace Distributor.Helpers
 
             //Create Action
             Organisation org = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
-            UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, currentUser.AppUserId, org.OrganisationId, user);
+            NotificationHelpers.CreateNotification(db, NotificationTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, listingOrigAppUserId, listingOrigOrgId, user);
 
             return offer;
         }
@@ -143,10 +143,6 @@ namespace Distributor.Helpers
 
                         db.Entry(offer).State = EntityState.Modified;
                         db.SaveChanges();
-
-                        //Create Action
-                        Organisation org = OrganisationHelpers.GetOrganisation(db, offer.CounterOfferOriginatorOrganisationId.Value);
-                        UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, AppUserHelpers.GetAppUserIdFromUser(user), org.OrganisationId, user);
                     }
                     break;
                 case OfferStatusEnum.Countered: //update counter value and move current offer to previous offer
@@ -171,13 +167,12 @@ namespace Distributor.Helpers
 
                         db.Entry(offer).State = EntityState.Modified;
                         db.SaveChanges();
-
-                        //Create Action
-                        Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
-                        UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, AppUserHelpers.GetAppUserIdFromUser(user), org.OrganisationId, user);
                     }
                     break;
             }
+            //Create Action
+            Organisation org = OrganisationHelpers.GetOrganisation(db, AppUserHelpers.GetAppUser(db, AppUserHelpers.GetAppUserIdFromUser(user)).OrganisationId);
+            NotificationHelpers.CreateNotification(db, NotificationTypeEnum.NewOfferReceived, "New offer received from " + org.OrganisationName, offer.OfferId, offer.ListingOriginatorAppUserId.Value, offer.ListingOriginatorOrganisationId.Value, user);
 
             return offer;
         }
@@ -230,7 +225,7 @@ namespace Distributor.Helpers
             db.SaveChanges();
 
             //set any related actions to Closed
-            UserActionHelpers.RemoveUserActionsForOffer(db, offerId, user);
+            NotificationHelpers.RemoveNotificationsForOffer(db, offerId, user);
 
             //set any related current offers to closed if there is no stock left (currentOfferQuantity = 0)
             if (offer.CurrentOfferQuantity == 0)
@@ -238,7 +233,7 @@ namespace Distributor.Helpers
 
             //Create Action to show order ready
             Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
-            UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
+            NotificationHelpers.CreateNotification(db, NotificationTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
 
             return offer;
         }
@@ -256,7 +251,7 @@ namespace Distributor.Helpers
             db.SaveChanges();
 
             //set any related actions to Closed
-            UserActionHelpers.RemoveUserActionsForOffer(db, offerId, user);
+            NotificationHelpers.RemoveNotificationsForOffer(db, offerId, user);
 
             return offer;
         }

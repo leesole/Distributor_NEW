@@ -7,9 +7,9 @@ using System.Web;
 
 namespace Distributor.Enums
 {
-    public class UserActionEnums
+    public class UserNotificationEnums
     {
-        public enum ActionTypeEnum
+        public enum NotificationTypeEnum
         {
             [Description("New offer received")]
             [Display(Name = "New offer received")]
@@ -21,7 +21,7 @@ namespace Distributor.Enums
 
             [Description("New order received")]
             [Display(Name = "New order received")]
-            NewOrderReceived = 0,
+            NewOrderReceived = 2,
         }
     }
 }

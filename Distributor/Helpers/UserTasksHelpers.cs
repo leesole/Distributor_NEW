@@ -50,7 +50,6 @@ namespace Distributor.Helpers
 
         public static UserTask CreateUserTask(TaskTypeEnum taskType, string taskDescription, Guid referenceKey, string referenceEmail, Guid referenceOrganisation, IPrincipal user)
         {
-
             ApplicationDbContext db = new ApplicationDbContext();
             UserTask userTask = CreateUserTask(db, taskType, taskDescription, referenceKey, referenceEmail, referenceOrganisation, user);
             db.Dispose();

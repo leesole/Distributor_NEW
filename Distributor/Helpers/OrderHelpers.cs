@@ -137,6 +137,11 @@ namespace Distributor.Helpers
 
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
+
+                //If order closed then add Action to Organisation of order out if they haven't closed their side yet saying this is closed  //LSLSLS
+
+                //Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
+                //UserActionHelpers.CreateUserAction(db, ActionTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
             }
 
             if (type == "out")
@@ -162,6 +167,8 @@ namespace Distributor.Helpers
 
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
+
+                //If order closed then add Action to Organisation of order out if they haven't closed their side yet saying this is closed    //LSLSLS
             }
 
             return order;

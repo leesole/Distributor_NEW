@@ -203,6 +203,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ManageInfoController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\OrganisationsController.cs" />
@@ -215,7 +216,7 @@
     <Compile Include="Enums\ItemEnums.cs" />
     <Compile Include="Enums\OfferEnums.cs" />
     <Compile Include="Enums\OrderEnums.cs" />
-    <Compile Include="Enums\UserActionEnums.cs" />
+    <Compile Include="Enums\UserNotificationEnums.cs" />
     <Compile Include="Enums\UserEnums.cs" />
     <Compile Include="Enums\UserTaskEnums.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
@@ -233,7 +234,7 @@
     <Compile Include="Helpers\OrderHelpers.cs" />
     <Compile Include="Helpers\OrganisationHelpers.cs" />
     <Compile Include="Helpers\RequiredListingHelpers.cs" />
-    <Compile Include="Helpers\UserActionHelpers.cs" />
+    <Compile Include="Helpers\NotificationHelpers.cs" />
     <Compile Include="Helpers\UserTasksHelpers.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.cs" />
     <Compile Include="Migrations\201712081350347_InitialCreate.Designer.cs">
@@ -367,6 +368,10 @@
     <Compile Include="Migrations\201802071458594_33rd.Designer.cs">
       <DependentUpon>201802071458594_33rd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802091440163_34th.cs" />
+    <Compile Include="Migrations\201802091440163_34th.Designer.cs">
+      <DependentUpon>201802091440163_34th.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppUser.cs" />
@@ -374,10 +379,10 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\LisitingModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Offer.cs" />
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\Organisation.cs" />
-    <Compile Include="Models\UserActionModels.cs" />
     <Compile Include="Models\UserTasksModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -388,6 +393,7 @@
     <Compile Include="ViewModels\HomeDashboardView.cs" />
     <Compile Include="ViewModels\HomeOrganisationDetailsView.cs" />
     <Compile Include="ViewModels\ListingViewModels.cs" />
+    <Compile Include="ViewModels\NotificationViewModels.cs" />
     <Compile Include="ViewModels\OfferViewModels.cs" />
     <Compile Include="ViewModels\OrderViewModels.cs" />
     <Compile Include="ViewModels\UserTasksViewModels.cs" />
@@ -665,6 +671,8 @@
     <Content Include="Views\ManageInfo\Orders.cshtml" />
     <Content Include="Views\ManageInfo\OrdersHistory.cshtml" />
     <Content Include="Views\Order\Display.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
+    <Content Include="Views\Notifications\History.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -773,6 +781,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802071458594_33rd.resx">
       <DependentUpon>201802071458594_33rd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802091440163_34th.resx">
+      <DependentUpon>201802091440163_34th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
