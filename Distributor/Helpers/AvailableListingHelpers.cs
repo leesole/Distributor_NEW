@@ -204,6 +204,8 @@ namespace Distributor.Helpers
 
         public static AvailableListingGeneralViewListModel GetAvailableListingGeneralViewListModel(ApplicationDbContext db, IPrincipal user, int? maxDistance, double? maxAge)
         {
+            List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
+
             //Get user so we can get the settings to initialise the search on the screen
             AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
             Organisation currentOrg = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
@@ -212,142 +214,122 @@ namespace Distributor.Helpers
             int? maxDistanceFilter = maxDistance ?? currentUser.MaxDistanceFilter ?? 1500;
             double? maxAgeFilter = maxAge ?? currentUser.MaxAgeFilter ?? 9999;
 
-            List<AvailableListing> available = AvailableListingHelpers.GetAvailableListingForOrganisation(db, currentUser.OrganisationId, currentUser.SelectionLevelFilter, maxDistanceFilter, maxAgeFilter, true, false);
-            List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
-            
-            foreach (AvailableListing item in available)
+            //Get the group Member IDs from groups that this user/organisation are part of, so we can remove them from the list
+            List<Guid> groupMemberOrgIds = null;
+            if (currentUser.SelectionLevelFilter == ExternalSearchLevelEnum.Group)
+                groupMemberOrgIds = GroupMembersHelpers.GetGroupsMembersOrgGuidsForGroupsFromOrg(db, currentOrg.OrganisationId);
+
+            //build the age filter to apply when building list
+            double negativeDays = 0 - maxAgeFilter.Value;
+            var dateCheck = DateTime.Now.AddDays(negativeDays);
+
+            //build list depending on whether to filter on groups or not (settings, search level = groups)
+            if (groupMemberOrgIds == null)
             {
-                // set the expiry date to be sell by date, if this is null then set to use by date (which could also be null)
-                DateTime? expiryDate = item.SellByDate ?? item.UseByDate;
-
-                Organisation supplier = OrganisationHelpers.GetOrganisation(db, item.ListingOriginatorOrganisationId);
-
-                AvailableListingGeneralViewModel listItem = new AvailableListingGeneralViewModel()
-                {
-                    ListingId = item.ListingId,
-                    ItemDescription = item.ItemDescription,
-                    ItemType = item.ItemType,
-                    QuantityOutstanding = item.QuantityOutstanding,
-                    UoM = item.UoM,
-                    AvailableTo = item.AvailableTo,
-                    ItemCondition = item.ItemCondition,
-                    ExpiryDate = expiryDate,
-                    DeliveryAvailable = item.DeliveryAvailable,
-                    SupplierDetails = supplier.OrganisationName,
-                    Distance = DistanceHelpers.GetDistance(currentOrg.AddressPostcode, item.ListingOrganisationPostcode)
-                };
-
-                Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
-
-                if (offer == null)
-                {
-                    listItem.OfferQty = 0.00M;
-                }
-                else
-                {
-                    listItem.OfferId = offer.OfferId;
-                    listItem.OfferQty = offer.CurrentOfferQuantity;
-                }
-
-                list.Add(listItem);
+                list = (from al in db.AvailableListings
+                        join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
+                        where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                            && al.ListingOriginatorDateTime >= dateCheck)
+                        select new AvailableListingGeneralViewModel()
+                        {
+                            ListingId = al.ListingId,
+                            ItemDescription = al.ItemDescription,
+                            ItemType = al.ItemType,
+                            QuantityOutstanding = al.QuantityOutstanding,
+                            UoM = al.UoM,
+                            AvailableTo = al.AvailableTo,
+                            ItemCondition = al.ItemCondition,
+                            ExpiryDate = al.SellByDate ?? al.UseByDate,
+                            DeliveryAvailable = al.DeliveryAvailable,
+                            SupplierDetails = org.OrganisationName,
+                            ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId,
+                            ListingOrganisationPostcode = al.ListingOrganisationPostcode
+                        }).Distinct().ToList();
+            }
+            else
+            {
+                list = (from al in db.AvailableListings
+                        join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
+                        join grpmem in groupMemberOrgIds on al.ListingOriginatorOrganisationId equals grpmem
+                        where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                            && al.ListingOriginatorDateTime >= dateCheck)
+                        select new AvailableListingGeneralViewModel()
+                        {
+                            ListingId = al.ListingId,
+                            ItemDescription = al.ItemDescription,
+                            ItemType = al.ItemType,
+                            QuantityOutstanding = al.QuantityOutstanding,
+                            UoM = al.UoM,
+                            AvailableTo = al.AvailableTo,
+                            ItemCondition = al.ItemCondition,
+                            ExpiryDate = al.SellByDate ?? al.UseByDate,
+                            DeliveryAvailable = al.DeliveryAvailable,
+                            SupplierDetails = org.OrganisationName,
+                            ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId,
+                            ListingOrganisationPostcode = al.ListingOrganisationPostcode
+                        }).Distinct().ToList();
             }
 
-            ////--------------------------
-            //List<AvailableListingGeneralViewModel> list = new List<AvailableListingGeneralViewModel>();
+            //Filter by DISTANCE and add OFFER info also.
 
-            ////build the age filter to apply when building list
-            //double negativeDays = 0 - maxAgeFilter.Value;
-            //var dateCheck = DateTime.Now.AddDays(negativeDays);
+            //hold list of organisationIds already checked - set to true if within range
+            Dictionary<Guid, bool> listingOrgIds = new Dictionary<Guid, bool>();
 
-            //if (currentUser.SelectionLevelFilter == ExternalSearchLevelEnum.Group)
-            //{
-            //    list = (from al in db.AvailableListings
-            //                join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
-            //                where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
-            //                    && al.ListingOriginatorDateTime >= dateCheck)
-            //                select new AvailableListingGeneralViewModel()
-            //                {
-            //                    ListingId = al.ListingId,
-            //                    ItemDescription = al.ItemDescription,
-            //                    ItemType = al.ItemType,
-            //                    QuantityOutstanding = al.QuantityOutstanding,
-            //                    UoM = al.UoM,
-            //                    AvailableTo = al.AvailableTo,
-            //                    ItemCondition = al.ItemCondition,
-            //                    ExpiryDate = al.SellByDate ?? al.UseByDate,
-            //                    DeliveryAvailable = al.DeliveryAvailable,
-            //                    SupplierDetails = org.OrganisationName,
-            //                    ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId
-            //                }).Distinct().ToList();
+            //hold new list from old
+            List<AvailableListingGeneralViewModel> newList = new List<AvailableListingGeneralViewModel>();
 
-            //    //filter distance
+            foreach (AvailableListingGeneralViewModel item in list)
+            {
+                //if we have checked this org before then just add or not depending on flag
+                if (listingOrgIds.ContainsKey(item.ListingOriginatorOrganisationId))
+                {
+                    if (listingOrgIds[item.ListingOriginatorOrganisationId])
+                    {
+                        //quick check for offer
+                        Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
 
+                        if (offer == null)
+                            item.OfferQty = 0.00M;
+                        else
+                        {
+                            item.OfferId = offer.OfferId;
+                            item.OfferQty = offer.CurrentOfferQuantity;
+                        }
 
-            //    //filter the list by group if required
-            //    list = GroupFilters.FilterAvailableListingsByGroup(db, list, currentUser.OrganisationId);
+                        newList.Add(item);
+                    }
+                }
+                else  //add the org to the dictionary with the flag set and add to new list if within range
+                {
+                    int distanceValue = DistanceHelpers.GetDistance(currentOrg.AddressPostcode, item.ListingOrganisationPostcode);
+                    if (distanceValue <= maxDistanceFilter)
+                    {
+                        listingOrgIds.Add(item.ListingOriginatorOrganisationId, true);
 
-            //    foreach (AvailableListingGeneralViewModel itemLS in list)
-            //    {
-            //        Offer offer = OfferHelpers.GetOfferForListingByUser(db, itemLS.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+                        //quick check for offer
+                        Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
 
-            //        if (offer == null)
-            //        {
-            //            itemLS.OfferQty = 0.00M;
-            //        }
-            //        else
-            //        {
-            //            itemLS.OfferId = offer.OfferId;
-            //            itemLS.OfferQty = offer.CurrentOfferQuantity;
-            //        }
-            //    }
-            //}
-            //else
-            //{
-            //    list = (from al in db.AvailableListings
-            //              join org in db.Organisations on al.ListingOriginatorOrganisationId equals org.OrganisationId
-            //              where (al.ListingOriginatorOrganisationId != currentUser.OrganisationId && (al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || al.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
-            //                  && al.ListingOriginatorDateTime >= dateCheck)
-            //              select new AvailableListingGeneralViewModel()
-            //              {
-            //                  ListingId = al.ListingId,
-            //                  ItemDescription = al.ItemDescription,
-            //                  ItemType = al.ItemType,
-            //                  QuantityOutstanding = al.QuantityOutstanding,
-            //                  UoM = al.UoM,
-            //                  AvailableTo = al.AvailableTo,
-            //                  ItemCondition = al.ItemCondition,
-            //                  ExpiryDate = al.SellByDate ?? al.UseByDate,
-            //                  DeliveryAvailable = al.DeliveryAvailable,
-            //                  SupplierDetails = org.OrganisationName,
-            //                  ListingOriginatorOrganisationId = al.ListingOriginatorOrganisationId
-            //              }).Distinct().ToList();
+                        if (offer == null)
+                            item.OfferQty = 0.00M;
+                        else
+                        {
+                            item.OfferId = offer.OfferId;
+                            item.OfferQty = offer.CurrentOfferQuantity;
+                        }
 
-            //    //filter distance
-
-
-            //    foreach (AvailableListingGeneralViewModel itemLS in list)
-            //    {
-            //        Offer offer = OfferHelpers.GetOfferForListingByUser(db, itemLS.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
-
-            //        if (offer == null)
-            //        {
-            //            itemLS.OfferQty = 0.00M;
-            //        }
-            //        else
-            //        {
-            //            itemLS.OfferId = offer.OfferId;
-            //            itemLS.OfferQty = offer.CurrentOfferQuantity;
-            //        }
-            //    }
-            //}
-            ////----------------------------
+                        newList.Add(item);
+                    }
+                    else
+                        listingOrgIds.Add(item.ListingOriginatorOrganisationId, false);
+                }
+            }
 
             AvailableListingGeneralViewListModel model = new AvailableListingGeneralViewListModel()
             {
                 MaxDistance = maxDistanceFilter,
                 MaxAge = maxAgeFilter,
-                EditableFields = list.Any(x => x.OfferId == null),  //only set if there are no offers in the list
-                Listing = list
+                EditableFields = newList.Any(x => x.OfferId == null),  //only set if there are no offers in the list
+                Listing = newList
             };
 
             return model;

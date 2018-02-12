@@ -276,6 +276,9 @@ namespace Distributor.ViewModels
         public decimal? OfferQty { get; set; }
 
         public Guid ListingOriginatorOrganisationId { get; set; }
+
+        [Display(Name = "Listing location")]
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
     }
 
     public class AvailableListingGeneralViewListModel
