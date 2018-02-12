@@ -673,6 +673,8 @@
     <Content Include="Views\Order\Display.cshtml" />
     <Content Include="Views\Notifications\Index.cshtml" />
     <Content Include="Views\Notifications\History.cshtml" />
+    <Content Include="Views\GeneralInfo\Required.cshtml" />
+    <Content Include="Views\GeneralInfo\DisplayRequired.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -31,7 +31,7 @@ namespace Distributor.Controllers
             {
                 if (Request.Form["savebutton"] != null)
                     //Create offers
-                    OfferHelpers.CreateOffers(db, model, ListingTypeEnum.Available, User);
+                    OfferHelpers.CreateOffers(db, model, null, ListingTypeEnum.Available, User);
 
                 return RedirectToAction("Available", "GeneralInfo", new { maxDistance = model.MaxDistance, maxAge = model.MaxAge });
             }
@@ -87,9 +87,82 @@ namespace Distributor.Controllers
 
             return View(model);
         }
+        
         #endregion
 
         #region RequiredListings
+
+        public ActionResult Required(int? maxDistance, double? maxAge)
+        {
+            RequiredListingGeneralViewListModel model = RequiredListingViewHelpers.GetRequiredListingGeneralViewListModel(db, User, maxDistance, maxAge);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Required(RequiredListingGeneralViewListModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["savebutton"] != null)
+                    //Create offers
+                    OfferHelpers.CreateOffers(db, null, model, ListingTypeEnum.Requirement, User);
+
+                return RedirectToAction("Required", "GeneralInfo", new { maxDistance = model.MaxDistance, maxAge = model.MaxAge });
+            }
+
+            return View(model);
+        }
+
+        public ActionResult DisplayRequired(Guid? id, string breadcrumb, string callingActionDisplayName, bool displayOnly, bool? recalled, string defaultController, string defaultAction, int? maxDistance, double? maxAge)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Dictionary<int, string> breadcrumbDictionary = new Dictionary<int, string>();
+            breadcrumbDictionary.Add(0, breadcrumb);
+
+            if (!recalled.HasValue)
+            {
+                defaultController = "GeneralInfo";
+                defaultAction = "Required";
+            }
+
+            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User, maxDistance, maxAge);
+
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.ListingType = "General Information";
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult DisplayRequired([Bind(Include = "MaxDistance,MaxAge,Breadcrumb,DisplayOnly,CallingAction,CallingController,CallingActionDisplayName,ListingId,ItemDescription,ItemCategory,ItemType,QuantityRequired,QuantityFulfilled,QuantityOutstanding,UoM,RequiredFrom,RequiredTo,AcceptDamagedItems,AcceptOutOfDateItems,CollectionAvailable,ListingStatus,ListingOrganisationPostcode,OfferDescription,OfferId,OfferQty,OfferCounterQty,OfferStatus")] RequiredListingDetailsViewModel model)
+        {
+            if (Request.Form["resetbutton"] != null)
+            {
+                return RedirectToAction("DisplayRequired", "GeneralInfo", new { id = model.ListingId, breadcrumb = model.Breadcrumb, callingActionDisplayName = model.CallingActionDisplayName, displayOnly = model.DisplayOnly, recalled = true, defaultController = model.CallingController, defaultAction = model.CallingAction, maxDistance = model.MaxDistance, maxAge = model.MaxAge });
+            }
+
+            if (ModelState.IsValid)
+            {
+                if (Request.Form["saveofferbutton"] != null)
+                    OfferHelpers.CreateOffer(db, model.ListingId, model.OfferQty, ListingTypeEnum.Requirement, null, User);
+
+                if (Request.Form["savebutton"] != null)
+                    RequiredListingHelpers.UpdateRequiredListing(db, model, User);
+
+                return RedirectToAction(model.CallingAction, model.CallingController);
+            }
+
+            return View(model);
+        }
+
         #endregion
 
         protected override void Dispose(bool disposing)

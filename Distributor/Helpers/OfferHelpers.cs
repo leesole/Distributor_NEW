@@ -102,20 +102,36 @@ namespace Distributor.Helpers
             return offer;
         }
 
-        public static List<Offer> CreateOffers(ApplicationDbContext db, AvailableListingGeneralViewListModel model, ListingTypeEnum listingType, IPrincipal user)
+        public static List<Offer> CreateOffers(ApplicationDbContext db, AvailableListingGeneralViewListModel availableModel, RequiredListingGeneralViewListModel requiredModel, ListingTypeEnum listingType, IPrincipal user)
         {
             AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
 
             List<Offer> createdOffers = new List<Offer>();
 
-            //go through the records, if there are offer qty's > 0 then create an offer from these
-            foreach (AvailableListingGeneralViewModel item in model.Listing)
+            if (listingType == ListingTypeEnum.Available)
             {
-                if (item.OfferQty.HasValue)
-                    if (item.OfferQty > 0)
-                        //only create offers if they don't already exist
-                        if (OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentUser.OrganisationId, LevelEnum.Organisation) == null)
-                            createdOffers.Add(CreateOffer(db, item.ListingId, item.OfferQty, listingType, currentUser, user));
+                //go through the records, if there are offer qty's > 0 then create an offer from these
+                foreach (AvailableListingGeneralViewModel item in availableModel.Listing)
+                {
+                    if (item.OfferQty.HasValue)
+                        if (item.OfferQty > 0)
+                            //only create offers if they don't already exist
+                            if (OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentUser.OrganisationId, LevelEnum.Organisation) == null)
+                                createdOffers.Add(CreateOffer(db, item.ListingId, item.OfferQty, listingType, currentUser, user));
+                }
+            }
+
+            if (listingType == ListingTypeEnum.Requirement)
+            {
+                //go through the records, if there are offer qty's > 0 then create an offer from these
+                foreach (RequiredListingGeneralViewModel item in requiredModel.Listing)
+                {
+                    if (item.RequiredQty.HasValue)
+                        if (item.RequiredQty > 0)
+                            //only create offers if they don't already exist
+                            if (OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentUser.OrganisationId, LevelEnum.Organisation) == null)
+                                createdOffers.Add(CreateOffer(db, item.ListingId, item.RequiredQty, listingType, currentUser, user));
+                }
             }
 
             return createdOffers;

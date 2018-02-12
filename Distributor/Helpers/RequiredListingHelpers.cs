@@ -165,6 +165,145 @@ namespace Distributor.Helpers
     {
         #region Get
 
+        #region General Info
+
+        public static RequiredListingGeneralViewListModel GetRequiredListingGeneralViewListModel(ApplicationDbContext db, IPrincipal user, int? maxDistance, double? maxAge)
+        {
+            List<RequiredListingGeneralViewModel> list = new List<RequiredListingGeneralViewModel>();
+
+            //Get user so we can get the settings to initialise the search on the screen
+            AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
+            Organisation currentOrg = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
+
+            //set the search criteria.  If nothing passed in then take the values from the settings.  If values past in then this is the dynamic changes made on the list screen and resubmitted
+            int? maxDistanceFilter = maxDistance ?? currentUser.MaxDistanceFilter ?? 1500;
+            double? maxAgeFilter = maxAge ?? currentUser.MaxAgeFilter ?? 9999;
+
+            //Get the group Member IDs from groups that this user/organisation are part of, so we can remove them from the list
+            List<Guid> groupMemberOrgIds = null;
+            if (currentUser.SelectionLevelFilter == ExternalSearchLevelEnum.Group)
+                groupMemberOrgIds = GroupMembersHelpers.GetGroupsMembersOrgGuidsForGroupsFromOrg(db, currentOrg.OrganisationId);
+
+            //build the age filter to apply when building list
+            double negativeDays = 0 - maxAgeFilter.Value;
+            var dateCheck = DateTime.Now.AddDays(negativeDays);
+
+            //build list depending on whether to filter on groups or not (settings, search level = groups)
+            if (groupMemberOrgIds == null)
+            {
+                list = (from rl in db.RequiredListings
+                        join org in db.Organisations on rl.ListingOriginatorOrganisationId equals org.OrganisationId
+                        where (rl.ListingOriginatorOrganisationId != currentUser.OrganisationId && (rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                            && rl.ListingOriginatorDateTime >= dateCheck)
+                        select new RequiredListingGeneralViewModel()
+                        {
+                            ListingId = rl.ListingId,
+                            ItemDescription = rl.ItemDescription,
+                            ItemType = rl.ItemType,
+                            QuantityOutstanding = rl.QuantityOutstanding,
+                            UoM = rl.UoM,
+                            RequiredTo = rl.RequiredTo,
+                            AcceptDamagedItems = rl.AcceptDamagedItems,
+                            AcceptOutOfDateItems = rl.AcceptOutOfDateItems,
+                            CollectionAvailable = rl.CollectionAvailable,
+                            RequesterDetails = org.OrganisationName,
+                            ListingOriginatorOrganisationId = rl.ListingOriginatorOrganisationId,
+                            ListingOrganisationPostcode = rl.ListingOrganisationPostcode
+                        }).Distinct().ToList();
+            }
+            else
+            {
+                list = (from rl in db.RequiredListings
+                        join org in db.Organisations on rl.ListingOriginatorOrganisationId equals org.OrganisationId
+                        join grpmem in groupMemberOrgIds on rl.ListingOriginatorOrganisationId equals grpmem
+                        where (rl.ListingOriginatorOrganisationId != currentUser.OrganisationId && (rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Open || rl.ListingStatus == ItemEnums.ItemRequiredListingStatusEnum.Partial)
+                            && rl.ListingOriginatorDateTime >= dateCheck)
+                        select new RequiredListingGeneralViewModel()
+                        {
+                            ListingId = rl.ListingId,
+                            ItemDescription = rl.ItemDescription,
+                            ItemType = rl.ItemType,
+                            QuantityOutstanding = rl.QuantityOutstanding,
+                            UoM = rl.UoM,
+                            RequiredTo = rl.RequiredTo,
+                            AcceptDamagedItems = rl.AcceptDamagedItems,
+                            AcceptOutOfDateItems = rl.AcceptOutOfDateItems,
+                            CollectionAvailable = rl.CollectionAvailable,
+                            RequesterDetails = org.OrganisationName,
+                            ListingOriginatorOrganisationId = rl.ListingOriginatorOrganisationId,
+                            ListingOrganisationPostcode = rl.ListingOrganisationPostcode
+                        }).Distinct().ToList();
+            }
+
+            //Filter by DISTANCE and add OFFER info also.
+
+            //hold list of organisationIds already checked - set to true if within range
+            Dictionary<Guid, bool> listingOrgIds = new Dictionary<Guid, bool>();
+
+            //hold new list from old
+            List<RequiredListingGeneralViewModel> newList = new List<RequiredListingGeneralViewModel>();
+
+            foreach (RequiredListingGeneralViewModel item in list)
+            {
+                //if we have checked this org before then just add or not depending on flag
+                if (listingOrgIds.ContainsKey(item.ListingOriginatorOrganisationId))
+                {
+                    if (listingOrgIds[item.ListingOriginatorOrganisationId])
+                    {
+                        //quick check for offer
+                        Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+                        if (offer == null)
+                            item.RequiredQty = 0.00M;
+                        else
+                        {
+                            item.OfferId = offer.OfferId;
+                            item.RequiredQty = offer.CurrentOfferQuantity;
+                        }
+
+                        newList.Add(item);
+                    }
+                }
+                else  //add the org to the dictionary with the flag set and add to new list if within range
+                {
+                    int distanceValue = DistanceHelpers.GetDistance(currentOrg.AddressPostcode, item.ListingOrganisationPostcode);
+                    if (distanceValue <= maxDistanceFilter)
+                    {
+                        listingOrgIds.Add(item.ListingOriginatorOrganisationId, true);
+
+                        //quick check for offer
+                        Offer offer = OfferHelpers.GetOfferForListingByUser(db, item.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+                        if (offer == null)
+                            item.RequiredQty = 0.00M;
+                        else
+                        {
+                            item.OfferId = offer.OfferId;
+                            item.RequiredQty = offer.CurrentOfferQuantity;
+                        }
+
+                        newList.Add(item);
+                    }
+                    else
+                        listingOrgIds.Add(item.ListingOriginatorOrganisationId, false);
+                }
+            }
+
+            RequiredListingGeneralViewListModel model = new RequiredListingGeneralViewListModel()
+            {
+                MaxDistance = maxDistanceFilter,
+                MaxAge = maxAgeFilter,
+                EditableFields = newList.Any(x => x.OfferId == null),  //only set if there are no offers in the list
+                Listing = newList
+            };
+
+            return model;
+        }
+
+        #endregion
+
+        #region Manage Info
+
         public static List<RequiredListingManageViewModel> GetRequiredListingManageViewModel(ApplicationDbContext db, Guid organisationId)
         {
            List<RequiredListingManageViewModel> list = (from rl in db.RequiredListings
@@ -203,12 +342,13 @@ namespace Distributor.Helpers
             return list;
         }
 
+        #endregion
 
         #endregion
 
         #region Create
 
-        public static RequiredListingDetailsViewModel CreateRequiredListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled)
+        public static RequiredListingDetailsViewModel CreateRequiredListingDetailsViewModel(ApplicationDbContext db, Guid listingId, string breadcrumb, bool displayOnly, HttpRequestBase request, string controllerValue, string actionValue, string callingActionDisplayName, Dictionary<int, string> breadcrumbDictionary, bool? recalled, IPrincipal user, int? maxDistance, double? maxAge)
         {
             RequiredListing listing = RequiredListingHelpers.GetRequiredListing(db, listingId);
 
@@ -252,6 +392,28 @@ namespace Distributor.Helpers
                     CallingActionDisplayName = callingActionDisplayName,
                     BreadcrumbTrail = breadcrumbDictionary
                 };
+
+                if (controllerValue == "GeneralInfo" && actionValue == "Required")
+                {
+                    //Get user info for the offer side of the display
+                    AppUser currentUser = AppUserHelpers.GetAppUser(db, user);
+                    Organisation currentOrg = OrganisationHelpers.GetOrganisation(db, currentUser.OrganisationId);
+
+                    Offer offer = OfferHelpers.GetOfferForListingByUser(db, listing.ListingId, currentUser.AppUserId, currentOrg.OrganisationId, currentOrg.ListingPrivacyLevel);
+
+                    if (offer == null)
+                    {
+                        model.OfferDescription = "Make a request";
+                    }
+                    else
+                    {
+                        model.OfferDescription = "Current request";
+                        model.OfferId = offer.OfferId;
+                        model.OfferQty = offer.CurrentOfferQuantity;
+                        model.OfferCounterQty = offer.CounterOfferQuantity;
+                        model.OfferStatus = offer.OfferStatus;
+                    }
+                }
 
                 return model;
             }

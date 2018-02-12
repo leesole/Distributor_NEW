@@ -405,6 +405,13 @@ namespace Distributor.ViewModels
 
     public class RequiredListingDetailsViewModel : CallingFields
     {
+        //Max Age/Distance used when called from GeneralInfo/Available
+        [Display(Name = "Max age")]
+        public double? MaxAge { get; set; }
+
+        [Display(Name = "Max distance")]
+        public int? MaxDistance { get; set; }
+
         public string Breadcrumb { get; set; }  //Holds the breadcrumb list passed from the previous view
 
         public Dictionary<int, string> BreadcrumbDictionary { get; set; } //used to pass the build breadcrumb dictionary if 'RESET' button pressed as we have lost original details
@@ -475,13 +482,85 @@ namespace Distributor.ViewModels
         public string ListingOriginatorAppUserEmail { get; set; }
         [Display(Name = "Date created")]
         public DateTime ListingOriginatorDateTime { get; set; }
+
+
+        //Offer details - link to offer (for the user organisation that is viewing as there could be multiple offers from different organisations)
+        public string OfferDescription { get; set; }
+        public Guid? OfferId { get; set; }
+        [Display(Name = "Quantity requested")]
+        public decimal? OfferQty { get; set; }
+        [Display(Name = "Counter request")]
+        public decimal? OfferCounterQty { get; set; }
+        [Display(Name = "Offer status")]
+        public OfferStatusEnum? OfferStatus { get; set; }
     }
 
     #endregion
 
     #region General Info Views
+
+    public class RequiredListingGeneralViewModel
+    {
+        public Guid ListingId { get; set; }
+
+        [Required]
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
+
+        [Required]
+        [Display(Name = "Item type")]
+        public ItemTypeEnum ItemType { get; set; }
+
+        [Display(Name = "Quantity required")]
+        public decimal QuantityOutstanding { get; set; }
+
+        [Display(Name = "Unit of measure")]
+        public string UoM { get; set; }
+
+        [Display(Name = "Required to")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? RequiredTo { get; set; }
+
+        [Display(Name = "Accept damaged items?")]
+        public bool AcceptDamagedItems { get; set; }
+
+        [Display(Name = "Accept out-of-date items?")]
+        public bool AcceptOutOfDateItems { get; set; }
+
+        [Display(Name = "Can collect?")]
+        public bool CollectionAvailable { get; set; }
+
+        [Display(Name = "Requester details")]
+        public string RequesterDetails { get; set; }
+
+        [Display(Name = "Distance")]
+        public int Distance { get; set; }
+
+        public Guid? OfferId { get; set; }
+        [Display(Name = "Quantity required")]
+        public decimal? RequiredQty { get; set; }
+
+        public Guid ListingOriginatorOrganisationId { get; set; }
+
+        [Display(Name = "Listing location")]
+        public string ListingOrganisationPostcode { get; set; }  //Put here for quicker sorting in view screens
+    }
+
+    public class RequiredListingGeneralViewListModel
+    {
+        [Display(Name = "Max age")]
+        public double? MaxAge { get; set; }
+
+        [Display(Name = "Max distance")]
+        public int? MaxDistance { get; set; }
+
+        public bool EditableFields { get; set; }
+
+        public List<RequiredListingGeneralViewModel> Listing { get; set; }
+    }
+
     #endregion
 
     #endregion
-    
+
 }

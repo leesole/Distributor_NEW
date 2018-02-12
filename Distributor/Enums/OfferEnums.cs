@@ -11,8 +11,8 @@ namespace Distributor.Enums
     {
         public enum OfferStatusEnum
         {
-            [Description("New offer")]
-            [Display(Name = "New offer")]
+            [Description("New offer/request")]
+            [Display(Name = "New offer/request")]
             New = 0,
 
             [Description("Accepted")]
@@ -27,8 +27,8 @@ namespace Distributor.Enums
             [Display(Name = "Countered")]
             Countered = 3,
 
-            [Description("Re-offer")]
-            [Display(Name = "Re-offer")]
+            [Description("Re-offer/request")]
+            [Display(Name = "Re-offer/request")]
             Reoffer = 4,
 
             [Description("Closed - no stock")]

@@ -190,7 +190,7 @@ namespace Distributor.Controllers
                 defaultAction = "Required";
             }
 
-            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled);
+            RequiredListingDetailsViewModel model = RequiredListingViewHelpers.CreateRequiredListingDetailsViewModel(db, id.Value, breadcrumb, displayOnly, Request, defaultController, defaultAction, callingActionDisplayName, breadcrumbDictionary, recalled, User, null, null);
 
             if (model == null)
             {
