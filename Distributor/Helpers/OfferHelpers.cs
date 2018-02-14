@@ -43,6 +43,50 @@ namespace Distributor.Helpers
             return offer;
         }
 
+        public static List<Offer> GetOpenOffersCreatedForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            List<Offer> list = (from o in db.Offers
+                                join org in db.Organisations on o.ListingOriginatorOrganisationId equals org.OrganisationId
+                                where (o.OfferOriginatorOrganisationId == organisationId && (o.OfferStatus == OfferStatusEnum.New || o.OfferStatus == OfferStatusEnum.Countered || o.OfferStatus == OfferStatusEnum.Reoffer))
+                                select o).Distinct().ToList();
+
+            return list;
+        }
+
+        public static List<Offer> GetAllOffersCreatedClosedForWeekForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            DateTime weekAgo = DateTime.Now.AddDays(-7);
+
+            List<Offer> list = (from o in db.Offers
+                                join org in db.Organisations on o.ListingOriginatorOrganisationId equals org.OrganisationId
+                                where (o.OfferOriginatorOrganisationId == organisationId && ((o.OfferStatus == OfferStatusEnum.Accepted && o.AcceptedOn >= weekAgo) || (o.OfferStatus == OfferStatusEnum.Rejected && o.RejectedOn >= weekAgo) || (o.OfferStatus == OfferStatusEnum.ClosedNoStock && o.ClosedNoStockOn >= weekAgo))) 
+                                select o).Distinct().ToList();
+
+            return list;
+        }
+
+        public static List<Offer> GetOpenOffersReceivedForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            List<Offer> list = (from o in db.Offers
+                                join org in db.Organisations on o.OfferOriginatorOrganisationId equals org.OrganisationId
+                                where (o.ListingOriginatorOrganisationId == organisationId && (o.OfferStatus == OfferStatusEnum.New || o.OfferStatus == OfferStatusEnum.Countered || o.OfferStatus == OfferStatusEnum.Reoffer))
+                                select o).Distinct().ToList();
+
+            return list;
+        }
+
+        public static List<Offer> GetAllOffersReceivedClosedForWeekForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            DateTime weekAgo = DateTime.Now.AddDays(-7);
+
+            List<Offer> list = (from o in db.Offers
+                                join org in db.Organisations on o.OfferOriginatorOrganisationId equals org.OrganisationId
+                                where (o.ListingOriginatorOrganisationId == organisationId && ((o.OfferStatus == OfferStatusEnum.Accepted && o.AcceptedOn >= weekAgo) || (o.OfferStatus == OfferStatusEnum.Rejected && o.RejectedOn >= weekAgo) || (o.OfferStatus == OfferStatusEnum.ClosedNoStock && o.ClosedNoStockOn >= weekAgo)))
+                                select o).Distinct().ToList();
+
+            return list;
+        }
+
         #endregion
 
         #region Create
@@ -232,6 +276,8 @@ namespace Distributor.Helpers
             Order order = OrderHelpers.CreateOrder(db, offer, user);
 
             offer.OfferStatus = OfferStatusEnum.Accepted;
+            offer.AcceptedBy = appUser.AppUserId;
+            offer.AcceptedOn = DateTime.Now;
             offer.OrderId = order.OrderId;
             offer.OrderOriginatorAppUserId = appUser.AppUserId;
             offer.OrderOriginatorOrganisationId = appUser.OrganisationId;
@@ -287,6 +333,12 @@ namespace Distributor.Helpers
             Offer offer = OfferHelpers.GetOffer(db, offerId);
 
             offer.OfferStatus = newStatus;
+
+            if (newStatus == OfferStatusEnum.ClosedNoStock)
+            {
+                offer.ClosedNoStockBy = AppUserHelpers.GetAppUserIdFromUser(user);
+                offer.ClosedNoStockOn = DateTime.Now;
+            }
 
             db.Entry(offer).State = EntityState.Modified;
             db.SaveChanges();

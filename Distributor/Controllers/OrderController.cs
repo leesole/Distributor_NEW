@@ -52,5 +52,14 @@ namespace Distributor.Controllers
             model.BreadcrumbTrail = breadcrumbDictionary;
             return View(model);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

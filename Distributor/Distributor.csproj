@@ -225,6 +225,7 @@
     </Compile>
     <Compile Include="Helpers\AppUserHelpers.cs" />
     <Compile Include="Helpers\AvailableListingHelpers.cs" />
+    <Compile Include="Helpers\DashboardHelpers.cs" />
     <Compile Include="Helpers\OfferHelpers.cs" />
     <Compile Include="Helpers\ControlHelpers.cs" />
     <Compile Include="Helpers\EnumHelpers.cs" />
@@ -371,6 +372,14 @@
     <Compile Include="Migrations\201802091440163_34th.cs" />
     <Compile Include="Migrations\201802091440163_34th.Designer.cs">
       <DependentUpon>201802091440163_34th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802131522136_35th.cs" />
+    <Compile Include="Migrations\201802131522136_35th.Designer.cs">
+      <DependentUpon>201802131522136_35th.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802131532036_36th.cs" />
+    <Compile Include="Migrations\201802131532036_36th.Designer.cs">
+      <DependentUpon>201802131532036_36th.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -624,7 +633,6 @@
     <Content Include="Views\Organisations\Details.cshtml" />
     <Content Include="Views\Organisations\Edit.cshtml" />
     <Content Include="Views\Organisations\Index.cshtml" />
-    <Content Include="Views\Home\Dashboard.cshtml" />
     <Content Include="Views\AppUsers\Create.cshtml" />
     <Content Include="Views\AppUsers\Delete.cshtml" />
     <Content Include="Views\AppUsers\Details.cshtml" />
@@ -675,6 +683,7 @@
     <Content Include="Views\Notifications\History.cshtml" />
     <Content Include="Views\GeneralInfo\Required.cshtml" />
     <Content Include="Views\GeneralInfo\DisplayRequired.cshtml" />
+    <Content Include="Views\Home\Dashboard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -786,6 +795,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802091440163_34th.resx">
       <DependentUpon>201802091440163_34th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802131522136_35th.resx">
+      <DependentUpon>201802131522136_35th.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802131532036_36th.resx">
+      <DependentUpon>201802131532036_36th.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

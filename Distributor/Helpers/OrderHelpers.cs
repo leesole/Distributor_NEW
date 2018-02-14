@@ -22,8 +22,60 @@ namespace Distributor.Helpers
             return db.Orders.Find(orderId);
         }
 
+        public static int GetOrdersInForOganisationCount(ApplicationDbContext db, Guid organisationId)
+        {
+            int count = (from o in db.Orders
+                         where (((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) ||
+                                 (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId)) &&
+                                  o.OrderInStatus != OrderInStatusEnum.Closed)
+                         select o).Distinct().Count();
+
+            return count;
+        }
+
+        public static List<Order> GetOrdersInForWeekForOrganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            DateTime weekAgo = DateTime.Now.AddDays(-7);
+
+            List<Order> list = (from o in db.Orders
+                                 where (((o.ListingType == ListingTypeEnum.Available && o.OfferOriginatorOrganisationId == organisationId) ||
+                                         (o.ListingType == ListingTypeEnum.Requirement && o.ListingOriginatorOrganisationId == organisationId)) &&
+                                         ((o.OrderInStatus == OrderInStatusEnum.Collected && o.OrderCollectedDateTime >= weekAgo) ||
+                                          (o.OrderInStatus == OrderInStatusEnum.Received && o.OrderReceivedDateTime >= weekAgo) ||
+                                          (o.OrderInStatus == OrderInStatusEnum.Closed && o.OrderInClosedDateTime >= weekAgo)))
+                                 select o).Distinct().ToList();
+
+            return list;
+        }
+
+        public static int GetOrdersOutForOganisationCount(ApplicationDbContext db, Guid organisationId)
+        {
+            int count = (from o in db.Orders
+                         where (((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
+                                 (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId)) &&
+                                  o.OrderOutStatus != OrderOutStatusEnum.Closed)
+                         select o).Distinct().Count();
+
+            return count;
+        }
+
+        public static List<Order> GetOrdersOutForWeekForOganisation(ApplicationDbContext db, Guid organisationId)
+        {
+            DateTime weekAgo = DateTime.Now.AddDays(-7);
+
+            List<Order> list = (from o in db.Orders
+                                where (((o.ListingType == ListingTypeEnum.Available && o.ListingOriginatorOrganisationId == organisationId) ||
+                                        (o.ListingType == ListingTypeEnum.Requirement && o.OfferOriginatorOrganisationId == organisationId)) &&
+                                        ((o.OrderOutStatus == OrderOutStatusEnum.Dispatched && o.OrderDistributionDateTime >= weekAgo) ||
+                                         (o.OrderOutStatus == OrderOutStatusEnum.Delivered && o.OrderDeliveredDateTime >= weekAgo) ||
+                                         (o.OrderOutStatus == OrderOutStatusEnum.Closed && o.OrderInClosedDateTime >= weekAgo)))
+                                select o).Distinct().ToList();
+
+            return list;
+        }
+
         #endregion
-        
+
         #region Create
 
         public static Order CreateOrder(ApplicationDbContext db, Offer offer, IPrincipal user)
@@ -150,7 +202,7 @@ namespace Distributor.Helpers
                 {
                     order.OrderDistributedBy = currentAppUserId;
                     order.OrderDistributionDateTime = DateTime.Now;
-                    order.OrderOutStatus = OrderOutStatusEnum.Despatched;
+                    order.OrderOutStatus = OrderOutStatusEnum.Dispatched;
                 }
                 if (orderDelivered)
                 {

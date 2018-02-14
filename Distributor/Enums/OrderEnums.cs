@@ -30,9 +30,9 @@ namespace Distributor.Enums
             [Description("New order")]
             [Display(Name = "New order")]
             New = 0,
-            [Description("Despatched")]
-            [Display(Name = "Despatched")]
-            Despatched = 1,
+            [Description("Dispatched")]
+            [Display(Name = "Dispatched")]
+            Dispatched = 1,
             [Description("Delivered")]
             [Display(Name = "Delivered")]
             Delivered = 2,

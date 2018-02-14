@@ -21,6 +21,8 @@ namespace Distributor.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         [AllowAnonymous]
         public ActionResult Index()
         {
@@ -92,7 +94,8 @@ namespace Distributor.Controllers
 
         public ActionResult Dashboard()
         {
-            return View();
+            HomeDashboardView view = DashboardHelpers.CreateHomeDashboardView(db, User);
+            return View(view);
         }
 
         [AllowAnonymous]
@@ -115,6 +118,15 @@ namespace Distributor.Controllers
         {
             ViewBag.ErrorMessage = errorMessage;
             return View();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
