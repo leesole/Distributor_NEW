@@ -13,8 +13,13 @@ namespace Distributor.Models
         [Key]
         public Guid OrderId { get; set; }
 
+
+
         [Display(Name = "Listing type")]
         public ListingTypeEnum ListingType { get; set; }
+
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
 
         [Display(Name = "Order quantity")]
         public decimal OrderQuanity { get; set; }

@@ -26,6 +26,7 @@
                         <thead>
                             <tr class="primary">
                                 <th>Status</th>
+                                <th>Description</th>
                                 <th>Qty</th>
                                 <th>Created</th>
                                 <th>Collect</th>
@@ -50,11 +51,13 @@
                                 <tr id=@orderId>
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderId)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderQuanity)
+                                    @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderCreationDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderCollectedDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderReceivedDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersInViewModel[i].OrderInClosedDateTime)
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersInViewModel[i].OrderInStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderCreationDateTime)</td>
                                     @if (Model.OrdersInViewModel[i].OrderCollectedDateTime.HasValue)
@@ -124,6 +127,7 @@
                         <thead>
                             <tr class="primary">
                                 <th>Status</th>
+                                <th>Description</th>
                                 <th>Qty</th>
                                 <th>Created</th>
                                 <th>Distribute</th>
@@ -147,12 +151,14 @@
 
                                 <tr id=@orderId>
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderId)
+                                    @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].ItemDescription)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderQuanity)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderCreationDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderDistributionDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderDeliveredDateTime)
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderOutClosedDateTime)
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersOutViewModel[i].OrderOutStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderCreationDateTime)</td>
                                     @if (Model.OrdersOutViewModel[i].OrderDistributionDateTime.HasValue)

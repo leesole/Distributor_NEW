@@ -295,7 +295,7 @@ namespace Distributor.Helpers
 
             //Create Action to show order ready
             Organisation org = OrganisationHelpers.GetOrganisation(db, offer.OfferOriginatorOrganisationId);
-            NotificationHelpers.CreateNotification(db, NotificationTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, offer.OfferId, appUser.AppUserId, org.OrganisationId, user);
+            NotificationHelpers.CreateNotification(db, NotificationTypeEnum.NewOrderReceived, "New order received from " + org.OrganisationName, order.OrderId, appUser.AppUserId, org.OrganisationId, user);
 
             return offer;
         }

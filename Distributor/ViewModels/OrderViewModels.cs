@@ -19,6 +19,9 @@ namespace Distributor.ViewModels
     {
         public Guid OrderId { get; set; }
 
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
+
         [Display(Name = "Order quantity")]
         public decimal OrderQuanity { get; set; }
 
@@ -48,6 +51,9 @@ namespace Distributor.ViewModels
     public class OrderOutViewModel
     {
         public Guid OrderId { get; set; }
+
+        [Display(Name = "Description")]
+        public string ItemDescription { get; set; }
 
         [Display(Name = "Order quantity")]
         public decimal OrderQuanity { get; set; }

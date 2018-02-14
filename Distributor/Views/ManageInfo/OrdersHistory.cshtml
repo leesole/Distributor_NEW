@@ -30,6 +30,7 @@
                         <thead>
                             <tr class="primary">
                                 <th>Status</th>
+                                <th>Description</th>
                                 <th>Qty</th>
                                 <th>Created</th>
                                 <th>Collected</th>
@@ -44,6 +45,7 @@
 
                                 <tr id=@orderId>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersInViewModel[i].OrderInStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderCreationDateTime)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "in", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersInViewModel[i].OrderCollectedDateTime)</td>
@@ -70,6 +72,7 @@ else
                         <thead>
                             <tr class="primary">
                                 <th>Status</th>
+                                <th>Description</th>
                                 <th>Qty</th>
                                 <th>Created</th>
                                 <th>Distributed</th>
@@ -85,6 +88,7 @@ else
                                 <tr id=@orderId>
                                     @Html.HiddenFor(modelItem => Model.OrdersOutViewModel[i].OrderId)
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Model.OrdersOutViewModel[i].OrderOutStatus.DisplayName()</td>
+                                    <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].ItemDescription)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderQuanity)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderCreationDateTime)</td>
                                     <td onclick="location.href='@Url.Action("Display", "Order", new { id = orderId, breadcrumb = breadcrumb, callingActionDisplayName = callingActionDisplayName, displayOnly = false, type = "out", recalled = false, controllerValue = "ManageInfo", actionValue = "Orders" })'">@Html.DisplayFor(modelItem => Model.OrdersOutViewModel[i].OrderDistributionDateTime)</td>

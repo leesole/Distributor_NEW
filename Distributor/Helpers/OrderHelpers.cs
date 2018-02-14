@@ -109,6 +109,7 @@ namespace Distributor.Helpers
             Order order = new Order()
             {
                 OrderId = Guid.NewGuid(),
+                ItemDescription = offer.ItemDescription,
                 ListingType = offer.ListingType,
                 OrderQuanity = orderQty,
                 OrderInStatus = OrderInStatusEnum.New,
@@ -348,6 +349,7 @@ namespace Distributor.Helpers
                         select new OrderInViewModel()
                         {
                             OrderId = o.OrderId,
+                            ItemDescription = o.ItemDescription,
                             OrderQuanity = o.OrderQuanity,
                             OrderInStatus = o.OrderInStatus,
                             OrderCreationDateTime = o.OrderCreationDateTime,
@@ -366,6 +368,7 @@ namespace Distributor.Helpers
                         select new OrderInViewModel()
                         {
                             OrderId = o.OrderId,
+                            ItemDescription = o.ItemDescription,
                             OrderQuanity = o.OrderQuanity,
                             OrderInStatus = o.OrderInStatus,
                             OrderCreationDateTime = o.OrderCreationDateTime,
@@ -392,6 +395,7 @@ namespace Distributor.Helpers
                         select new OrderOutViewModel()
                         {
                             OrderId = o.OrderId,
+                            ItemDescription = o.ItemDescription,
                             OrderQuanity = o.OrderQuanity,
                             OrderOutStatus = o.OrderOutStatus,
                             OrderCreationDateTime = o.OrderCreationDateTime,
@@ -410,6 +414,7 @@ namespace Distributor.Helpers
                         select new OrderOutViewModel()
                         {
                             OrderId = o.OrderId,
+                            ItemDescription = o.ItemDescription,
                             OrderQuanity = o.OrderQuanity,
                             OrderOutStatus = o.OrderOutStatus,
                             OrderCreationDateTime = o.OrderCreationDateTime,
