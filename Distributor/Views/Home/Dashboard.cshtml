@@ -12,85 +12,8 @@
 </div>
 
 <div class="row">
-        <div class="col-md-4 col-sm-12">
-            @if (userRole == "Admin" || userRole == "SuperUser")
-            {
-                <div class="panel panel-yellow">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-tasks fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">@Html.DisplayFor(model => model.OpenTasks)</div>
-                                <div>New Tasks!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href='@Url.Action("Index", "UserTasks", new { redirect = Request.Url.ToString() })'>
-                        <div class="panel-footer">
-                            @{
-                                var wkTasks = "width:" + Model.OpenTasksThisWeekPercent + "%";
-                                var dayTasks = "width:" + Model.OpenTasksPastDayPercent + "%";
-                            }
-                            @if (Model.OpenTasksThisWeekPercent > 0)
-                            {
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success" role="progressbar" style=@wkTasks>This week</div>
-                                </div>
-                            }
-                            @if (Model.OpenTasksPastDayPercent > 0)
-                            {
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" style=@dayTasks>Today</div>
-                                </div>
-                            }
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            }
-            <div class="panel panel-red">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-exclamation fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">@Html.DisplayFor(model => model.OpenNotifications)</div>
-                            <div>New Notifications!</div>
-                        </div>
-                    </div>
-                </div>
-                <a href='@Url.Action("Index", "Notifications", new { redirect = Request.Url.ToString() })'>
-                    <div class="panel-footer">
-                        @{ 
-                            var wkNotifications = "width:" + Model.OpenNotificationsThisWeekPercent + "%";
-                            var dayNotifications = "width:" + Model.OpenNotificationsPastDayPercent + "%";
-                        }
-                        @if (Model.OpenNotificationsThisWeekPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" style=@wkNotifications>This week</div>
-                            </div>
-                        }
-                        @if (Model.OpenNotificationsPastDayPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" role="progressbar" style=@dayNotifications>Today</div>
-                            </div>
-                        }
-                        <span class="pull-left">View Details</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-            </div>
-        </div>
-            
-        <div class="col-md-4 col-sm-12">
+    <div class="col-md-3 col-sm-12">
+        <a href='@Url.Action("Offers", "ManageInfo")'>
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
@@ -103,26 +26,41 @@
                         </div>
                     </div>
                 </div>
-                <a href='@Url.Action("Offers", "ManageInfo")'>
+                <div class="panel-footer">
+                    @{
+                        var counteredOffersCreated = "width:" + Model.OffersCreatedCounteredPercent + "%";
+                        var reofferedOffersCreated = "width:" + Model.OffersCreatedReOfferedPercent + "%";
+                    }
+                    @if (Model.OffersCreatedCounteredPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style=@counteredOffersCreated>Countered</div>
+                        </div>
+                    }
+                    @if (Model.OffersCreatedReOfferedPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" style=@reofferedOffersCreated>Re-offered</div>
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <div class="huge">@Html.DisplayFor(model => model.OffersCreatedClosedTotalThisWeek)</div>
+                                <div>Closed Offers Created!</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="panel-footer">
                         @{
-                            var counteredOffersCreated = "width:" + Model.OffersCreatedCounteredPercent + "%";
-                            var reofferedOffersCreated = "width:" + Model.OffersCreatedReOfferedPercent + "%";
                             var acceptedOffersCreated = "width:" + Model.OffersCreatedAcceptedThisWeekPercent + "%";
                             var rejectedOffersCreated = "width:" + Model.OffersCreatedRejectedThisWeekPercent + "%";
                             var closedOffersCreated = "width:" + Model.OffersCreatedClosedThisWeekPercent + "%";
-                        }
-                        @if (Model.OffersCreatedCounteredPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" style=@counteredOffersCreated>Countered</div>
-                            </div>
-                        }
-                        @if (Model.OffersCreatedReOfferedPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" role="progressbar" style=@reofferedOffersCreated>Re-offered</div>
-                            </div>
                         }
                         @if (Model.OffersCreatedAcceptedThisWeekPercent > 0 || Model.OffersCreatedRejectedThisWeekPercent > 0 || Model.OffersCreatedClosedThisWeekPercent > 0)
                         {
@@ -134,95 +72,222 @@
                         }
                         <div class="clearfix"></div>
                     </div>
-                </a>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <a href='@Url.Action("Offers", "ManageInfo")'>
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
-                        @*<div class="col-xs-3">
+                        <div class="col-xs-3">
                             <i class="fa fa-pencil-square-o fa-5x"></i>
-                        </div>*@
-                        <div class="col-xs-12 text-right">
+                        </div>
+                        <div class="col-xs-9 text-right">
                             <div class="huge">@Html.DisplayFor(model => model.OffersReceivedOpen)</div>
                             <div>New Offers Received!</div>
                         </div>
                     </div>
                 </div>
-                <a href='@Url.Action("Offers", "ManageInfo")'>
+
+                <div class="panel-footer">
+                    @{
+                    var counteredOffersReceived = "width:" + Model.OffersReceivedCounteredPercent + "%";
+                    var reofferedOffersReceived = "width:" + Model.OffersReceivedReOfferedPercent + "%";
+                    }
+                    @if (Model.OffersReceivedCounteredPercent > 0)
+                {
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success" role="progressbar" style=@counteredOffersReceived>Countered</div>
+                </div>
+                }
+                    @if (Model.OffersReceivedReOfferedPercent > 0)
+                {
+                <div class="progress">
+                    <div class="progress-bar progress-bar-info" role="progressbar" style=@reofferedOffersReceived>Re-offered</div>
+                </div>
+                }
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-12 text-right">
+                                <div class="huge">@Html.DisplayFor(model => model.OffersReceivedClosedTotalThisWeek)</div>
+                                <div>New Offers Received!</div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel-footer">
                         @{
-                            var counteredOffersReceived = "width:" + Model.OffersReceivedCounteredPercent + "%";
-                            var reofferedOffersReceived = "width:" + Model.OffersReceivedReOfferedPercent + "%";
-                            var acceptedOffersReceived = "width:" + Model.OffersReceivedAcceptedThisWeekPercent + "%";
-                            var rejectedOffersReceived = "width:" + Model.OffersReceivedRejectedThisWeekPercent + "%";
-                            var closedOffersReceived = "width:" + Model.OffersReceivedClosedThisWeekPercent + "%";
-                        }
-                        @if (Model.OffersReceivedCounteredPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" style=@counteredOffersReceived>Countered</div>
-                            </div>
-                        }
-                        @if (Model.OffersReceivedReOfferedPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-info" role="progressbar" style=@reofferedOffersReceived>Re-offered</div>
-                            </div>
+                        var acceptedOffersReceived = "width:" + Model.OffersReceivedAcceptedThisWeekPercent + "%";
+                        var rejectedOffersReceived = "width:" + Model.OffersReceivedRejectedThisWeekPercent + "%";
+                        var closedOffersReceived = "width:" + Model.OffersReceivedClosedThisWeekPercent + "%";
                         }
                         @if (Model.OffersReceivedAcceptedThisWeekPercent > 0 || Model.OffersReceivedRejectedThisWeekPercent > 0 || Model.OffersReceivedClosedThisWeekPercent > 0)
-                        {
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success" role="progressbar" style=@acceptedOffersReceived>Accepted</div>
-                                <div class="progress-bar progress-bar-danger" role="progressbar" style=@rejectedOffersReceived>Rejected</div>
-                                <div class="progress-bar progress-bar-warning" role="progressbar" style=@closedOffersReceived>Closed</div>
-                            </div>
-                        }
-                        <span class="pull-left">View Details</span>
-                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    {
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" style=@acceptedOffersReceived>Accepted</div>
+                        <div class="progress-bar progress-bar-danger" role="progressbar" style=@rejectedOffersReceived>Rejected</div>
+                        <div class="progress-bar progress-bar-warning" role="progressbar" style=@closedOffersReceived>Closed</div>
+                    </div>
+                    }
                         <div class="clearfix"></div>
                     </div>
-                </a>
+                </div>
             </div>
+        </a>
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Html.DisplayFor(model => model.OrdersInOpen)</div>
+                        <div>New Orders In!</div>
+                    </div>
+                </div>
+            </div>
+            <a href='@Url.Action("Orders", "ManageListings")'>
+                <div class="panel-footer">
+                    @{
+                        var collectedOrdersIn = "width:" + Model.OrdersInCollectedThisWeekPercent + "%";
+                        var receivedOrdersIn = "width:" + Model.OrdersInReceivedThisWeekPercent + "%";
+                        var closedOrdersIn = "width:" + Model.OrdersInClosedThisWeekPercent + "%";
+                    }
+                    @if (Model.OrdersInCollectedThisWeekPercent > 0 || Model.OrdersInReceivedThisWeekPercent > 0 || Model.OrdersInClosedThisWeekPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style=@collectedOrdersIn>Collected</div>
+                            <div class="progress-bar progress-bar-danger" role="progressbar" style=@receivedOrdersIn>Received</div>
+                            <div class="progress-bar progress-bar-warning" role="progressbar" style=@closedOrdersIn>Closed</div>
+                        </div>
+                    }
+                    <div class="clearfix"></div>
+                </div>
+            </a>
         </div>
-        <div class="col-md-4 col-sm-12">
-            <div class="panel panel-green">
+    </div>
+    <div class="col-md-3 col-sm-12">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Html.DisplayFor(model => model.OrdersOutOpen)</div>
+                        <div>New Orders Out!</div>
+                    </div>
+                </div>
+            </div>
+            <a href='@Url.Action("Orders", "ManageListings")'>
+                <div class="panel-footer">
+                    @{
+                        var despatchedOrdersOut = "width:" + Model.OrdersOutDespatchedThisWeekPercent + "%";
+                        var deliveredOrdersOut = "width:" + Model.OrdersOutDeliveredThisWeekPercent + "%";
+                        var closedOrdersOut = "width:" + Model.OrdersOutClosedThisWeekPercent + "%";
+                    }
+                    @if (Model.OrdersOutDespatchedThisWeekPercent > 0 || Model.OrdersOutDeliveredThisWeekPercent > 0 || Model.OrdersOutClosedThisWeekPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style=@despatchedOrdersOut>Dispatched</div>
+                            <div class="progress-bar progress-bar-danger" role="progressbar" style=@deliveredOrdersOut>Delivered</div>
+                            <div class="progress-bar progress-bar-warning" role="progressbar" style=@closedOrdersOut>Closed</div>
+                        </div>
+                    }
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 col-sm-12">
+        @if (userRole == "Admin" || userRole == "SuperUser")
+        {
+            <div class="panel panel-yellow">
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-xs-3">
-                            <i class="fa fa-shopping-cart fa-5x"></i>
+                            <i class="fa fa-tasks fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">@Html.DisplayFor(model => model.OrdersInOpen)</div>
-                            <div>New Orders In!</div>
+                            <div class="huge">@Html.DisplayFor(model => model.OpenTasks)</div>
+                            <div>New Tasks!</div>
                         </div>
                     </div>
                 </div>
-                <a href='@Url.Action("Orders", "ManageListings")'>
+                <a href='@Url.Action("Index", "UserTasks", new { redirect = Request.Url.ToString() })'>
                     <div class="panel-footer">
-                        <div class="clearfix"></div>
-                    </div>
-                </a>
-                <div class="panel-heading">
-                    <div class="row">
-                        @*<div class="col-xs-3">
-                            <i class="fa fa-shopping-cart fa-5x"></i>
-                        </div>*@
-                        <div class="col-xs-12 text-right">
-                            <div class="huge">@Html.DisplayFor(model => model.OrdersOutOpen)</div>
-                            <div>New Orders Out!</div>
-                        </div>
-                    </div>
-                </div>
-                <a href='@Url.Action("Orders", "ManageListings")'>
-                    <div class="panel-footer">
+                        @{
+                            var wkTasks = "width:" + Model.OpenTasksThisWeekPercent + "%";
+                            var dayTasks = "width:" + Model.OpenTasksPastDayPercent + "%";
+                        }
+                        @if (Model.OpenTasksThisWeekPercent > 0)
+                        {
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" style=@wkTasks>This week</div>
+                            </div>
+                        }
+                        @if (Model.OpenTasksPastDayPercent > 0)
+                        {
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-info" role="progressbar" style=@dayTasks>Today</div>
+                            </div>
+                        }
                         <span class="pull-left">View Details</span>
                         <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                         <div class="clearfix"></div>
                     </div>
                 </a>
             </div>
+                            }
+        <div class="panel panel-red">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-exclamation fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">@Html.DisplayFor(model => model.OpenNotifications)</div>
+                        <div>New Notifications!</div>
+                    </div>
+                </div>
+            </div>
+            <a href='@Url.Action("Index", "Notifications", new { redirect = Request.Url.ToString() })'>
+                <div class="panel-footer">
+                    @{
+                        var wkNotifications = "width:" + Model.OpenNotificationsThisWeekPercent + "%";
+                        var dayNotifications = "width:" + Model.OpenNotificationsPastDayPercent + "%";
+                    }
+                    @if (Model.OpenNotificationsThisWeekPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" style=@wkNotifications>This week</div>
+                        </div>
+                    }
+                    @if (Model.OpenNotificationsPastDayPercent > 0)
+                    {
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" style=@dayNotifications>Today</div>
+                        </div>
+                    }
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
         </div>
+    </div>
 </div>
-
-
 
 <div class="col-xl-3 col-sm-6">
     <div class="item d-flex align-items-center">

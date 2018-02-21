@@ -24,6 +24,7 @@ namespace Distributor.ViewModels
         public decimal OffersCreatedCounteredPercent { get; set; }
         public int OffersCreatedReOffered { get; set; }
         public decimal OffersCreatedReOfferedPercent { get; set; }
+        public int OffersCreatedClosedTotalThisWeek { get; set; }
         public int OffersCreatedAcceptedThisWeek { get; set; }
         public decimal OffersCreatedAcceptedThisWeekPercent { get; set; }
         public int OffersCreatedRejectedThisWeek { get; set; }
@@ -36,6 +37,7 @@ namespace Distributor.ViewModels
         public decimal OffersReceivedCounteredPercent { get; set; }
         public int OffersReceivedReOffered { get; set; }
         public decimal OffersReceivedReOfferedPercent { get; set; }
+        public int OffersReceivedClosedTotalThisWeek { get; set; }
         public int OffersReceivedAcceptedThisWeek { get; set; }
         public decimal OffersReceivedAcceptedThisWeekPercent { get; set; }
         public int OffersReceivedRejectedThisWeek { get; set; }

@@ -62,19 +62,19 @@ namespace Distributor.Helpers
             view.OffersCreatedAcceptedThisWeek = (from oCC in offersCreatedClosed where oCC.OfferStatus == OfferStatusEnum.Accepted select oCC).Count();
             view.OffersCreatedRejectedThisWeek = (from oCC in offersCreatedClosed where oCC.OfferStatus == OfferStatusEnum.Rejected select oCC).Count();
             view.OffersCreatedClosedThisWeek = (from oCC in offersCreatedClosed where oCC.OfferStatus == OfferStatusEnum.ClosedNoStock select oCC).Count();
-            int offersCreatedClosedCount = view.OffersCreatedAcceptedThisWeek + view.OffersCreatedRejectedThisWeek + view.OffersCreatedClosedThisWeek;
+            view.OffersCreatedClosedTotalThisWeek = view.OffersCreatedAcceptedThisWeek + view.OffersCreatedRejectedThisWeek + view.OffersCreatedClosedThisWeek;
             if (view.OffersCreatedAcceptedThisWeek == 0)
                 view.OffersCreatedAcceptedThisWeekPercent = 0;
             else
-                view.OffersCreatedAcceptedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedAcceptedThisWeek) / Convert.ToDecimal(offersCreatedClosedCount)) * 100;
+                view.OffersCreatedAcceptedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedAcceptedThisWeek) / Convert.ToDecimal(view.OffersCreatedClosedTotalThisWeek)) * 100;
             if (view.OffersCreatedRejectedThisWeek == 0)
                 view.OffersCreatedRejectedThisWeekPercent = 0;
             else
-                view.OffersCreatedRejectedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedRejectedThisWeek) / Convert.ToDecimal(offersCreatedClosedCount)) * 100;
+                view.OffersCreatedRejectedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedRejectedThisWeek) / Convert.ToDecimal(view.OffersCreatedClosedTotalThisWeek)) * 100;
             if (view.OffersCreatedClosedThisWeek == 0)
                 view.OffersCreatedClosedThisWeekPercent = 0;
             else
-                view.OffersCreatedClosedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedClosedThisWeek) / Convert.ToDecimal(offersCreatedClosedCount)) * 100;
+                view.OffersCreatedClosedThisWeekPercent = (Convert.ToDecimal(view.OffersCreatedClosedThisWeek) / Convert.ToDecimal(view.OffersCreatedClosedTotalThisWeek)) * 100;
 
             List<Offer> offersReceived = OfferHelpers.GetOpenOffersReceivedForOrganisation(db, currentOrg.OrganisationId);
             view.OffersReceivedOpen = offersReceived.Count;
@@ -92,19 +92,19 @@ namespace Distributor.Helpers
             view.OffersReceivedAcceptedThisWeek = (from oRC in offersReceived where oRC.OfferStatus == OfferStatusEnum.Accepted select oRC).Count();
             view.OffersReceivedRejectedThisWeek = (from oRC in offersReceived where oRC.OfferStatus == OfferStatusEnum.Rejected select oRC).Count();
             view.OffersReceivedClosedThisWeek = (from oRC in offersReceived where oRC.OfferStatus == OfferStatusEnum.ClosedNoStock select oRC).Count();
-            int offersReceivedClosedCount = view.OffersReceivedAcceptedThisWeek + view.OffersReceivedRejectedThisWeek + view.OffersReceivedClosedThisWeek;
+            view.OffersReceivedClosedTotalThisWeek = view.OffersReceivedAcceptedThisWeek + view.OffersReceivedRejectedThisWeek + view.OffersReceivedClosedThisWeek;
             if (view.OffersReceivedAcceptedThisWeek == 0)
                 view.OffersReceivedAcceptedThisWeekPercent = 0;
             else
-                view.OffersReceivedAcceptedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedAcceptedThisWeek) / Convert.ToDecimal(offersReceivedClosedCount)) * 100;
+                view.OffersReceivedAcceptedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedAcceptedThisWeek) / Convert.ToDecimal(view.OffersReceivedClosedTotalThisWeek)) * 100;
             if (view.OffersReceivedRejectedThisWeek == 0)
                 view.OffersReceivedRejectedThisWeekPercent = 0;
             else
-                view.OffersReceivedRejectedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedRejectedThisWeek) / Convert.ToDecimal(offersReceivedClosedCount)) * 100;
+                view.OffersReceivedRejectedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedRejectedThisWeek) / Convert.ToDecimal(view.OffersReceivedClosedTotalThisWeek)) * 100;
             if (view.OffersReceivedClosedThisWeek == 0)
                 view.OffersReceivedClosedThisWeekPercent = 0;
             else
-                view.OffersReceivedClosedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedClosedThisWeek) / Convert.ToDecimal(offersReceivedClosedCount)) * 100;
+                view.OffersReceivedClosedThisWeekPercent = (Convert.ToDecimal(view.OffersReceivedClosedThisWeek) / Convert.ToDecimal(view.OffersReceivedClosedTotalThisWeek)) * 100;
 
             view.OrdersInOpen = OrderHelpers.GetOrdersInForOganisationCount(db, currentOrg.OrganisationId);
             List<Order> ordersIn = OrderHelpers.GetOrdersInForWeekForOrganisation(db, currentOrg.OrganisationId);
